@@ -1,0 +1,14 @@
+name: cioppino
+description: Sundry resources in Azure
+runtime: nodejs
+template:
+  config:
+    aws:region:
+      description: The AWS region to deploy into
+      default: us-west-2
+    gcp:zone:
+      description: The GCP zone to deploy into
+      default: us-central1-a
+    azure:location:
+      description: The Azure location to deploy into
+      default: centralus

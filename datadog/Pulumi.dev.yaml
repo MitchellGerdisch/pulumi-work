@@ -1,0 +1,6 @@
+config:
+  aws:region: us-west-2
+  datadog:apiKey:
+    secure: AAABAPpeqrHcYLHntK1UXL7GRlqIolEcqg5KKkYkLcw5/HYJEkNma670sHvja7h7ELuojJC1XQICcuxMSDDyGA==
+  datadog:appKey:
+    secure: AAABAHyMp1gdB4T/fIaUdzFrJ1L0sIW+9VCp+qh711dv6jiaETraNyjcwxnyyJcbE7ycyzA6dr3anmKXtqaLf6CJ8peAlR98

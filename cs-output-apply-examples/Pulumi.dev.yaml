@@ -1,0 +1,4 @@
+config:
+  azure:location: CentralUS
+  cs-secrets:rgName:
+    secure: AAABAFnUUImgQ8BBfrZoa5Rvg3yobdoWsFUcRc9krAjLXQrxhFSEDA==

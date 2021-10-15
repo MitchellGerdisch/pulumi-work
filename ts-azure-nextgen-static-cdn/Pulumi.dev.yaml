@@ -1,0 +1,7 @@
+config:
+  azure-nextgen-static-cdn:cdnSku: Standard_Microsoft
+  azure-nextgen-static-cdn:domainName: mitch.example.com
+  azure-nextgen-static-cdn:location: CentralUs
+  azure-nextgen-static-cdn:nameBase: mitch
+  azure:environment: public
+  azure:location: CentralUS

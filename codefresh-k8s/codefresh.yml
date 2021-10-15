@@ -1,0 +1,181 @@
+# This is a Codefresh pipeline workflow to show integration between pulumi launching a k8s stack and Codefresh k8s and related dashboards.
+# It leverages the CE k8s nginx demo stack.
+#
+# CI/CD DEMO SET UP INSTRUCTIONS
+# See comments at bottom of this file on how to set up Codefresh for this to work.
+#
+
+version: '1.0'
+stages:
+  - prepare
+  - deploy
+  - promote
+  - cleanup
+steps:
+  # Get Pulumi application from Git
+  cloneRepo:
+    stage: prepare
+    title: Clone Repo
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
+    git: github
+  # Prepare the environment
+  prepareEnvironment:
+    stage: prepare
+    title: Prepare Environment
+    fail_fast: true
+    image: pulumi/pulumi
+    shell: bash
+    working_directory: ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/${{REPO_DIR}} # Where is the pulumi code for this project found in the repo?
+    commands:
+      # Set PULUMI_HOME so it uses the volume and not the default ~/.pulumi - this is especially important for K8s since destroys need to find the k8s provider stored in $PULUMI_HOME
+      - export PULUMI_HOME=$CF_VOLUME_PATH
+      - cf_export PULUMI_HOME
+
+      # create some environment variables for use in this step and subsequent steps
+      # Since we equate CF Project with Pulumi project and CF Pipeline with Pulumi stack, we can build variables used for Pulumi commands.
+      # CF_PIPELINE_NAME is of form <CF PROJECT>/<CF PIPELINE> which means it's of form <PULUMI PROJECT>/<PULUMI STACK>
+      # A Pulumi full stack name is of the form <PULUMI ORGANIZATION>/<PULUMI PROJECT>/<PULUMI STACK>.
+      # Therefore, Pulumi full stack is <PULUMI ORG>/$CF_PIPELINE_NAME
+      - export PULUMI_STACK_PATH=$PULUMI_ORG/$CF_PIPELINE_NAME
+      - cf_export PULUMI_STACK_PATH
+
+      # Used for reference later on
+      - export CF_PROJECT=`echo $CF_PIPELINE_NAME | cut -d"/" -f1`
+      - cf_export CF_PROJECT
+
+      # Set up the base environment
+      - npm install
+
+      # In the interest of keeping a single yml for all demos,
+      # this logic is used to handle having to set up the k8s cluster folder for k8s demos that leverage the cluster code.
+      # For the base cluster demo this code will run unnecessarily, but it allows for more flexibility later if we add other k8s demos.
+      - export GOOGLE_APPLICATION_CREDENTIALS=$PWD/google_application_credentials.json
+      - echo $GOOGLE_CREDENTIALS > $GOOGLE_APPLICATION_CREDENTIALS
+      - cf_export GOOGLE_APPLICATION_CREDENTIALS
+      # This modifies gcp.ts to produce a kubeconfig that is compatible with a gcloud-free environment and it sets up node modules for the cluster code.
+      - if [[ $PWD =~ k8s ]] ; then  cd ../k8s-ts-cluster ; sed -i -e '/ config:/{N;N;N;N;d;}' ./gcp.ts ; npm install ; fi ;
+  # Stand up the stack for this pipeline
+  deployStack:
+    stage: deploy
+    title: Deploy Pulumi Stack
+    fail_fast: false
+    image: pulumi/pulumi
+    working_directory: ${{prepareEnvironment}}
+    commands:
+      # Select stack
+      - pulumi stack select -c $PULUMI_STACK_PATH
+      # Deploy/update the stack
+      - pulumi up --skip-preview --non-interactive --yes # --debug --logtostderr -v 9
+
+  # # Request approval to launch into production.
+  # askToPromote:
+  #   type: pending-approval
+  #   stage: promote
+  #   title: Promote to Production?
+  #   fail_fast: false
+  #   timeout: # skip the Prod deploy and force a clean up after "duration" hours.
+  #     duration: 1
+  #     finalState: denied
+  # # Invoke the production pipeline
+  # promoteToProd:
+  #   type: codefresh-run
+  #   stage: promote
+  #   title: Promote to Production
+  #   fail_fast: false
+  #   arguments:
+  #     PIPELINE_ID: ${{CF_PROJECT}}/prod
+  #     VARIABLE:
+  #       - CF_REPO_OWNER=${{CF_REPO_OWNER}}
+  #       - CF_REPO_NAME=${{CF_REPO_NAME}}
+  #       - CF_REVISION=${{CF_REVISION}}
+  #     SKIP: # use the same codefresh yaml file for the production pipeline but skip the promote and clean up steps
+  #       - askToPromote
+  #       - promoteToProd
+  #       - waitToClean
+  #       - destroyPulumiStacks
+  #   when:
+  #     steps:
+  #       - name: askToPromote
+  #         on:
+  #           - approved
+
+  # Wait for a response to go and clean up the staging AND production infrastructure
+  # If denied, the stacks will remain.
+  # If approved, the stacks will be destroyed.
+  # If no answer given, the stacks will be destroyed after an hour.
+  waitToClean:
+    type: pending-approval
+    stage: cleanup
+    title: Destroy the Demo Stack?
+    fail_fast: true
+    timeout: # force a clean up after "duration" hours.
+      duration: 1
+      finalState: approved
+  # Destroy the stacks once the clean up question is approved or never answered.
+  destroyPulumiStacks:
+    stage: cleanup
+    title: Destroy Demo Stack
+    fail_fast: false
+    image: pulumi/pulumi
+    working_directory: ${{prepareEnvironment}}
+    commands:
+      # Recreate the base Pulumi environment to do the destroys.
+      - export PULUMI_STACK=$PULUMI_ORG/$CF_PROJECT/demo
+      # Destroy stack
+      - pulumi stack select $PULUMI_STACK
+      - pulumi destroy -s $PULUMI_STACK -y --skip-preview
+#
+#
+####### SET UP NOTES ######
+# The following notes explain how to set things up in Codefresh.io
+# NOTE, the mapping of Codefresh constructs and Pulumi constructs are as follows:
+# - Codefresh Project is mapped to Pulumi Project
+# - Codefresh Pipeline is mapped to Pulumi Stack.
+# Therefore, the project and pipeline names in Codefresh need to match those being used in Pulumi.
+
+# Account Settings -> Pipeline Settings
+# - Advanced options - change to keep the volume on approval (build remains active)
+# Account Settings -> Shared Configuration
+# - Create a shared secret configuration context for the Cloud Credentials and store the required environment variables:
+#   - AWS_ACCESS_KEY_ID (see https://www.pulumi.com/docs/intro/cloud-providers/aws/setup/#environment-variables)
+#   - AWS_SECRET_ACCESS_KEY
+#   - ARM_CLIENT_ID (see https://www.pulumi.com/docs/intro/cloud-providers/azure/setup/#service-principal-authentication)
+#   - ARM_CLIENT_SECRET
+#   - ARM_TENANT_ID
+#   - ARM_SUBSCRIPTION_ID
+#   - GOOGLE_CREDENTIALS (see https://www.pulumi.com/docs/intro/cloud-providers/gcp/service-account/)
+# - Create a shared secret configuration context for the Pulumi Credentials and store the required environment variable:
+#   - PULUMI_ACCESS_TOKEN (see https://www.pulumi.com/docs/intro/console/accounts-and-organizations/accounts/#access-tokens)
+# - Create a shared (nonsecret) configuration context for Pulumi Configuration and store the required environment variable:
+#   - PULUMI_ORG contains the name of the Pulumi Organization underwhich the stacks will be managed. The PULUMI_ACCESS_TOKEN must have write access to this Pulumi organization.
+
+# For each demo in the repo you want to integrate CI/CD into, do the following:
+# - Create a Codefresh project with the same name as the corresponding Pulumi project.
+#   For example, demo, aws-ts-webserver is deployed in project demo-aws-ts-webserver.
+#   This is the name to use for the Codefresh project.
+# - Set Project Variables as follows:
+#   - REPO_DIR = the path to the given demo this project is for. For example, demos/aws-ts-webserver.
+
+# For each Codefresh project, do the following:
+# - Create a pipeline named "staging"
+#   - Associate it with the customer-engineering repo (i.e. the repo where the demos are stored).
+#   - Select the Workflow view
+#   - Click the Triggers tab on the righthand of the screen in the Workflow view
+#     - Click the Gear and disable the Github trigger.
+#   - Click the Variables tab on the righthand of the screen in the Workflow view.
+#     - Click the gear (DO NOT CLICK ADD VARIABLE).
+#       - Click IMPORT FROM SHARED CONFIGURATION and select the three configurations created above.
+#   - Once back to the Workflow view, change the "Inline YAML" selection to "Use YAML from Repository" and specify the path to the codefresh.yml file (i.e. this file).
+#   - Make sure the github folder for the given demo (e.g. aws-ts-webserver) has a Pulumi.staging.yaml file in it. If not, create one based on the Pulumi.dev.yaml file or from scratch.
+# - Create a prod pipeine as follows.
+#   - Clone the "staging" pipeline by clicking on the 3-dots for the "staging" pipeline.
+#     - Name it "prod" and click Create
+#     - Click NEXT on the Copy Workflow panel.
+#     - Click SKIP on the Copy Triggers panel.
+#     - Click SKIP on the Copy Variables panel.
+#   - Execute the same steps as done for the staging pipeline (Variables, Workfow from Repo, etc).
+#   - Make sure the github folder has a Pulumi.prod.yaml file in it.
+#
+

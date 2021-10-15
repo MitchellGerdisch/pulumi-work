@@ -1,0 +1,5 @@
+config:
+  ts-azure-nextgen-multiple-subscriptions:azureSub1:
+    secure: AAABADSD26FgZQdflZ05d1yvF1tfMjL4H0vehRnNk3YtAS1Wsy09/fWj450H1CIu5UHHbL3/VN+Z299EBD1gW3Qy8vc=
+  ts-azure-nextgen-multiple-subscriptions:azureSub2:
+    secure: AAABAIYML/2cZu+3UZDKSn0p+XXKjqtYPUoKhl5ndx8Uv2ncocIFKfA6A0si4bMk7lCMlzlz+6r+64KJTxsShBO2Fn0=

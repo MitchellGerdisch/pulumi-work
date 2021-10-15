@@ -1,0 +1,3 @@
+name: pulumi-auditlog-collector
+runtime: nodejs
+description: Lambda function that gets Pulumi audit logs and stores them and can forward them.

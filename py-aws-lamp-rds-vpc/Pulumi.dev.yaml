@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  lamp-rds:db_user: dbadmin
+  lamp-rds:service_name: mitch-wp

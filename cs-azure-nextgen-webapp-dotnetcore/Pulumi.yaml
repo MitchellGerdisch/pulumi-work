@@ -1,0 +1,3 @@
+name: cs-azure-nextgen-webapp-dotnetcore
+runtime: dotnet
+description: A minimal Azure NextGen C# Pulumi program

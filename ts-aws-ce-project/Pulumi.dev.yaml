@@ -1,0 +1,6 @@
+config:
+  aws:region: us-east-1
+  ts-aws-ce-project:deploymentName: mitch
+  ts-aws-ce-project:numAvailZones: "1"
+  ts-aws-ce-project:vpcCidrBlock: 10.1.0.0/16
+  ts-aws-ce-project:docDbInstanceCount: "1"

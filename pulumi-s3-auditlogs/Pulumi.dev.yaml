@@ -1,0 +1,5 @@
+config:
+  aws:region: us-east-1
+  setup-s3-auditlogs:orgName: demo
+  setup-s3-auditlogs:pulumiApiKey:
+    secure: AAABAOVaGLYE1e8B9oKAJp1cfsf58lfwt3FXET+ttQ3I0InW0uL0qkZT8fX1pDSY73nFeum4bUpDYHuPNwgNgpvQYB1BT/9mEbsfcA==

@@ -1,0 +1,8 @@
+config:
+  azure-native:location: centralus
+  azure:location: centralus
+  cioppino:instanceCount: "1"
+  datadog:apiKey:
+    secure: AAABADeF4nagCnXVyAcCp/N0Vtx/6fd2NbBr3kE8ACqStlBKZ6BAF6MAN2k1PkgASfdTvEMhm8xm9mkYyo7j8CU=
+  datadog:appKey:
+    secure: AAABAPoNcR8h9u6ztz/rerIhk2Hlf5u0ggZU8RPkxZhJiKciyZfwG98BRSa7L3RVb3vf+7CCOVR6jd6AeD05GfSUIxGpgjla

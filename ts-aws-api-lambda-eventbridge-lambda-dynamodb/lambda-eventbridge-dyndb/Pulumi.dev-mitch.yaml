@@ -1,0 +1,8 @@
+config:
+  aws:region: us-east-1
+  lambda-eventbridge-dyndb:existingApiGwId: 73vell33qg
+  lambda-eventbridge-dyndb:existingApiGwName: mitch-existing-apigw
+  newrelic:accountId: "2318745"
+  newrelic:apiKey:
+    secure: AAABAGkjPYQhA8BSuQmoss0GZTB5F54Ed2CbRNSO5/IUUPgI+pDr8FvwpO2yWtJ0vB58IBuuQuHov3T7VMgp0g==
+  newrelic:region: US

@@ -1,0 +1,6 @@
+name: auto-s3-backend
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: A minimal Python Pulumi program

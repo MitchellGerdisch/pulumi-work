@@ -1,0 +1,3 @@
+name: ts-aws-ce-project
+runtime: nodejs
+description: A minimal AWS TypeScript Pulumi program

@@ -1,0 +1,5 @@
+config:
+  aws:region: us-east-1
+  lamp-rds:db_password:
+    secure: AAABAHpWqzvswvJM1Jt8N9maC6AmAHvYRd6X3IKI5ww9AbaRbzUSza9BS04=
+  lamp-rds:db_user: dbadmin

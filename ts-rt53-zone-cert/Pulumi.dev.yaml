@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  rt53_zone_cert:namebase: mitch-rt53
+  rt53_zone_cert:zone: pulumi-ce.team

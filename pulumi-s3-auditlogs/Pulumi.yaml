@@ -1,0 +1,3 @@
+name: setup-s3-auditlogs
+runtime: nodejs
+description: A minimal AWS TypeScript Pulumi program

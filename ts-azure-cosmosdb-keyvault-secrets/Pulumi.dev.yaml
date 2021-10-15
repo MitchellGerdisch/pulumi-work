@@ -1,0 +1,5 @@
+config:
+  azure:environment: public
+  azure:location: CentralUS
+  cosmossecret:tenantId:
+    secure: AAABAP5bENNuiRRj6hHM4lR7S3g5YukROQBZn0IwKnYvZGw1CcLa1XFV8PGORjf2K1d00m5+uR9zfB2yEOKJW+1RwHI=

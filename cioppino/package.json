@@ -1,0 +1,20 @@
+{
+    "name": "demo-k8s-ts-nginx",
+    "scripts": {
+        "postinstall": "(cd ../k8s-ts-cluster && npm install);"
+    },
+    "dependencies": {
+        "@pulumi/aws": "^4.17.0",
+        "@pulumi/awsx": "^0.31.0",
+        "@pulumi/azure": "^4.15.0",
+        "@pulumi/azure-native": "^1.23.0",
+        "@pulumi/azuread": "^4.3.0",
+        "@pulumi/eks": "^0.33.0",
+        "@pulumi/gcp": "^5.17.0",
+        "@pulumi/kubernetes": "^3.6.3",
+        "@pulumi/pulumi": "^3.11.0",
+        "@pulumi/random": "^4.2.0",
+        "@pulumi/tls": "^4.0.0",
+        "@types/node": "^16.7.6"
+    }
+}

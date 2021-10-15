@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  ps-app:namebase: mitch-ps-3
+  ps-app:networkstackname: MitchGerdisch/ps/network

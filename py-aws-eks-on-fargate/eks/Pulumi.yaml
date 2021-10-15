@@ -1,0 +1,6 @@
+name: eks-main
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Stands up EKS on fargate.

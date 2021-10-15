@@ -1,0 +1,18 @@
+config:
+  aws:region: us-west-2
+  aws:skipCredentialsValidation: 'true'
+  aws:skipGetEc2Platforms: 'true'
+  aws:skipMetadataApiCheck: 'true'
+  aws:skipRegionValidation: 'true'
+  aws:skipRequestingAccountId: 'true'
+  azure:location: westus
+  gcp:project:
+    secure: AAABAGGNsNKqWTbHOEVRMlvOAj+5ZESge4GtWQZ9NsWyxSZOPCldLN0yxXhsfg==
+  gcp:region: us-central1
+  gcp:zone: us-central1-a
+  cioppino:instanceCount: "12"
+  datadog:apiKey:
+    secure: AFedDeF4nagCnXVyAcCp/N0Vtx/6fd2NbBr3kE8ACqStlBKZ6BAF6MAN2k1PkgASfdTvEMhm8xm9mkYyo7j8CU=
+  datadog:appKey:
+    secure: DDDeoNcR8h9u6ztz/rerIhk2Hlf5u0ggZU8RPkxZhJiKciyZfwG98BRSa7L3RVb3vf+7CCOVR6jd6AeD05GfSUIxGpgjla
+

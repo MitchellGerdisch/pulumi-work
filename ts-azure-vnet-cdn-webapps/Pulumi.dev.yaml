@@ -1,0 +1,7 @@
+config:
+  azure:environment: public
+  azure:location: CentralUS
+  component-resource-work:tenantId:
+    secure: AAABAKZlA/7/9doObKU9jAfP/0eiGk6318kg5XLxfjUASJfKkH9SLCbHa8ADNOUeGxVBTRjopddopw6BJtAcSjtzd1c=
+  component-resource-work:vaultObjectId:
+    secure: AAABAKMZfWJSFeXR498UVLEfqEMXVPvGrVVtV0EY9pmuFOnP+Bw8bP9scHHCjeWTKYa7AFWbJciiUADwr1K1J/oB/9c=

@@ -1,0 +1,16 @@
+{
+    "name": "azure-nextgen-ts-webserver",
+    "scripts": {
+        "postinstall": "(cd ../demos-common && npm install);"
+    },
+    "devDependencies": {
+        "@types/node": "^10.0.0"
+    },
+    "dependencies": {
+        "@pulumi/azure-native": "^1.14.0",
+        "@pulumi/datadog": "^3.3.0",
+        "@pulumi/pulumi": "^3.5.1",
+        "@pulumi/random": "^4.2.0",
+        "@pulumi/tls": "^4.0.0"
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "automate-stacks",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "@pulumi/pulumi": "^3.0.0",
+    "process": "^0.11.10",
+    "ts-node": "^9.0.0",
+    "upath": "^2.0.0"
+  },
+  "scripts": {
+    "update": "./node_modules/ts-node/dist/bin.js update.ts",
+    "destroy": "./node_modules/ts-node/dist/bin.js destroy.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.44"
+  }
+}

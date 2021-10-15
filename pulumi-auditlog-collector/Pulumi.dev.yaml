@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  pulumi-auditlog-collector:pulumi_access_token:
+    secure: AAABAGf+ylNdXdmk3jeHYnclNuCNxQsXBEuFy1IQleGbStQXtqKwYaRLXCcIqR1Hmz/zo45PjtjCup4oN7EUAriUnLNZtSS4p3xfoQ==
