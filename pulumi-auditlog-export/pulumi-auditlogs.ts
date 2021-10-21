@@ -58,7 +58,7 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
     {
         headers: headers
     })
-    return { id: `AuditLogExport-${orgName}`, outs: inputs};
+    return { id: `${orgName}-AuditLogsExport`, outs: inputs};
   },
 
   async update(id: string, currentOutputs: PulumiAuditLogsProviderArgs, newInputs: PulumiAuditLogsProviderArgs): Promise<UpdateResult> {
@@ -93,8 +93,6 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
     return { outs: newInputs};
   },
 
-  // There is currently no DELETE API call to clear the export settings.
-  // This is being worked on and once available this code will be updated.
   async delete(id: string, props: PulumiAuditLogsProviderArgs): Promise<void> {
     const orgName = props.orgName
     const bucketName = props.bucketName
@@ -107,27 +105,21 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
       pulumiServiceEndpoint = props.pulumiServiceEndpoint
     }
 
-    // const apiUrl  = `${pulumiServiceEndpoint}/api/orgs/${orgName}/auditlogs/export/config`
+    const apiUrl  = `${pulumiServiceEndpoint}/api/orgs/${orgName}/auditlogs/export/config`
 
-    // const headers =  {
-    //     'Authorization': `token ${pulumiApiKey}`,
-    //     'content-type': 'application/json;charset=UTF-8',
-    // }
+    const headers =  {
+        'Authorization': `token ${pulumiApiKey}`,
+        'content-type': 'application/json;charset=UTF-8',
+    }
 
-    // const data = {
-    //   newEnabled:true,
-    //   newS3Configuration: {
-    //     s3BucketName: "",
-    //     s3PathPrefix: "",
-    //     iamRoleArn: "",
-    //   }}
-    // const createResults = await axios.post(apiUrl, data,
-    // {
-    //     headers: headers
-    // })
+    const createResults = await axios.delete(apiUrl,
+    {
+        headers: headers
+    })
   },
 
   async diff(id: string, previousOutput: PulumiAuditLogsProviderArgs, news: PulumiAuditLogsProviderArgs): Promise<pulumi.dynamic.DiffResult> {
+    console.log("in diff")
     const replaces: string[] = [];
     let changes = false;
     let deleteBeforeReplace = false;
@@ -135,6 +127,7 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
     // If the org name changes, which would be kind of weird, it means we need to delete the config on the old
     // org and create a new config on the new org.
     if (previousOutput.orgName !== news.orgName) {
+      console.log("needs replace")
       changes = true
       deleteBeforeReplace = true
       replaces.push("orgName")
@@ -142,8 +135,12 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
 
     // If any of the other items changes, then we just need a simple update.
     if ((previousOutput.bucketName !== news.bucketName) || (previousOutput.prefixName != news.prefixName) || (previousOutput.iamRoleArn != news.iamRoleArn)) {
+      console.log("just changes")
         changes = true
     }
+
+    console.log("replaces:", replaces)
+    console.log("changes:", changes)
 
     return {
         deleteBeforeReplace: deleteBeforeReplace,
@@ -170,11 +167,6 @@ const pulumiAuditLogsProvider: pulumi.dynamic.ResourceProvider = {
 
     return {inputs: news}
   },
-
-
-
-
-  // Need to add update operation
 }
 
 export class PulumiAuditLogs extends pulumi.dynamic.Resource {

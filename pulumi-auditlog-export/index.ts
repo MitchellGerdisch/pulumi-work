@@ -22,6 +22,7 @@ const logsBucketFolder = new aws.s3.BucketObject(logsBucketFolderName, {
     key: `${logsBucketFolderName}/`
 })
 export const auditLogsBucketName = logsBucket.id;
+export const auditLogsPrefixName = `${logsBucketFolderName}`
 
 // Create an IAM role with the necessary policy
 const logsIamRole = new aws.iam.Role(`${logsBaseName}`, {
@@ -42,6 +43,7 @@ const logsIamRole = new aws.iam.Role(`${logsBaseName}`, {
     }),
 });
 export const logsIamRoleName = logsIamRole.name
+export const logsIamRoleArn = logsIamRole.arn
 
 // Create IAM Policy as per the instructions and attach to the role above.
 const logsIamPolicy = new aws.iam.RolePolicy(`${logsBaseName}`, {
@@ -75,11 +77,13 @@ const logsIamPolicy = new aws.iam.RolePolicy(`${logsBaseName}`, {
 })
 export const logsIamPolicyName = logsIamPolicy.name
 
-const pulumiAuditLogExport = new PulumiAuditLogs(`${logsBaseName}-setting`, {
-    pulumiApiKey: config.require("pulumiApiKey"),
+const pulumiAuditLogExport = new PulumiAuditLogs(`${orgName}-AuditLogsExport`, {
+    pulumiApiKey: config.requireSecret("pulumiApiKey"),
     orgName: orgName,
     bucketName: auditLogsBucketName,
     prefixName: logsBucketFolderName,
     iamRoleArn: logsIamRole.arn,
 })
+export const pulumiAuditLogExportUrn = pulumiAuditLogExport.urn
+
 
