@@ -1,0 +1,6 @@
+name: py-aws-native-autotagging
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Showing tagging and autotagging with aws-native provider.
