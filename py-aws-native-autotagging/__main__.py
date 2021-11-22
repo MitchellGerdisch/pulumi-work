@@ -18,9 +18,19 @@ register_auto_tags(
 
 vpc_name = "aws-native-vpc"
 vpc = pulumi_aws_native.ec2.VPC(vpc_name,
-    cidr_block="10.200.1.0/24",
+    cidr_block="10.200.1.0/16",
     tags=[
         {"key":"Name", "value":vpc_name},
+        {"key":"VPCnote", "value":"this is a VPC"}
+    ]
+)
+
+subnet_name = "aws-native-subnet"
+subnet = pulumi_aws_native.ec2.Subnet(subnet_name, 
+    vpc_id=vpc.id,
+    cidr_block="10.200.1.0/24",
+    tags=[
+        {"key":"Name", "value":subnet_name}
     ]
 )
 
