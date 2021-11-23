@@ -5,6 +5,8 @@ from kubernetes.client.rest import ApiException
 import time
 
 ### use python k8s client to wait for the ingress status to show the ALB information.
+alb_wait_period =  360 # number of total seconds to wait for the ALB to be available
+alb_wait_interval = 15 # number of seconds between checks
 def get_alb_endpoint(args):
   if not pulumi.runtime.is_dry_run():
     cluster_id = args[0]
@@ -35,9 +37,9 @@ def get_alb_endpoint(args):
           lb_check_count += 1
       except ApiException as e:
         lb_check_count += 1
-      if lb_check_count > 24:
+      if lb_check_count > (alb_wait_period/alb_wait_interval):
         done = True
       if not done:
         pulumi.log.info("Waiting for ingress ALB to be ready.")
-        time.sleep(15)
+        time.sleep(alb_wait_interval)
     return f"{alb_endpoint}"
