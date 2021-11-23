@@ -10,16 +10,15 @@ from pulumi_aws.eks import FargateProfileSelectorArgs
 from pulumi_kubernetes import Provider
 from pulumi_kubernetes.core.v1 import Namespace
 from pulumi_kubernetes.meta.v1 import ObjectMetaArgs
-from pulumi_kubernetes.extensions.v1beta1 import (
+from pulumi_kubernetes.networking.v1 import (
     Ingress,
     IngressSpecArgs,
     IngressRuleArgs,
     HTTPIngressRuleValueArgs,
     HTTPIngressPathArgs,
-    IngressBackendArgs)
-
-
-
+    IngressBackendArgs,
+    IngressServiceBackendArgs,
+    ServiceBackendPortArgs)
 
 # Get config values to use for the stack
 config = pulumi.Config()
@@ -103,14 +102,14 @@ app_ingress = Ingress(
         "pulumi.com/skipAwait": "true" # This skipAwait annotation is needed because the ALB controller doesn't return a status and so Pulumi times out waiting for a value that never shows up.
     }),
     spec=IngressSpecArgs(
-        rules=[IngressRuleArgs(
-            http=HTTPIngressRuleValueArgs(
-                paths=[HTTPIngressPathArgs(
-                    path="/*", 
-                    backend=IngressBackendArgs(service_name=app.app_service.metadata.name, service_port=80)
-                )]
+        default_backend=IngressBackendArgs(
+            service=IngressServiceBackendArgs(
+                name=app.app_service.metadata.name,
+                port=ServiceBackendPortArgs(
+                    number=80
+                )
             )
-        )]
+        )
     ),
     opts=ResourceOptions(provider=k8s_provider, depends_on=[ingress_controller,app]),
 )
