@@ -13,7 +13,7 @@ import base64
 
 class OperatorArgs:
   def __init__(self,
-              namespace="argocd",
+              namespace=None,
               ):
     self.namespace = namespace
 
@@ -25,7 +25,6 @@ class Operator(ComponentResource):
     super().__init__('custom:Gitops:Operator', name, {}, opts)
 
     basename = f"{name}-oper"
-    namespace = args.namespace
 
     # define an namespace for the argocd operator to live in
     ns_opts = opts
@@ -77,9 +76,19 @@ class Operator(ComponentResource):
 
 class ApplicationArgs:
   def __init__(self,
-              namespace="argocd",
+              app_namespace=None,
+              app_name=None,
+              app_repo_url=None,
+              app_repo_path=None,
+              app_repo_target_revision=None,
+              operator_namespace=None,
               ):
-    self.namespace = namespace
+    self.app_namespace = app_namespace
+    self.app_name = app_name
+    self.app_repo_url = app_repo_url
+    self.app_repo_path = app_repo_path
+    self.app_repo_target_revision = app_repo_target_revision
+    self.operator_namespace = operator_namespace
 
 class Application(ComponentResource):
   def __init__(self,
@@ -89,28 +98,28 @@ class Application(ComponentResource):
     super().__init__('custom:Gitops:Application', name, {}, opts)
 
     basename = f"{name}-app"
-    namespace = args.namespace
 
-    # define an namespace for the argo managed deployment to live in
+
+    # define a namespace to deploy our app to.
     ns_opts = opts
     ns_opts.parent=self
     self.ns = k8s.core.v1.Namespace(f"{basename}-ns",
       metadata={
-        "name": namespace
+        "name": args.app_namespace
       },
       opts=ns_opts
     )
 
-    # Deploy the app via argo
+    # Deploy the app via argo as a custom resource
     app_opts = opts
     app_opts.parent=self
     self.app = k8s.apiextensions.CustomResource(
-        "sock-shop",
+        args.app_name,
         api_version="argoproj.io/v1alpha1",
         kind="Application",
         metadata=k8s.meta.v1.ObjectMetaArgs(
-            name="sock-shop",
-            namespace=self.ns.metadata.name,
+            name=args.app_name,
+            namespace=args.operator_namespace
         ),
         spec={
             "destination": {
@@ -119,9 +128,9 @@ class Application(ComponentResource):
             },
             "project": "default",
             "source": {
-                "path": "sock-shop",
-                "repoURL": "https://github.com/argoproj/argocd-example-apps",
-                "targetRevision": "HEAD",
+                "path": args.app_repo_path,
+                "repoURL": args.app_repo_url,
+                "targetRevision": args.app_repo_target_revision
             },
             "syncPolicy": {"automated": {}},
         },
