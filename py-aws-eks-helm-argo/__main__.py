@@ -4,8 +4,6 @@ import pulumi
 from pulumi.resource import ResourceOptions
 import pulumi_aws as aws
 import pulumi_eks as eks
-import pulumi_kubernetes as k8s
-import base64
 
 from Gitops import OperatorArgs, Operator, ApplicationArgs, Application
 from apps import apps

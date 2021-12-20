@@ -5,7 +5,7 @@
 # This component resource is currently written to use ArgoCD.
 # But it could be substituted with Flux of Pulumi's K8s Operator.
 
-from pulumi import ComponentResource, ResourceOptions, Output, runtime
+from pulumi import ComponentResource, ResourceOptions, Output
 import pulumi_kubernetes as k8s
 
 import base64
