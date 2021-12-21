@@ -2,18 +2,22 @@
 
 import pulumi
 from pulumi.resource import ResourceOptions
+from pulumi_eks import ClusterArgs, Cluster 
 import pulumi_aws as aws
-import pulumi_eks as eks
 
+from Network import VpcArgs, Vpc
 from Gitops import OperatorArgs, Operator, ApplicationArgs, Application
 from apps import apps
 
-basename = "argo-example"
-# get the default VPCs to deploy the cluster
-vpc = aws.ec2.get_vpc(default=True)
+basename = "argo-demo"
+
+### create VPC
+vpc = Vpc(basename, VpcArgs())
 
 ### create an EKS cluster
-cluster = eks.Cluster(basename)
+cluster = Cluster(basename, ClusterArgs(
+    vpc_id=vpc.id
+))
 k8s_provider = cluster.provider
 pulumi.export("kubeconfig", pulumi.Output.secret(cluster.kubeconfig))
 

@@ -40,11 +40,11 @@ class Operator(ComponentResource):
     chart_opts = opts
     chart_opts.parent = self.ns
     chart_id = f"{basename}-chart"
-    self.argo = k8s.helm.v3.Chart(chart_id,
-        k8s.helm.v3.ChartOpts(
+    self.argo = k8s.helm.v3.Release(chart_id,
+        k8s.helm.v3.ReleaseArgs(
             chart="argo-cd",
             namespace=self.ns.metadata.name,
-            fetch_opts=k8s.helm.v3.FetchOpts(
+            repository_opts=k8s.helm.v3.RepositoryOptsArgs(
                 repo="https://argoproj.github.io/argo-helm"
             ),
             values={
@@ -64,12 +64,12 @@ class Operator(ComponentResource):
     get_opts.parent=self.argo
 
     # URL for the Argo service UI
-    service_uri = Output.all(chart_ready=self.argo.ready, ns_id=self.ns.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['ns_id']}/{chart_id}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
+    service_uri = Output.all(chart_ready=self.argo.status, argo_id=self.argo.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['argo_id']}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
     self.service_url = Output.concat("https://",service_uri)
 
     # Credentials for the Argo service UI
     self.service_admin_username = "admin" # default for Argo CD
-    service_admin_password_encoded = Output.all(chart_ready=self.argo.ready, ns_id=self.ns.id).apply(lambda args: k8s.core.v1.Secret.get("argo_service_password",f"{args['ns_id']}/argocd-initial-admin-secret", opts=get_opts).data["password"])
+    service_admin_password_encoded = Output.all(chart_ready=self.argo.status, ns_id=self.ns.id).apply(lambda args: k8s.core.v1.Secret.get("argo_service_password",f"{args['ns_id']}/argocd-initial-admin-secret", opts=get_opts).data["password"])
     self.service_admin_password = service_admin_password_encoded.apply(lambda pwd: base64.b64decode(pwd).decode('utf-8'))
 
     self.register_outputs({})
