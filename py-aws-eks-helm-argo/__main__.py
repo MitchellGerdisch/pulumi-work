@@ -5,6 +5,7 @@ from pulumi.resource import ResourceOptions
 import pulumi_aws as aws
 import pulumi_eks as eks
 
+from Network import Vpc
 from Gitops import OperatorArgs, Operator, ApplicationArgs, Application
 from apps import apps
 
