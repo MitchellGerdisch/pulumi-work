@@ -64,7 +64,7 @@ class Operator(ComponentResource):
     get_opts.parent=self.argo
 
     # URL for the Argo service UI
-    service_uri = Output.all(chart_ready=self.argo.status, ns_id=self.ns.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['ns_id']}/{chart_id}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
+    service_uri = Output.all(chart_ready=self.argo.status, argo_id=self.argo.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['argo_id']}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
     self.service_url = Output.concat("https://",service_uri)
 
     # Credentials for the Argo service UI
