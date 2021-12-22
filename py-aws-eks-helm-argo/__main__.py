@@ -1,4 +1,9 @@
-"""An AWS Python Pulumi program"""
+"""
+- Creates VPC
+- Instantiates EKS cluster
+- Deploys ArgoCD service
+- Deploys one or more ArgoCD applications
+"""
 
 import pulumi
 from pulumi.resource import ResourceOptions
