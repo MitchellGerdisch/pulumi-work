@@ -1,2 +1,12 @@
 config:
   aws:region: us-west-2
+
+  eks_helm_argo:apps:
+    - app_name: "sock-shop-c"
+      app_repo_path: sock-shop
+      app_repo_url: "https://github.com/argoproj/argocd-example-apps"
+      app_repo_target_revision: "HEAD"
+    - app_name: "guestbook-c"
+      app_repo_path: "kustomize-guestbook"
+      app_repo_url: "https://github.com/argoproj/argocd-example-apps"
+      app_repo_target_revision: "HEAD"
