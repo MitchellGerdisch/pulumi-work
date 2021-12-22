@@ -63,8 +63,8 @@ class Vpc(ComponentResource):
 
         # Subnets, at least across two zones.
         all_zones = get_availability_zones()
-        # limiting to 2 zones for speed and to meet minimal requirements.
-        zone_names = [all_zones.names[0], all_zones.names[1]]
+        # limiting to 3 zones for speed and to meet minimal requirements.
+        zone_names = [all_zones.names[0], all_zones.names[1], all_zones.names[2]]
         self.subnets = []
         subnet_name_base = f'{name}-subnet'
         for zone in zone_names:
