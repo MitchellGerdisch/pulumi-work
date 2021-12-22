@@ -54,8 +54,8 @@ pulumi.export("Admin Password", operator.service_admin_password)
 #         opts=ResourceOptions(provider=k8s_provider)
 #     )
 
+# ### Deploy Some Apps using config data
 # config_apps = config.get_object("apps")
-# ### Deploy Some Apps
 # for app in config_apps:
 #     app_namespace=app.get("app_name")
 #     app_name=app.get("app_name")
