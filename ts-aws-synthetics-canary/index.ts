@@ -46,19 +46,19 @@ const myCanary = new aws.synthetics.Canary("mitch-bird", {
     s3Key: canaryScriptObject.id,
 });
 
-// Canary based on AWS Native provider.
-const myCanaryNative = new awsnative.synthetics.Canary("mitch-bird2", {
-  artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
-  executionRoleArn: canaryExecurtionRole.arn,
-  runtimeVersion: "syn-nodejs-puppeteer-3.5",
-  schedule: {
-      expression: "rate(1 minute)",
-  },
-  code: {
-    handler: "exports.handler",
-    s3Bucket: canaryScriptBucket.id,
-    s3Key: canaryScriptObject.id,
-  },
-  startCanaryAfterCreation: false
-});
+// // Canary based on AWS Native provider.
+// const myCanaryNative = new awsnative.synthetics.Canary("mitch-bird2", {
+//   artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
+//   executionRoleArn: canaryExecurtionRole.arn,
+//   runtimeVersion: "syn-nodejs-puppeteer-3.5",
+//   schedule: {
+//       expression: "rate(1 minute)",
+//   },
+//   code: {
+//     handler: "exports.handler",
+//     s3Bucket: canaryScriptBucket.id,
+//     s3Key: canaryScriptObject.id,
+//   },
+//   startCanaryAfterCreation: false
+// });
 
