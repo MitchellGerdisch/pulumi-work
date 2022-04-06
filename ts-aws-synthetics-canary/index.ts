@@ -1,20 +1,39 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as awsnative from "@pulumi/aws-native";
 import * as aws from "@pulumi/aws";
+import { generateCanaryPolicy } from "./canaryPolicy"
+
+const config = new pulumi.Config()
+const baseName = config.get("baseName") || "canary"
 
 // Zip and upload the canary script
-const canaryScriptAsset = new pulumi.asset.FileArchive("./canary");
-const canaryScriptAssetArchive = new pulumi.asset.AssetArchive({
-  file: canaryScriptAsset
-})
-const canaryScriptBucket = new aws.s3.BucketV2("mitch-canary-script-bucket")
-const canaryScriptObject = new aws.s3.BucketObjectv2("mitch-canary-script", {
+// const canaryScriptAsset = new pulumi.asset.FileArchive("./canary/Canary.zip");
+// const canaryScriptBucket = new aws.s3.BucketV2(`${baseName}-scripts`)
+// const canaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-test-script`, {
+//   bucket: canaryScriptBucket.id,
+//   source: canaryScriptAsset
+// }, {replaceOnChanges: ["source"]})
+
+
+
+const canaryScriptArchive = new pulumi.asset.FileArchive("./canary/");
+// const canaryScriptAsset = new pulumi.asset.FileArchive("./canary/nodejs");
+// const canaryScriptAssetArchive = new pulumi.asset.AssetArchive({
+//   file: canaryScriptAsset
+// })
+const canaryScriptBucket = new aws.s3.BucketV2(`${baseName}-scripts`)
+const canaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-test-script`, {
   bucket: canaryScriptBucket.id,
-  source: canaryScriptAssetArchive
+  source: canaryScriptArchive,
+}, {replaceOnChanges: ["source"]}) // forces the canary to be updated when the code changes.
+
+// Bucket for storing the canary results
+const canaryResultsS3Bucket = new aws.s3.BucketV2(`${baseName}-results`, {
+  forceDestroy: true
 })
 
 // Canary execution role
-const canaryExecurtionRole = new aws.iam.Role("mitch-bird-role", {
+const canaryExecutionRole = new aws.iam.Role(`${baseName}-exec-role`, {
   assumeRolePolicy: {
       Version: "2012-10-17",
       Statement: [
@@ -27,16 +46,19 @@ const canaryExecurtionRole = new aws.iam.Role("mitch-bird-role", {
           },
       ],
   },
-  managedPolicyArns: [ "arn:aws:iam::aws:policy/CloudWatchSyntheticsFullAccess"]
+  // managedPolicyArns: [ "arn:aws:iam::aws:policy/CloudWatchSyntheticsFullAccess"]
 })
 
-// Bucket for storing the canary results
-const canaryResultsS3Bucket = new aws.s3.BucketV2("mitch-canary-results")
+const canaryExecutionPolicy = new aws.iam.RolePolicy(`${baseName}-exec-policy`, {
+  role: canaryExecutionRole.id,
+  policy: canaryResultsS3Bucket.arn.apply(arn => generateCanaryPolicy(arn))
+})
+
 
 // Canary based on AWS Classic provider.
-const myCanary = new aws.synthetics.Canary("mitch-bird", {
+const myCanary = new aws.synthetics.Canary(`${baseName}`, {
     artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
-    executionRoleArn: canaryExecurtionRole.arn,
+    executionRoleArn: canaryExecutionRole.arn,
     handler: "exports.handler",
     runtimeVersion: "syn-nodejs-puppeteer-3.5",
     schedule: {
@@ -44,7 +66,7 @@ const myCanary = new aws.synthetics.Canary("mitch-bird", {
     },
     s3Bucket: canaryScriptBucket.id,
     s3Key: canaryScriptObject.id,
-});
+}, {replaceOnChanges: ["s3Key"]});
 
 // // Canary based on AWS Native provider.
 // const myCanaryNative = new awsnative.synthetics.Canary("mitch-bird2", {

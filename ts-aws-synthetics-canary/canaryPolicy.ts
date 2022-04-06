@@ -21,17 +21,18 @@ export function generateCanaryPolicy(canaryResultsBucketArn: string) {
                   canaryResultsBucketArn
               ]
           },
-          // {
-          //     "Effect": "Allow",
-          //     "Action": [
-          //         "logs:CreateLogStream",
-          //         "logs:PutLogEvents",
-          //         "logs:CreateLogGroup"
-          //     ],
-          //     "Resource": [
-          //         "arn:aws:logs:us-east-1:052848974346:log-group:/aws/lambda/cwsyn-mitch-canary-test-*"
-          //     ]
-          // },
+        //   {
+        //       "Effect": "Allow",
+        //       "Action": [
+        //           "logs:CreateLogStream",
+        //           "logs:PutLogEvents",
+        //           "logs:CreateLogGroup"
+        //       ],
+        //       "Resource": [
+        //         "*"
+        //         //   "arn:aws:logs:us-east-1:052848974346:log-group:/aws/lambda/cwsyn-mitch-canary-test-*"
+        //       ]
+        //   },
           {
               "Effect": "Allow",
               "Action": [
