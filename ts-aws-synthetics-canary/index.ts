@@ -6,31 +6,14 @@ import { generateCanaryPolicy } from "./canaryPolicy"
 const config = new pulumi.Config()
 const baseName = config.get("baseName") || "canary"
 
-// Zip and upload the canary script
-// const canaryScriptAsset = new pulumi.asset.FileArchive("./canary/Canary.zip");
-// const canaryScriptBucket = new aws.s3.BucketV2(`${baseName}-scripts`)
-// const canaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-test-script`, {
-//   bucket: canaryScriptBucket.id,
-//   source: canaryScriptAsset
-// }, {replaceOnChanges: ["source"]})
-
-
-
-const canaryScriptArchive = new pulumi.asset.FileArchive("./canary/");
-// const canaryScriptAsset = new pulumi.asset.FileArchive("./canary/nodejs");
-// const canaryScriptAssetArchive = new pulumi.asset.AssetArchive({
-//   file: canaryScriptAsset
-// })
-const canaryScriptBucket = new aws.s3.BucketV2(`${baseName}-scripts`)
-const canaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-test-script`, {
-  bucket: canaryScriptBucket.id,
-  source: canaryScriptArchive,
-}, {replaceOnChanges: ["source"]}) // forces the canary to be updated when the code changes.
-
-// Bucket for storing the canary results
+// Bucket for storing canary scripts
+const canaryScriptsBucket = new aws.s3.BucketV2(`${baseName}-scripts`)
+// Bucket for storing canary results
 const canaryResultsS3Bucket = new aws.s3.BucketV2(`${baseName}-results`, {
   forceDestroy: true
 })
+
+
 
 // Canary execution role
 const canaryExecutionRole = new aws.iam.Role(`${baseName}-exec-role`, {
@@ -46,17 +29,26 @@ const canaryExecutionRole = new aws.iam.Role(`${baseName}-exec-role`, {
           },
       ],
   },
-  // managedPolicyArns: [ "arn:aws:iam::aws:policy/CloudWatchSyntheticsFullAccess"]
 })
 
+// Make sure the canary(lambda) can do what it needs to do just being a canary.
+// Note though that if the canary code itself has to interact with AWS resources, then the role needs the 
+// policies to allow the canary to do so.
+// The canaries used in this example do not interact with any AWS resources, 
+// so no canary-specific permissions are needed.
 const canaryExecutionPolicy = new aws.iam.RolePolicy(`${baseName}-exec-policy`, {
   role: canaryExecutionRole.id,
   policy: canaryResultsS3Bucket.arn.apply(arn => generateCanaryPolicy(arn))
 })
 
-
-// Canary based on AWS Classic provider.
-const myCanary = new aws.synthetics.Canary(`${baseName}`, {
+// zip up, upload and deploy the "simple canary"
+const simpleCanaryScriptArchive = new pulumi.asset.FileArchive("./canaries/simple-canary/");
+const simpleCanaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-simple-canary`, {
+  bucket: canaryScriptsBucket.id,
+  source: simpleCanaryScriptArchive,
+}) 
+// Create a canary using the AWS Classic provider.
+const simpleCanary = new aws.synthetics.Canary(`${baseName}-simple`, {
     artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
     executionRoleArn: canaryExecutionRole.arn,
     handler: "exports.handler",
@@ -64,23 +56,29 @@ const myCanary = new aws.synthetics.Canary(`${baseName}`, {
     schedule: {
         expression: "rate(1 minute)",
     },
-    s3Bucket: canaryScriptBucket.id,
-    s3Key: canaryScriptObject.id,
+    s3Bucket: canaryScriptsBucket.id,
+    s3Key: simpleCanaryScriptObject.id,
+    startCanary: true
 }, {replaceOnChanges: ["s3Key"]});
 
-// // Canary based on AWS Native provider.
-// const myCanaryNative = new awsnative.synthetics.Canary("mitch-bird2", {
-//   artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
-//   executionRoleArn: canaryExecurtionRole.arn,
-//   runtimeVersion: "syn-nodejs-puppeteer-3.5",
-//   schedule: {
-//       expression: "rate(1 minute)",
-//   },
-//   code: {
-//     handler: "exports.handler",
-//     s3Bucket: canaryScriptBucket.id,
-//     s3Key: canaryScriptObject.id,
-//   },
-//   startCanaryAfterCreation: false
-// });
-
+// zip up and upload the "webpage canary"
+const webpageCanaryScriptArchive = new pulumi.asset.FileArchive("./canaries/webpage-canary/");
+const webpageCanaryScriptObject = new aws.s3.BucketObjectv2(`${baseName}-webpage-canary`, {
+  bucket: canaryScriptsBucket.id,
+  source: webpageCanaryScriptArchive,
+}) 
+// Create a canary using the AWS Native provider, because why not?
+const webpageCanary = new awsnative.synthetics.Canary(`${baseName}-web`, {
+  artifactS3Location: canaryResultsS3Bucket.id.apply(id => `s3://${id}`),
+  executionRoleArn: canaryExecutionRole.arn,
+  runtimeVersion: "syn-nodejs-puppeteer-3.5",
+  schedule: {
+      expression: "rate(1 minute)",
+  },
+  code: {
+    handler: "exports.handler",
+    s3Bucket: canaryScriptsBucket.id,
+    s3Key: webpageCanaryScriptObject.id,
+  },
+  startCanaryAfterCreation: true
+}, {replaceOnChanges: ["s3Key"]});
