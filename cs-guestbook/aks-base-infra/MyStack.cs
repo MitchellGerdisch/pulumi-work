@@ -29,17 +29,17 @@ class MyStack : Stack
         });
 
         // Generate random password
-        var password = new RandomPassword("password", new RandomPasswordArgs
-        {
-            Length = 20,
-            Special = true
-        });
+        // var password = new RandomPassword("password", new RandomPasswordArgs
+        // {
+        //     Length = 20,
+        //     Special = true
+        // });
 
         // Create the Service Principal Password
         var adSpPassword = new ServicePrincipalPassword("aksSpPassword", new ServicePrincipalPasswordArgs
         {
             ServicePrincipalId = adSp.Id,
-            Value = password.Result,
+            // Value = password.Result,
             EndDate = "2099-01-01T00:00:00Z"
         });
 
@@ -84,11 +84,11 @@ class MyStack : Stack
                     }
                 }
             },
-            // NodeResourceGroup = $"MC_azure-cs_my_aks",
             ServicePrincipalProfile = new ManagedClusterServicePrincipalProfileArgs
             {
                 ClientId = adApp.ApplicationId,
-                Secret = adSpPassword.Value
+                // Secret = adSpPassword.Value
+                Secret = adSp.Id.Apply(id => { return(adSpPassword.Value); })
             }
         });
 

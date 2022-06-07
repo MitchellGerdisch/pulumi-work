@@ -1,5 +1,3 @@
-[![Deploy](https://get.pulumi.com/new/button.svg)](https://app.pulumi.com/new?template=https://github.com/pulumi/examples/blob/master/azure-cs-aks/README.md)
-
 # Azure Kubernetes Service (AKS) Cluster using the native Azure Provider
 
 This example deploys an AKS cluster, creates an Azure Active AD application, creates a Service Principal and sets credentials to manage access to the cluster.

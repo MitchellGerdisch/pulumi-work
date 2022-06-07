@@ -1,5 +1,3 @@
 config:
-  azure-native:location: CentralUS
-  guestbook-app-cs:goo: foo
   guestbook-app-cs:k8sProject: guestbook-base-aks-infra-cs
   guestbook-app-cs:org: demo
