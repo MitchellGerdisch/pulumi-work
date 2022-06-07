@@ -1,0 +1,8 @@
+config:
+  aws:region: us-west-2
+  azure-native:location: CentralUS
+  gcp:project: pulumi-ce-team
+  gcp:region: us-west2
+  gcp:zone: us-west2-a
+  guestbook-base-eks-infra-cs:eksProject: guestbook-base-eks-infra-cs
+  guestbook-base-eks-infra-cs:org: demo

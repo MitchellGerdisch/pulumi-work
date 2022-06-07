@@ -1,0 +1,5 @@
+config:
+  aws:region: us-west-2
+  azure-native:location: CentralUS
+  guestbook-app-cs:k8sProject: guestbook-base-aks-infra-cs
+  guestbook-app-cs:org: demo

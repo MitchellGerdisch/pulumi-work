@@ -1,0 +1,6 @@
+config:
+  azure-native:location: CentralUS
+  guestbook-app-cs:k8sProject: guestbook-base-aks-infra-cs
+  guestbook-app-cs:org: demo
+  guestbook-base-aks-infra-cs:password:
+    secure: AAABAMQXw2YuzS72TBezI4pO7BvelddL7l2xV/cc0RweBfr7G90HjuzGjOLpMSt0yXI=

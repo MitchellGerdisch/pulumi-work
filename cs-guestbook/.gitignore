@@ -1,0 +1,3 @@
+obj
+bin
+!Pulumi.*.yaml
