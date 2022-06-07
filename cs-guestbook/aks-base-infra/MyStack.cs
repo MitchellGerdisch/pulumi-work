@@ -15,6 +15,10 @@ class MyStack : Stack
 {
     public MyStack()
     {
+        // Config
+        var config = new Pulumi.Config();
+        var agentPoolCount = config.GetInt32("agentPoolCount") ?? 1; // Default to 1
+
         // Create an Azure Resource Group
         var resourceGroup = new ResourceGroup("azure-cs-aks");
 
@@ -28,18 +32,10 @@ class MyStack : Stack
             ApplicationId = adApp.ApplicationId
         });
 
-        // Generate random password
-        // var password = new RandomPassword("password", new RandomPasswordArgs
-        // {
-        //     Length = 20,
-        //     Special = true
-        // });
-
         // Create the Service Principal Password
         var adSpPassword = new ServicePrincipalPassword("aksSpPassword", new ServicePrincipalPasswordArgs
         {
             ServicePrincipalId = adSp.Id,
-            // Value = password.Result,
             EndDate = "2099-01-01T00:00:00Z"
         });
 
@@ -57,7 +53,7 @@ class MyStack : Stack
             {
                 new ManagedClusterAgentPoolProfileArgs
                 {
-                    Count = 3,
+                    Count = agentPoolCount,
                     MaxPods = 110,
                     Mode = "System",
                     Name = "agentpool",
@@ -87,13 +83,11 @@ class MyStack : Stack
             ServicePrincipalProfile = new ManagedClusterServicePrincipalProfileArgs
             {
                 ClientId = adApp.ApplicationId,
-                // Secret = adSpPassword.Value
                 Secret = adSp.Id.Apply(id => { return(adSpPassword.Value); })
             }
         });
 
         // Export the KubeConfig
-        // this.KubeConfig = Output.CreateSecret(GetKubeConfig(resourceGroup.Name, cluster.Name));
         this.kubeconfig = GetKubeConfig(resourceGroup.Name, cluster.Name);
     }
 
