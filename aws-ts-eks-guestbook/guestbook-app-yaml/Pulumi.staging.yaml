@@ -1,0 +1,3 @@
+config:
+  guestbook-app-yaml:eksProject: guestbook-base-eks-infra-ts
+  guestbook-app-yaml:org: demo
