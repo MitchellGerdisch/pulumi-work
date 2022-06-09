@@ -1,7 +1,9 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as k8s from "@pulumi/kubernetes";
+import * as aws from "@pulumi/aws";
 import * as ServiceDeployment from "@pulumi/k8s-servicedeployment";
 
+const goo = new 
 
 const config = new pulumi.Config()
 const org = config.require("org")
@@ -39,5 +41,18 @@ const frontend = new ServiceDeployment.ServiceDeployment("frontend", {
   serviceType: "LoadBalancer",
 }, {provider: k8sProvider})
 
+const dnsName = "guestbook"
+const zoneName = config.require("zoneName")
+const fqdn = `${dnsName}.${zoneName}`
+const zoneId = aws.route53.getZoneOutput({ name: zoneName }).zoneId
+const dnsRecord = new aws.route53.Record("frontEndDnsRecord", {
+  zoneId: zoneId,
+  name: fqdn,
+  type: "CNAME",
+  ttl: 300,
+  records: [ frontend.frontEndIp.apply(ip => ip) ]
+})
+
 export const frontEndUrl = pulumi.interpolate`http://${frontend.frontEndIp}`
+export const nameUrl = `http://${fqdn}`
 
