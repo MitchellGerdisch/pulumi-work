@@ -1,8 +1,8 @@
-[![Deploy](https://get.pulumi.com/new/button.svg)](https://app.pulumi.com/new?template=https://github.com/pulumi/examples/blob/master/azure-ts-functions/README.md)
+# Pulumi Webhook Using Azure Functions
 
-# Deploying Azure Functions
-
-Starting point for building serverless applications hosted in Azure Functions.
+This Pulumi project creates an Azure Function that can the be used as a webhook in the Pulumi Service.  
+The code in this project takes the information sent by the Pulumi service (through the aforementioned webhook) and forwards it to a Slack channel via a Slack Webhooks.  
+We are creating a web of webhooks here. Which is better than a web of lies.
 
 ## Running the App
 
@@ -30,6 +30,12 @@ Starting point for building serverless applications hosted in Azure Functions.
     $ pulumi config set azure-native:location westus2
     ```
 
+1. Set the Slack webhook for the function to forward messages to.
+    ```
+    $ pulumi config set slackWebhookUrl --secret
+    value: ENTER YOUR SLACK WEBHOOK URL 
+    ```
+
 1.  Run `pulumi up` to preview and deploy changes:
 
     ```
@@ -46,10 +52,11 @@ Starting point for building serverless applications hosted in Azure Functions.
     ```
 
 1.  Check the deployed endpoint:
+    Note: The response from the curl is just an error handling message. When plugged into the Pulumi Service as a webhook there, stack updates will generate messages in the given Slack channel
 
     ```
     $ pulumi stack output endpoint
-    https://appg-fsprfojnnlr.azurewebsites.net/api/HelloNode?name=Pulumi
+    https://appg-fsprfojnnlr.azurewebsites.net/api/SlackHandler
     $ curl "$(pulumi stack output endpoint)"
-    Hello from Node.js, Pulumi
+    No message body received.
     ```

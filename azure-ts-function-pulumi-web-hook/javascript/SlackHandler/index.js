@@ -1,9 +1,8 @@
-
-// import { IncomingWebhook, IncomingWebhookSendArguments } from "@slack/webhook";
-// import { formatSlackMessage } from "./util"
+// This is Azure function code that sends a message to slack when invoked.
 
 https = require('https');
 
+// Helper function
 function sendSlackMessage (webhookURL, messageBody) {
     // make sure the incoming message body can be parsed into valid JSON
     try {
@@ -26,7 +25,6 @@ function sendSlackMessage (webhookURL, messageBody) {
       const req = https.request(webhookURL, requestOptions, (res) => {
         let response = '';
   
-  
         res.on('data', (d) => {
           response += d;
         });
@@ -48,97 +46,84 @@ function sendSlackMessage (webhookURL, messageBody) {
     });
   }
 
+// Main trigger function that is invoked by the Azure Function framework.
 module.exports = async function (context, req) {
 
-    context.log('HTTP trigger function processed a request.');
+    context.log('HTTP trigger function received a request.');
+
+    const https = require('https');
+    const yourWebHookURL = process.env.SLACK_WEBHOOK_URL
 
     // Handle POST of data from Pulumi and send it to Slack
     if  (req.body) {
-        const https = require('https');
-
-        const yourWebHookURL = 'TBD'; 
-        const userAccountNotification = {
-          'username': 'Error notifier', // This will appear as user name who posts the message
-          'text': 'User failed to login 3 times. Account locked for 15 minutes.', // text
-          'icon_emoji': ':bangbang:', // User icon, you can also use custom icons here
-          'attachments': [{ // this defines the attachment block, allows for better layout usage
-            'color': '#eed140', // color of the attachments sidebar.
-            'fields': [ // actual fields
-              {
-                'title': 'Environment', // Custom field
-                'value': 'Production', // Custom value
-                'short': true // long fields will be full width
-              },
-              {
-                'title': 'User ID',
-                'value': '331',
-                'short': true
-              }
-            ]
-          }]
-        };
         
-        /**
-         * Handles the actual sending request. 
-         * We're turning the https.request into a promise here for convenience
-         * @param webhookURL
-         * @param messageBody
-         * @return {Promise}
-         */
-        
-        
-        // main
-        (async function () {
-          if (!yourWebHookURL) {
-            context.log.error('Please fill in your Webhook URL');
-          }
-        
-          context.log('Sending slack message');
-          try {
-            const slackResponse = await sendSlackMessage(yourWebHookURL, userAccountNotification);
-            context.log('Message response', slackResponse);
-          } catch (e) {
-            context.log.error('There was a error with the request', e);
-          }
-        })();
+      // Parse the request and get the important bits out for sending to Slack
+      const eventKind = req.headers["pulumi-webhook-kind"] // update, preview, destroy 
+      const user = req.body["user"]["name"]
+      const projectName = req.body["projectName"]
+      const stackName = req.body["stackName"]
+      const kind = req.body["kind"]  // update or destroy 
+      const result = req.body["result"]
+      const resourceChanges = req.body["resourceChanges"] ? JSON.stringify(req.body["resourceChanges"]) : ""
+      // Build the slack text and the webhook message body.
+      // See the following link for how to make it pretty: https://api.slack.com/messaging/webhooks#advanced_message_formatting 
+      const slackText = `User: ${user}\n
+      Project: ${projectName}\n
+      Stack: ${stackName}\n
+      Action: ${eventKind}\n
+      Resource Changes: ${resourceChanges}\n
+      Result: ${result}`
 
+      // Use this to dump all the stuff that the webhook sends to figure out which fields you want to
+      // use
+      //const slackText = `{ ${json.STRINGIFY(req.headers)}, ${json.STRINGIFY(req.body)} }`
 
+      const slackNotification = {
+        'username': 'Pulumi stack event', // This will appear as user name who posts the message
+        'text': slackText,
+        'icon_emoji': ':bangbang:', // User icon, you can also use custom icons here
+        'attachments': [{ // this defines the attachment block, allows for better layout usage
+          'color': '#eed140', // color of the attachments sidebar.
+          'fields': [ // actual fields
+            {
+              'title': 'Project', // Custom field
+              'value': projectName, // Custom value
+              'short': true // long fields will be full width
+            },
+            {
+              'title': 'Stack',
+              'value': stackName,
+              'short': true
+            }
+          ]
+        }]
+      };
+      
 
+      // main
+      (async function () {
+        if (!yourWebHookURL) {
+          context.log.error('No webhook provided.');
+        }
+      
+        context.log('Sending slack message');
+        try {
+          const slackResponse = await sendSlackMessage(yourWebHookURL, slackNotification);
+          context.log('Message response', slackResponse);
+        } catch (e) {
+          context.log.error('There was a error with the request', e);
+        }
+      })();
 
-
-
-        // context.log("processing body: " + JSON.stringify(req.body));
-        // context.log("headers: " + JSON.stringify(req.headers));
-        // const webhookKind = req.headers !== undefined ? req.headers["pulumi-webhook-kind"] : "";
-        // context.log("webhookKind: " + webhookKind);
-        // const payload = req.body.toString();
-        // context.log("payload: " + payload);
-        // const parsedPayload = JSON.parse(payload);
-        // context.log("parsedPayload: " + parsedPayload);
-        // const prettyPrintedPayload = JSON.stringify(parsedPayload, null, 2);
-
-        // const webhook = new IncomingWebhook("https://hooks.slack.com/services/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");
-
-        // const fallbackText = `Pulumi Service Webhook (\`${webhookKind}\`)\n` + "```\n" + prettyPrintedPayload + "```\n";
-        // const messageArgs: IncomingWebhookSendArguments = {
-        //     channel: "general",
-        //     text: fallbackText,
-        // };
-
-        // // Format the Slack message based on the kind of webhook received.
-        // const formattedMessageArgs = formatSlackMessage(webhookKind, parsedPayload, messageArgs);
-
-        // await webhook.send(formattedMessageArgs);
-
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Got a body 4"
-        };
+      context.res = {
+          // status: 200, /* Defaults to 200 */
+          body: "Successfully sent message to Slack Web Hook"
+      };
     }
     else {
         context.res = {
             status: 400,
-            body: "Expecting POST with request body"
+            body: "No message body received."
         };
     }
 };

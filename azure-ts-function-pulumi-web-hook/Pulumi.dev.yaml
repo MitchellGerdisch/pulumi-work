@@ -1,2 +1,4 @@
 config:
   azure-native:location: CentralUS
+  azure-ts-pulumi-web-hook:slackWebhookUrl:
+    secure: AAABALShLQW2QjEeZfsHcEGeu6HBfpdXil3M9o1aigsiVBlHh9jV/3R8+1pLvCBjD5Zk4xfgBPlqEY4hYLE25sv28KmsESGDDJZ4n+I7RDeb2KCat631lB4zH4A28KxCzrpsHkVU5wjoKl0v/zYG
