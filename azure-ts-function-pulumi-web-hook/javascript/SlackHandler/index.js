@@ -56,7 +56,7 @@ module.exports = async function (context, req) {
     if  (req.body) {
         const https = require('https');
 
-        const yourWebHookURL = 'https://hooks.slack.com/services/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'; 
+        const yourWebHookURL = 'TBD'; 
         const userAccountNotification = {
           'username': 'Error notifier', // This will appear as user name who posts the message
           'text': 'User failed to login 3 times. Account locked for 15 minutes.', // text
