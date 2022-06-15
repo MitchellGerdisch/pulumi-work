@@ -1,0 +1,3 @@
+name: azure-ts-functions
+runtime: nodejs
+description: Creates and deploys an Azure Function App

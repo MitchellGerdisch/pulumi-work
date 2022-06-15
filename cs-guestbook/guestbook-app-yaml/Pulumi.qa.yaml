@@ -1,0 +1,3 @@
+config:
+  guestbook-app-yaml:k8sProject: guestbook-base-aks-infra-cs
+  guestbook-app-yaml:org: demo

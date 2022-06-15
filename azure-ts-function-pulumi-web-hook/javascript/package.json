@@ -1,0 +1,8 @@
+{
+  "name": "hello-node",
+  "version": "0.1.0",
+  "dependencies": {
+    "@slack/webhook": "^6.1.0",
+    "https": "^1.0.0"
+  }
+}
