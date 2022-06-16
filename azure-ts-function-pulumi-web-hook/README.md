@@ -1,7 +1,7 @@
 # Pulumi Webhook Using Azure Functions
 
 This Pulumi project creates an Azure Function that can the be used as a webhook in the Pulumi Service.  
-The code in this project takes the information sent by the Pulumi service (through the aforementioned webhook) and forwards it to a Slack channel via a Slack Webhooks.  
+The code in this project takes the information sent by the Pulumi service (through the aforementioned webhook) and forwards it to a Slack channel via a Slack Webhook that you provide.  
 We are creating a web of webhooks here. Which is better than a web of lies.
 
 ## Running the App
@@ -55,8 +55,10 @@ We are creating a web of webhooks here. Which is better than a web of lies.
     Note: The response from the curl is just an error handling message. When plugged into the Pulumi Service as a webhook there, stack updates will generate messages in the given Slack channel
 
     ```
-    $ pulumi stack output endpoint
+    $ pulumi stack output webHookURL
     https://appg-fsprfojnnlr.azurewebsites.net/api/SlackHandler
     $ curl "$(pulumi stack output endpoint)"
     No message body received.
     ```
+    
+1. Go to the Pulumi Service UI and under Settings -> Integrations, create a webhook and paste in the provided `webHookURL`
