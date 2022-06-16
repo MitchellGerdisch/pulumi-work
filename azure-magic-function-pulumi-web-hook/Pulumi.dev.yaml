@@ -1,0 +1,4 @@
+config:
+  azure-magic-function-pulumi-web-hook:slackWebhookUrl:
+    secure: AAABAOz5L4XQ/+J3kWWTZQ2lD3GSyZ/Uo958BQSoIzGmvn/q5cokbVWWl/AwrXLjbSPxfUsQdohf+c9gkk8wXr2147MRm//AES5fjRawgC3dCZ1vt+5dYKw76sx5e34XWB8zt9nQCPyvvzoL6g7G
+  azure:location: CentralUS

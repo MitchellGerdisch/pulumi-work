@@ -9,7 +9,7 @@ const config = new pulumi.Config()
 const baseName = config.get("baseName") || "pulumihook"
 const slackWebhookUrl = config.requireSecret("slackWebhookUrl")
 
-// Create a separate resource group for this example.
+// Create a resource group 
 const resourceGroup = new resources.ResourceGroup(`${baseName}-rg`);
 export const rgName = resourceGroup.name
 

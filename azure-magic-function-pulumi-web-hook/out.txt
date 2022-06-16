@@ -1,0 +1,58 @@
+I0616 12:36:26.931792   39931 backend.go:420] found username for access token
+I0616 12:36:27.444116   39931 backend.go:420] found username for access token
+I0616 12:36:27.930928   39931 update.go:192] *** Starting Update(preview=true) ***
+I0616 12:36:27.932210   39931 plugins.go:77] gatherPluginsFromProgram(): gathering plugins from language host
+I0616 12:36:27.932982   39931 plugins.go:1063] GetPluginPath(language, nodejs, <nil>): found on $PATH /Users/mitch/.pulumi/bin/pulumi-language-nodejs
+I0616 12:36:27.933684   39931 plugin.go:184] Launching plugin 'nodejs' from '/Users/mitch/.pulumi/bin/pulumi-language-nodejs' with args: -root=/Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook,127.0.0.1:63971
+I0616 12:36:28.020987   39931 langruntime_plugin.go:207] langhost[nodejs].GetPluginInfo() executing
+I0616 12:36:28.023048   39931 langruntime_plugin.go:115] langhost[nodejs].GetRequiredPlugins(proj=azure-magic-function-pulumi-web-hook,pwd=/Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook,program=.) executing
+I0616 12:36:28.226534   39931 eventsink.go:78] eventSink::Infoerr(<{%reset%}>I0616 12:36:28.226415   39941 main.go:242] one or more errors while discovering plugins: 1 error occurred:
+<{%reset%}>)
+I0616 12:36:28.226630   39931 eventsink.go:78] eventSink::Infoerr(<{%reset%}>	* unmarshaling package.json node_modules/resolve/test/resolver/malformed_package_json/package.json: unexpected end of JSON input
+<{%reset%}>)
+I0616 12:36:28.230928   39931 langruntime_plugin.go:157] langhost[nodejs].GetRequiredPlugins(proj=azure-magic-function-pulumi-web-hook,pwd=/Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook,program=.) success: #versions=1
+I0616 12:36:28.230988   39931 plugins.go:89] gatherPluginsFromProgram(): plugin nodejs <nil> () is required by language host
+I0616 12:36:28.231406   39931 plugins.go:89] gatherPluginsFromProgram(): plugin azure 5.10.0 () is required by language host
+I0616 12:36:28.231726   39931 plugins.go:101] gatherPluginsFromSnapshot(): gathering plugins from snapshot
+I0616 12:36:28.231741   39931 plugins.go:138] ensurePluginsAreInstalled(): beginning
+I0616 12:36:28.231888   39931 plugins.go:1063] GetPluginPath(language, nodejs, <nil>): found on $PATH /Users/mitch/.pulumi/bin/pulumi-language-nodejs
+I0616 12:36:28.231904   39931 plugins.go:143] ensurePluginsAreInstalled(): plugin nodejs <nil> already installed
+I0616 12:36:28.233788   39931 plugins.go:1104] GetPluginPath(resource, azure, 5.10.0): enabling new plugin behavior
+I0616 12:36:28.233818   39931 plugins.go:1192] SelectCompatiblePlugin(..., azure): beginning
+I0616 12:36:28.233865   39931 plugins.go:1225] SelectCompatiblePlugin(..., azure): skipping plugin azure-3.28.0: semver mismatch
+I0616 12:36:28.233875   39931 plugins.go:1225] SelectCompatiblePlugin(..., azure): skipping plugin azure-4.42.0: semver mismatch
+I0616 12:36:28.233884   39931 plugins.go:1225] SelectCompatiblePlugin(..., azure): skipping plugin azure-5.6.0: semver mismatch
+I0616 12:36:28.233892   39931 plugins.go:1221] SelectCompatiblePlugin(..., azure): best plugin azure-5.10.0: semver match
+I0616 12:36:28.233900   39931 plugins.go:1234] SelectCompatiblePlugin(..., azure): selecting plugin 'azure-5.10.0': best match 
+I0616 12:36:28.233920   39931 plugins.go:1151] GetPluginPath(resource, azure, 5.10.0): found in cache at /Users/mitch/.pulumi/plugins/resource-azure-v5.10.0/pulumi-resource-azure
+I0616 12:36:28.233929   39931 plugins.go:143] ensurePluginsAreInstalled(): plugin azure 5.10.0 already installed
+I0616 12:36:28.233936   39931 plugins.go:158] ensurePluginsAreInstalled(): completed
+I0616 12:36:28.233952   39931 plugins.go:259] computeDefaultProviderPlugins(): considering nodejs
+I0616 12:36:28.233982   39931 plugins.go:262] computeDefaultProviderPlugins(): skipping nodejs, not a resource provider
+I0616 12:36:28.233989   39931 plugins.go:259] computeDefaultProviderPlugins(): considering azure-5.10.0
+I0616 12:36:28.234002   39931 plugins.go:290] computeDefaultProviderPlugins(): plugin azure-5.10.0 selected for package azure (first seen)
+I0616 12:36:28.234034   39931 plugins.go:296] computeDefaultProviderPlugins(): summary of default plugins:
+I0616 12:36:28.234043   39931 plugins.go:298]   azure           = 5.10.0
+I0616 12:36:28.408538   39931 step_generator.go:1123] stepGenerator.GeneratePendingDeletes(): scanning previous snapshot for pending deletes
+I0616 12:36:28.408603   39931 langruntime_plugin.go:168] langhost[nodejs].Run(pwd=/Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook,program=.,#args=0,proj=azure-magic-function-pulumi-web-hook,stack=dev,#config=2,dryrun=true) executing
+I0616 12:36:28.408614   39931 deployment_executor.go:474] deploymentExecutor.retirePendingDeletes(...): no pending deletions
+I0616 12:36:28.408914   39931 step_executor.go:377] StepExecutor worker(-2): worker coming online
+I0616 12:36:28.408958   39931 step_executor.go:377] StepExecutor worker(-2): worker waiting for incoming chains
+I0616 12:36:28.409328   39931 deployment_executor.go:255] deploymentExecutor.Execute(...): waiting for incoming events
+I0616 12:36:28.688100   39931 eventsink.go:78] eventSink::Infoerr(<{%reset%}>I0616 12:36:28.688022   39941 main.go:540] Language host launching process:  /Users/mitch/.nvm/versions/node/v18.0.0/bin/node /Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook/node_modules/@pulumi/pulumi/cmd/run/index.js --monitor 127.0.0.1:63977 --engine 127.0.0.1:63971 --sync /var/folders/qp/6k0zsrj13rz5ll53hsmlksvw0000gq/T/pulumi-node-pipes1960597410 --project azure-magic-function-pulumi-web-hook --stack dev --pwd /Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook --dry-run --query-mode false --parallel 2147483647 .
+<{%reset%}>)
+I0616 12:36:28.828583   39931 deployment_executor.go:155] deploymentExecutor.Execute(...): signalling cancellation to providers...
+I0616 12:36:28.828576   39931 step_executor.go:377] StepExecutor worker(-2): worker exiting due to cancellation
+I0616 12:36:28.828597   39931 deployment_executor.go:293] deploymentExecutor.Execute(...): context finished: context canceled
+I0616 12:36:28.828651   39931 step_executor.go:377] StepExecutor worker(-1): StepExecutor.waitForCompletion(): waiting for worker threads to exit
+I0616 12:36:28.828662   39931 step_executor.go:377] StepExecutor worker(-1): StepExecutor.waitForCompletion(): worker threads all exited
+I0616 12:36:28.828673   39931 deployment_executor.go:303] deploymentExecutor.Execute(...): step executor has completed
+I0616 12:36:28.828689   39931 eventsink.go:86] eventSink::Error(<{%reset%}>preview canceled<{%reset%}>)
+I0616 12:36:28.828710   39931 langruntime_plugin.go:193] langhost[nodejs].Run(pwd=/Users/mitch/Downloads/mitch-stuff-2/pulumi-work/azure-magic-function-pulumi-web-hook,program=.,...,dryrun=true) failed: err=error reading from server: read tcp 127.0.0.1:63974->127.0.0.1:63972: use of closed network connection
+I0616 12:36:28.829358   39931 ignore.go:44] Explicitly ignoring and discarding error: rpc error: code = Canceled desc = grpc: the client connection is closing
+I0616 12:36:28.830976   39931 ignore.go:44] Explicitly ignoring and discarding error: 1 error occurred:
+	* operation not permitted
+
+I0616 12:36:28.831036   39931 update.go:195] *** Update(preview=true) complete ***
+I0616 12:36:28.831035   39931 source_eval.go:187] EvalSourceIterator ended with an error: error reading from server: read tcp 127.0.0.1:63974->127.0.0.1:63972: use of closed network connection
+I0616 12:36:28.831088   39931 deployment_executor.go:240] deploymentExecutor.Execute(...): incoming events goroutine exiting
