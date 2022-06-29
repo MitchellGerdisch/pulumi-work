@@ -1,0 +1,3 @@
+name: guestbook-base-gke-infra-go
+runtime: go
+description: A GCP Go Pulumi program with Kubernetes

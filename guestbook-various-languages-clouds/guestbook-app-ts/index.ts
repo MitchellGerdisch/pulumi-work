@@ -1,9 +1,8 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as k8s from "@pulumi/kubernetes";
 import * as aws from "@pulumi/aws";
+import * as k8s from "@pulumi/kubernetes";
 import * as ServiceDeployment from "@pulumi/k8s-servicedeployment";
 
-const goo = new 
 
 const config = new pulumi.Config()
 const org = config.require("org")

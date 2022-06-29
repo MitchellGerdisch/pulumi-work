@@ -11,8 +11,9 @@ variables:
     Fn::StackReference:
       # Need to use the specific literal for the stack reference due to YAML provider not currently supporting a constructed value.
       # - ${org}/${eksProject}/${pulumi.stack}
-      - demo/guestbook-base-eks-infra-ts/staging
+      # - demo/guestbook-base-eks-infra-ts/staging
       # - demo/guestbook-base-eks-infra-py/dev
+      - demo/guestbook-base-gke-infra-go/dev
       - kubeconfig
 resources: 
   # Create a K8s provider using the kubeconfig retrieved as a stack reference above.
@@ -52,11 +53,5 @@ resources:
       serviceType: LoadBalancer
     options:
       provider: ${k8sProvider}
-  # Create a bucket just to show something rather familiar
-  bucket:
-    type: aws:s3:Bucket
-    properties:
-      acl: public-read
 outputs:
   frontEndUrl: http://${frontend.frontEndIp}
-  bucketId: ${bucket.id}

@@ -1,0 +1,3 @@
+config:
+  guestbook-app-yaml:eksProject: guestbook-base-gke-infra-go
+  guestbook-app-yaml:org: demo

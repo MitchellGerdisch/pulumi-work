@@ -1,0 +1,5 @@
+config:
+  gcp:project:
+    secure: AAABAEFcIQ6Y+WjPltLj2S3vUgaMzcLqdtk5/keEzjs0crrerjM5K6VrI9JXOA==
+  gcp:region: us-west2
+  gcp:zone: us-west2-a

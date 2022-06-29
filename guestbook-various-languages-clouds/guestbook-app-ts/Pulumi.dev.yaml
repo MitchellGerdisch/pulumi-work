@@ -1,0 +1,5 @@
+config:
+  guestbook-app-ts:eksProject: guestbook-base-gke-infra-go
+  guestbook-app-ts:org: demo
+  guestbook-app-ts:zoneName:
+    secure: AAABAGoJBjYO6t74wtnIwCWsPsIF8jXaQYASvIcMQKo2eshUYNNLaHq0EhPc5w==
