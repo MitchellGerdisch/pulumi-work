@@ -40,18 +40,28 @@ const frontend = new ServiceDeployment.ServiceDeployment("frontend", {
   serviceType: "LoadBalancer",
 }, {provider: k8sProvider})
 
-const dnsName = "guestbook"
+// Test if the "IP" is an IP or a name.
+// GKE returns an IP, EKS returns a name
+const frontendDnsType = frontend.frontEndIp.apply(ip => {
+  let dnsType = "CNAME"
+  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip)) {  
+    dnsType = "A"
+  }
+  return dnsType
+})
+
+const dnsName = `guestbook-ts-${pulumi.getStack()}`
 const zoneName = config.require("zoneName")
 const fqdn = `${dnsName}.${zoneName}`
 const zoneId = aws.route53.getZoneOutput({ name: zoneName }).zoneId
 const dnsRecord = new aws.route53.Record("frontEndDnsRecord", {
   zoneId: zoneId,
   name: fqdn,
-  type: "CNAME",
+  type: frontendDnsType,
   ttl: 300,
   records: [ frontend.frontEndIp.apply(ip => ip) ]
 })
 
-export const frontEndUrl = pulumi.interpolate`http://${frontend.frontEndIp}`
-export const nameUrl = `http://${fqdn}`
+export const frontEndIp = frontend.frontEndIp
+export const frontEndUrl = `http://${fqdn}`
 

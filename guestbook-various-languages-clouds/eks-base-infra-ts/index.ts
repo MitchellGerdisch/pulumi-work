@@ -3,10 +3,10 @@ import * as awsx from "@pulumi/awsx";
 import * as eks from "@pulumi/eks";
 
 // Create a VPC for our cluster.
-const vpc = new awsx.ec2.Vpc("vpc", { numberOfAvailabilityZones: 2 });
+const vpc = new awsx.ec2.Vpc("guestbook-vpc", { numberOfAvailabilityZones: 2 });
 
 // Create the EKS cluster itself and a deployment of the Kubernetes dashboard.
-const cluster = new eks.Cluster("cluster", {
+const cluster = new eks.Cluster("guestbook-cluster", {
     vpcId: vpc.id,
     subnetIds: vpc.publicSubnetIds,
     instanceType: "t2.medium",

@@ -14,12 +14,12 @@ func main() {
 		}
 		masterVersion := engineVersions.LatestMasterVersion
 
-		cluster, err := container.NewCluster(ctx, "demo-cluster", &container.ClusterArgs{
-			InitialNodeCount: pulumi.Int(2),
+		cluster, err := container.NewCluster(ctx, "guestbook-cluster", &container.ClusterArgs{
+			InitialNodeCount: pulumi.Int(3),
 			MinMasterVersion: pulumi.String(masterVersion),
 			NodeVersion:      pulumi.String(masterVersion),
 			NodeConfig: &container.ClusterNodeConfigArgs{
-				MachineType: pulumi.String("n1-standard-1"),
+				MachineType: pulumi.String("e2-medium"),
 				OauthScopes: pulumi.StringArray{
 					pulumi.String("https://www.googleapis.com/auth/compute"),
 					pulumi.String("https://www.googleapis.com/auth/devstorage.read_only"),
