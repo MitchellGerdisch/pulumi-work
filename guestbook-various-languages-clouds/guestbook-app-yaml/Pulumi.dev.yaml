@@ -1,3 +1,4 @@
 config:
   guestbook-app-yaml:eksProject: guestbook-base-gke-infra-go
   guestbook-app-yaml:org: demo
+  guestbook-app-yaml:zoneName: pulumi-ce.team

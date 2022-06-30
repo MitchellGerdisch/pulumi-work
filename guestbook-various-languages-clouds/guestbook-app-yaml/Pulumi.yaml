@@ -6,6 +6,8 @@ configuration:
     type: String
   eksProject:
     type: String
+  zoneName:
+    type: String
 variables: 
   kubeconfig:
     Fn::StackReference:
@@ -15,6 +17,15 @@ variables:
       # - demo/guestbook-base-eks-infra-py/dev
       - demo/guestbook-base-gke-infra-go/dev
       - kubeconfig
+  stackName: ${pulumi.stack}
+  dnsName: guestbook-yaml-${stackName}
+  fqdn: ${dnsName}.${zoneName}
+  zoneId:
+    Fn::Invoke:
+      Function: aws:route53:getZone
+      Arguments:
+        name: ${zoneName}
+      Return: zoneId
 resources: 
   # Create a K8s provider using the kubeconfig retrieved as a stack reference above.
   k8sProvider: 
@@ -53,5 +64,15 @@ resources:
       serviceType: LoadBalancer
     options:
       provider: ${k8sProvider}
+  dnsRecord:
+    type: aws:route53:Record
+    properties:
+      zoneId: ${zoneId}
+      name: ${fqdn}
+      type: A
+      ttl: 300
+      records: 
+        - ${frontend.frontEndIp} 
 outputs:
-  frontEndUrl: http://${frontend.frontEndIp}
+  frontEndIp: ${frontend.frontEndIp}
+  frontEndUrl: http://${fqdn}
