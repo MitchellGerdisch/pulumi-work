@@ -38,5 +38,5 @@ pulumi_docker () {
     rm ${ENVFILE}
 }
 
-echo "You can pass a specific pulumi version as a parameter, e.g. \"v2.10.2\". Otherwise \"latest\" is used."
+echo "You can pass a specific pulumi version as a parameter, e.g. \"2.10.2\". Otherwise \"latest\" is used."
 pulumi_docker ${1}
