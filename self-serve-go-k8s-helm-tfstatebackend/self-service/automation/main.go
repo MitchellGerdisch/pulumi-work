@@ -32,7 +32,6 @@ func main() {
 		fmt.Println("Missing stack name: -stack STACKNAME")
 		os.Exit(1)
 	}
-
 	fmt.Println("Using the following parameters:")
 	fmt.Printf("orgName: %q\n", orgName)
 	fmt.Printf("stackName: %q\n", stackName)
@@ -54,12 +53,20 @@ func main() {
 		{"eksStackName", orgName + "/aws-go-eks/" + stackName},
 		{"stackTag", "SelfServeDemoEnv"},
 		{"orgName", orgName},
+		{"appName", "SelfServiceDemo"},
 	}
 
 	// The Local Workspaces that make up this orchestrated deployment.
 	projectDirs := []string{"base-vpc", "go-base-eks", "go-k8s-apps"}
+	if destroy { // Reverse the order
+		for i, j := 0, len(projectDirs)-1; i < j; i, j = i+1, j-1 {
+			projectDirs[i], projectDirs[j] = projectDirs[j], projectDirs[i]
+		}
+	}
+
 	for _, projectDir := range projectDirs {
 
+		fmt.Printf("Processing project folder: %s\n", projectDir)
 		workDir := filepath.Join("../..", projectDir)
 
 		// create or select a stack from a local workspace
@@ -96,23 +103,24 @@ func main() {
 				fmt.Printf("Failed to destroy stack: %v", err)
 			}
 			fmt.Println("Stack successfully destroyed")
-			os.Exit(0)
+
+		} else {
+
+			fmt.Println("Starting update")
+
+			// wire up our update to stream progress to stdout
+			stdoutStreamer := optup.ProgressStreams(os.Stdout)
+
+			// run the update to deploy our fargate web service
+			// res, err := s.Up(ctx, stdoutStreamer)
+			_, err = s.Up(ctx, stdoutStreamer)
+			if err != nil {
+				fmt.Printf("Failed to update stack: %v\n\n", err)
+				os.Exit(1)
+			}
+
+			fmt.Println("Update succeeded!")
 		}
-
-		fmt.Println("Starting update")
-
-		// wire up our update to stream progress to stdout
-		stdoutStreamer := optup.ProgressStreams(os.Stdout)
-
-		// run the update to deploy our fargate web service
-		// res, err := s.Up(ctx, stdoutStreamer)
-		_, err = s.Up(ctx, stdoutStreamer)
-		if err != nil {
-			fmt.Printf("Failed to update stack: %v\n\n", err)
-			os.Exit(1)
-		}
-
-		fmt.Println("Update succeeded!")
 	}
 
 	// // get the URL from the stack outputs

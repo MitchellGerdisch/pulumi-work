@@ -10,6 +10,7 @@ import (
 	"github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes/helm/v3"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+	"github.com/pulumi/pulumi-pulumiservice/sdk/go/pulumiservice"
 )
 
 func main() {
@@ -18,6 +19,20 @@ func main() {
 		// Get the base eks stack kubeconfig
 		conf := config.New(ctx, "")
     eksStackName := conf.Require("eksStackName")
+
+		orgName := conf.Require("orgName")
+		appName := conf.Require("appName")
+
+		_, err := pulumiservice.NewStackTag(ctx, "stackTag", &pulumiservice.StackTagArgs{
+			Name: pulumi.String("Application"),
+			Value: pulumi.String(appName),
+			Organization: pulumi.String(orgName),
+			Project: pulumi.String(ctx.Project()),
+			Stack: pulumi.String(ctx.Stack()),
+		}, nil)
+		if err != nil {
+			return fmt.Errorf("error creating StackTag: %v", err)
+		}
 
 		eksStackRef, err := pulumi.NewStackReference(ctx, eksStackName, nil)
 		if err != nil {

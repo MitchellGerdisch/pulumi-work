@@ -23,7 +23,7 @@ tf_state_file = config.require("tf_state_file_key")
 
 base_infra_state = terraform.state.RemoteStateReference("base_infra", 
   backend_type = "s3",
-  args = S3BackendArgs(
+  args = terraform.state.S3BackendArgs(
     bucket=tf_state_bucket,
     key=tf_state_file,
     region="us-east-2"

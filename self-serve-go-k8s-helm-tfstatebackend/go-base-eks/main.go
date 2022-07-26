@@ -13,6 +13,7 @@ import (
 	// "github.com/pulumi/pulumi-kubernetes/sdk/v3/go/kubernetes"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+	"github.com/pulumi/pulumi-pulumiservice/sdk/go/pulumiservice"
 )
 
 func main() {
@@ -21,6 +22,19 @@ func main() {
 		// Get the base infrastructure items
 		conf := config.New(ctx, "")
     baseStackName := conf.Require("baseStackName")
+		orgName := conf.Require("orgName")
+		appName := conf.Require("appName")
+
+		_, err := pulumiservice.NewStackTag(ctx, "stackTag", &pulumiservice.StackTagArgs{
+			Name: pulumi.String("Application"),
+			Value: pulumi.String(appName),
+			Organization: pulumi.String(orgName),
+			Project: pulumi.String(ctx.Project()),
+			Stack: pulumi.String(ctx.Stack()),
+		}, nil)
+		if err != nil {
+			return fmt.Errorf("error creating StackTag: %v", err)
+		}
 
 		baseStackRef, err := pulumi.NewStackReference(ctx, baseStackName, nil)
 		if err != nil {
