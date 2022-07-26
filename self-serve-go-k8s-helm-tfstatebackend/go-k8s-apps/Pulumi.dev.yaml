@@ -1,3 +1,0 @@
-config:
-  aws:region: us-east-2
-  go-k8s-apps:eksStackName: demo/aws-go-eks/dev

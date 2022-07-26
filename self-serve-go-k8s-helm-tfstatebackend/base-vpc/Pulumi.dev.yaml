@@ -1,4 +1,0 @@
-config:
-  base-infra:tf_state_bucket: mitch-tf-backend
-  base-infra:tf_state_file_key: tf-state
-  base-infra:stackTag: SelfServeDemoEnv
