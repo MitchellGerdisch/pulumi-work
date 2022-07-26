@@ -1,0 +1,349 @@
+{
+    "version": 3,
+    "deployment": {
+        "manifest": {
+            "time": "2022-07-22T15:58:54.13-05:00",
+            "magic": "6577a7089141345e70205be8eebe507c37a15e4d5789a0b6652a428d11a7956b",
+            "version": "v3.36.0"
+        },
+        "secrets_providers": {
+            "type": "service",
+            "state": {
+                "url": "https://api.pulumi.com",
+                "owner": "MitchGerdisch",
+                "project": "go-k8s-apps",
+                "stack": "dev"
+            }
+        },
+        "resources": [
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "custom": false,
+                "type": "pulumi:pulumi:Stack",
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::pulumi:providers:pulumi::default",
+                "custom": true,
+                "id": "d05ae61c-0dec-40b8-a840-b975242804c7",
+                "type": "pulumi:providers:pulumi",
+                "parent": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:StackReference::MitchGerdisch/aws-go-eks/dev",
+                "custom": true,
+                "id": "MitchGerdisch/aws-go-eks/dev",
+                "type": "pulumi:pulumi:StackReference",
+                "inputs": {
+                    "name": "MitchGerdisch/aws-go-eks/dev"
+                },
+                "outputs": {
+                    "name": "MitchGerdisch/aws-go-eks/dev",
+                    "outputs": {
+                        "kubeconfig": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "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"
+                        }
+                    },
+                    "secretOutputNames": [
+                        "kubeconfig"
+                    ]
+                },
+                "parent": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "external": true,
+                "provider": "urn:pulumi:dev::go-k8s-apps::pulumi:providers:pulumi::default::d05ae61c-0dec-40b8-a840-b975242804c7",
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::pulumi:providers:kubernetes::k8sprovider",
+                "custom": true,
+                "id": "21455678-c38f-495f-a176-c4f1c224cfb8",
+                "type": "pulumi:providers:kubernetes",
+                "inputs": {
+                    "enableConfigMapMutable": false,
+                    "enableDryRun": false,
+                    "enableReplaceCRD": false,
+                    "enableServerSideApply": false,
+                    "kubeconfig": {
+                        "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                        "ciphertext": "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"
+                    },
+                    "suppressDeprecationWarnings": false,
+                    "suppressHelmHookWarnings": false,
+                    "version": "3.20.1"
+                },
+                "outputs": {
+                    "enableConfigMapMutable": false,
+                    "enableDryRun": false,
+                    "enableReplaceCRD": false,
+                    "enableServerSideApply": false,
+                    "kubeconfig": {
+                        "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                        "ciphertext": "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"
+                    },
+                    "suppressDeprecationWarnings": false,
+                    "suppressHelmHookWarnings": false,
+                    "version": "3.20.1"
+                },
+                "parent": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "dependencies": [
+                    "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:StackReference::MitchGerdisch/aws-go-eks/dev"
+                ],
+                "propertyDependencies": {
+                    "kubeconfig": [
+                        "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:StackReference::MitchGerdisch/aws-go-eks/dev"
+                    ]
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::kubernetes:core/v1:Namespace::wordpress-ns",
+                "custom": true,
+                "id": "wordpress-ns",
+                "type": "kubernetes:core/v1:Namespace",
+                "inputs": {
+                    "apiVersion": "v1",
+                    "kind": "Namespace",
+                    "metadata": {
+                        "labels": {
+                            "app.kubernetes.io/managed-by": "pulumi"
+                        },
+                        "name": "wordpress-ns"
+                    }
+                },
+                "outputs": {
+                    "__fieldManager": "pulumi-kubernetes-b17353e6",
+                    "__initialApiVersion": "v1",
+                    "__inputs": {
+                        "apiVersion": "v1",
+                        "kind": "Namespace",
+                        "metadata": {
+                            "labels": {
+                                "app.kubernetes.io/managed-by": "pulumi"
+                            },
+                            "name": "wordpress-ns"
+                        }
+                    },
+                    "apiVersion": "v1",
+                    "kind": "Namespace",
+                    "metadata": {
+                        "annotations": {
+                            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"labels\":{\"app.kubernetes.io/managed-by\":\"pulumi\"},\"name\":\"wordpress-ns\"}}\n"
+                        },
+                        "creationTimestamp": "2022-07-22T20:50:53Z",
+                        "labels": {
+                            "app.kubernetes.io/managed-by": "pulumi",
+                            "kubernetes.io/metadata.name": "wordpress-ns"
+                        },
+                        "managedFields": [
+                            {
+                                "apiVersion": "v1",
+                                "fieldsType": "FieldsV1",
+                                "fieldsV1": {
+                                    "f:metadata": {
+                                        "f:annotations": {
+                                            ".": {},
+                                            "f:kubectl.kubernetes.io/last-applied-configuration": {}
+                                        },
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:app.kubernetes.io/managed-by": {},
+                                            "f:kubernetes.io/metadata.name": {}
+                                        }
+                                    }
+                                },
+                                "manager": "pulumi-resource-kubernetes",
+                                "operation": "Update",
+                                "time": "2022-07-22T20:50:53Z"
+                            }
+                        ],
+                        "name": "wordpress-ns",
+                        "resourceVersion": "19087",
+                        "uid": "573c74ba-404e-4a7d-aa1a-d5959ff4634e"
+                    },
+                    "spec": {
+                        "finalizers": [
+                            "kubernetes"
+                        ]
+                    },
+                    "status": {
+                        "phase": "Active"
+                    }
+                },
+                "parent": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "provider": "urn:pulumi:dev::go-k8s-apps::pulumi:providers:kubernetes::k8sprovider::21455678-c38f-495f-a176-c4f1c224cfb8",
+                "propertyDependencies": {
+                    "apiVersion": [],
+                    "kind": [],
+                    "metadata": []
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::go-k8s-apps::kubernetes:helm.sh/v3:Release::wpdev",
+                "custom": true,
+                "id": "default/wpdev-29b4c232",
+                "type": "kubernetes:helm.sh/v3:Release",
+                "inputs": {
+                    "atomic": false,
+                    "chart": "wordpress",
+                    "cleanupOnFail": false,
+                    "createNamespace": false,
+                    "dependencyUpdate": false,
+                    "description": "",
+                    "devel": false,
+                    "disableCRDHooks": false,
+                    "disableOpenapiValidation": false,
+                    "disableWebhooks": false,
+                    "forceUpdate": false,
+                    "keyring": "",
+                    "lint": false,
+                    "name": "wpdev-29b4c232",
+                    "namespace": "wordpress-ns",
+                    "postrender": "",
+                    "recreatePods": false,
+                    "renderSubchartNotes": false,
+                    "replace": false,
+                    "repositoryOpts": {
+                        "caFile": "",
+                        "certFile": "",
+                        "keyFile": "",
+                        "password": "",
+                        "repo": "https://charts.bitnami.com/bitnami",
+                        "username": ""
+                    },
+                    "resetValues": false,
+                    "resourceNames": {
+                        "ConfigMap/v1": [
+                            "wordpress-ns/wpdev-29b4c232-mariadb"
+                        ],
+                        "Deployment.apps/apps/v1": [
+                            "wordpress-ns/wpdev-29b4c232-wordpress"
+                        ],
+                        "PersistentVolumeClaim/v1": [
+                            "wordpress-ns/wpdev-29b4c232-wordpress"
+                        ],
+                        "Secret/v1": [
+                            "wordpress-ns/wpdev-29b4c232-mariadb",
+                            "wordpress-ns/wpdev-29b4c232-wordpress"
+                        ],
+                        "Service/v1": [
+                            "wordpress-ns/wpdev-29b4c232-mariadb",
+                            "wordpress-ns/wpdev-29b4c232-wordpress"
+                        ],
+                        "ServiceAccount/v1": [
+                            "wordpress-ns/wpdev-29b4c232-mariadb"
+                        ],
+                        "StatefulSet.apps/apps/v1": [
+                            "wordpress-ns/wpdev-29b4c232-mariadb"
+                        ]
+                    },
+                    "reuseValues": false,
+                    "skipAwait": false,
+                    "skipCrds": false,
+                    "timeout": 300,
+                    "values": {
+                        "service": {
+                            "type": "ClusterIP"
+                        }
+                    },
+                    "verify": false,
+                    "version": "15.0.12",
+                    "waitForJobs": false
+                },
+                "outputs": {
+                    "__inputs": {
+                        "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                        "ciphertext": "AAABAEYua9FsqAPk+ngn0cY5m3TGfZVW5o20NQbg0LTnEl/mq2q+qs/CspEXAq9MC0C4wy8pBTPCz4aexLVNNx0uHAKKrBagla+M34CKeEeMZWvfkQzGoN2BVZwhAdewiazUR6au7yKxuAkQYR/rrjmNmDzd4Obji8wj74ogiQ9WyFFUDbWDerj0X4bXf+OOLMlzkqHYOv+eW7alS/k041MD8rblqhhfd3bn7kYbTjnoTxAzf2NHaGot/on3jxkCrYajeMuRzUxvlMd99cIJh9aqrE4BS6z/LN315tWatRWYNPrQpBbBc952VrdrcW3uHnnAOXJPcIB1CukgYtg7rvYN9450vZCQ6X75/nf8nMZ4BEUsMafY6mHvV8kK4iICP0pGAqgmK26+jGeO7iwkfftiIuATQn5hbQ2nXAVvpLGXFS0n4Jkr5NrCwzx+K/PeS7G+anJ/anFtLknsgCirUUM/3PzK0vTFuUG7LcPv59omw6KOH9Xr3SWfjO07jGku2HvgRuNh7FTblwl1CLdOjaIqJr6af/EfXwoOeOe9XeSnNJwdDnT5TI1k1LcjYwuEpjqRWDivfKribu17JY1h653zOwYU1vBjxjA1IF36QyNLQ+4vSE019iEs4wmXYiWlIBQB9kluX1PPEdoXLoKhlRfWxQR3xhEk4buS0f/DyKuwBrlOwv2kWsh+TJ4dRm/RrGRHVfP2ppcC0AM2iowCFal+l+uvnrDCELY+BLiZdU6/Y9iC60PWSsaw9NTwgpt+LPh5miUuEkrww2ZhAAAxgq2Kh6vveAAW6kGbZ3/VknN6QxOdiw4XL0pmkB9isun8rPs9Fxf7PTNs8DpFQBkAYakPL0kFg1tf8M5zbPNhP3cYz5W8WBXrj9diXJkY25YVJx/b28W/ysd1X/Ggsps3hTxFIvqMNfn9T/252M8vvWH6NOPZVnzML6Z6NRkcZu6fAQ++pinvyiqrXibR7ZnEVwU2exB0mUax/Zuu//wOQ0vmIHySpPbHqwBmXUBnlASx/xtrhitFZcWjYRakef+KFi4YVqutaJ4wPDh8/8JjMEcl/OYUscTufeqr7U8eVGub8nw4110k2d9wHxyZGXbAOyESEDF9iaHhAxsi0UdvJhRJsJfidczrNU5WyQpWTy8i6jS1Ajcx6rS0/iv7p+FCKOzxKgo98O331Gd6AY/nuWcC7tvyyODYyzuJB5cjxZt6eM53FIzDrkIC8+aSqLS4b2A/i+gEGTtC9f/cM2ETQwQuY1AR/Du6YS4XWjUL/QhGw+hKKEGFNLLijsC0G2skmnSH8eVjGmZLhDk3Cfhs4nY0pT6hcHsr64fNCe23TL2A0mMfpA/fKKdC4W5gEagVZUqnxl1AMn0F6xLaio+Tjqcrr+IhC2rCiJd9eWfKpKaImH/Ku20y9TaiVj65zL/XAkAWW3B9JrziMPSh5r9GkVBZdTKosg84bhy4y1tLBcsN/gUbdKOqqdjU7n0kIBU5ObQOpiVLkhWqBEuIJ1gXN3Rbbv82p3Z7/ivhZ0+d55/G1E8wKbqWc/2g4WKnt0sfoNW9gQBLmivE5QSEWS2QpAbPWP16c7cgfuka2rCYQUq9SlnLeeLkp68lZY96v5cmCazBUTcacIEP/v4N4DVP6y5384BUJdqKY1TvRLR9IYmRVvoBwHTl9MivujJFaICf/R3xvQ=="
+                    },
+                    "atomic": false,
+                    "chart": "wordpress",
+                    "cleanupOnFail": false,
+                    "createNamespace": false,
+                    "dependencyUpdate": false,
+                    "description": "",
+                    "devel": false,
+                    "disableCRDHooks": false,
+                    "disableOpenapiValidation": false,
+                    "disableWebhooks": false,
+                    "forceUpdate": false,
+                    "keyring": "",
+                    "lint": false,
+                    "name": "wpdev-29b4c232",
+                    "namespace": "wordpress-ns",
+                    "postrender": "",
+                    "recreatePods": false,
+                    "renderSubchartNotes": false,
+                    "replace": false,
+                    "repositoryOpts": {
+                        "caFile": "",
+                        "certFile": "",
+                        "keyFile": "",
+                        "password": "",
+                        "repo": "https://charts.bitnami.com/bitnami",
+                        "username": ""
+                    },
+                    "resetValues": false,
+                    "resourceNames": {
+                        "ConfigMap/v1": [
+                            "default/wpdev-29b4c232-mariadb"
+                        ],
+                        "Deployment.apps/apps/v1": [
+                            "default/wpdev-29b4c232-wordpress"
+                        ],
+                        "PersistentVolumeClaim/v1": [
+                            "default/wpdev-29b4c232-wordpress"
+                        ],
+                        "Secret/v1": [
+                            "default/wpdev-29b4c232-mariadb",
+                            "default/wpdev-29b4c232-wordpress"
+                        ],
+                        "Service/v1": [
+                            "default/wpdev-29b4c232-mariadb",
+                            "default/wpdev-29b4c232-wordpress"
+                        ],
+                        "ServiceAccount/v1": [
+                            "default/wpdev-29b4c232-mariadb"
+                        ],
+                        "StatefulSet.apps/apps/v1": [
+                            "default/wpdev-29b4c232-mariadb"
+                        ]
+                    },
+                    "reuseValues": false,
+                    "skipAwait": false,
+                    "skipCrds": false,
+                    "status": {
+                        "appVersion": "6.0.1",
+                        "chart": "wordpress",
+                        "name": "wpdev-29b4c232",
+                        "namespace": "default",
+                        "revision": 2,
+                        "status": "deployed",
+                        "version": "15.0.12"
+                    },
+                    "timeout": 300,
+                    "values": {
+                        "service": {
+                            "type": "ClusterIP"
+                        }
+                    },
+                    "verify": false,
+                    "version": "15.0.12",
+                    "waitForJobs": false
+                },
+                "parent": "urn:pulumi:dev::go-k8s-apps::pulumi:pulumi:Stack::go-k8s-apps-dev",
+                "dependencies": [
+                    "urn:pulumi:dev::go-k8s-apps::kubernetes:core/v1:Namespace::wordpress-ns"
+                ],
+                "provider": "urn:pulumi:dev::go-k8s-apps::pulumi:providers:kubernetes::k8sprovider::21455678-c38f-495f-a176-c4f1c224cfb8",
+                "propertyDependencies": {
+                    "namespace": [
+                        "urn:pulumi:dev::go-k8s-apps::kubernetes:core/v1:Namespace::wordpress-ns"
+                    ]
+                },
+                "sequenceNumber": 1
+            }
+        ]
+    }
+}

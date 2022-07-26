@@ -1,0 +1,3 @@
+config:
+  aws-go-eks:aws_region: us-east-2
+  aws-go-eks:baseStackName: demo/base-infra/dev

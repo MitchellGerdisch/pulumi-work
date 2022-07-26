@@ -1,0 +1,3 @@
+name: aws-go-eks
+runtime: go
+description: Deploys an eks cluster and some support resources 
