@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -16,8 +16,8 @@ func main() {
 
 	destroyPtr := flag.Bool("destroy", false, "Destroys the stack(s).")
 	orgPtr := flag.String("org", "demo", "Pulumi org to deploy in. Defaults to the demo org.")
-	
-	// The general flow will be to use a stack name that is based, say, on the requester's name. 
+
+	// The general flow will be to use a stack name that is based, say, on the requester's name.
 	nostackname := "NO-STACK-SHOULD-HAVE-THIS-NAME"
 	stackPtr := flag.String("stack", nostackname, "Stack name to update or create.")
 
@@ -28,7 +28,7 @@ func main() {
 	orgName := *orgPtr
 	stackName := *stackPtr
 	stackPath := orgName + "/" + stackName
-	if (stackName == nostackname) {
+	if stackName == nostackname {
 		fmt.Println("Missing stack name: -stack STACKNAME")
 		os.Exit(1)
 	}
@@ -39,6 +39,22 @@ func main() {
 	fmt.Printf("destroy: %t\n", destroy)
 
 	ctx := context.Background()
+
+	// Set up the config for the stacks
+	// A less lazy me would make this a bit more data driven from a json file or something and would put in a separate file.
+	type configObject struct {
+		configName  string
+		configValue string
+	}
+	config := []configObject{
+		{"aws:region", "us-east-2"},
+		{"tf_state_bucket", "mitch-tf-backend"},
+		{"tf_state_file_key", "tf-state"},
+		{"baseStackName", orgName + "/base-infra/" + stackName},
+		{"eksStackName", orgName + "/aws-go-eks/" + stackName},
+		{"stackTag", "SelfServeDemoEnv"},
+		{"orgName", orgName},
+	}
 
 	// The Local Workspaces that make up this orchestrated deployment.
 	projectDirs := []string{"base-vpc", "go-base-eks", "go-k8s-apps"}
@@ -54,6 +70,11 @@ func main() {
 		}
 
 		fmt.Printf("Created/Selected stack %q\n", stackName)
+
+		// Set configs for each stack
+		for _, configItem := range config {
+			s.SetConfig(ctx, configItem.configName, auto.ConfigValue{Value: configItem.configValue})
+		}
 
 		fmt.Println("Starting refresh")
 

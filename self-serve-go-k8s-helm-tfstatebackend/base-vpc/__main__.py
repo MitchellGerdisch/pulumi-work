@@ -1,8 +1,21 @@
 """A Python Pulumi program"""
 
 import pulumi
+from pulumi_pulumiservice import StackTag, StackTagArgs
 import pulumi_terraform as terraform
-from pulumi_terraform.state.remote_state_reference import BackendArgs, S3BackendArgs
+
+
+# Add a stack tag on the stack in the Pulumi Service.
+config = pulumi.Config()
+org_name = config.require("orgName")
+app_name = config.require("appName")
+stackTag = StackTag("stackTag", StackTagArgs(
+  name = "Application",
+  value= app_name,
+  organization=org_name,
+  project=pulumi.get_project(),
+  stack=pulumi.get_stack()
+))
 
 config = pulumi.Config()
 tf_state_bucket = config.require("tf_state_bucket")
