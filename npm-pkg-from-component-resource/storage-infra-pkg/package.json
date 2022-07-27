@@ -1,0 +1,32 @@
+{
+  "name": "storage-infra-pkg",
+  "version": "0.0.9",
+  "description": "Pulumi package for creating Azure storage infrastructure.",
+  "main": "./bin/index.js",
+  "types": "./bin/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint --project ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrsmith/static-website-aws.git"
+  },
+  "keywords": [
+    "pulumi",
+    "azure",
+    "storage"
+  ],
+  "author": "mitch@pulumi.com",
+  "license": "APACHE-2.0",
+  "devDependencies": {
+    "@types/mime": "^2.0.0",
+    "@types/node": "latest",
+    "tslint": "^5.10.0",
+    "typescript": "^2.7.2"
+  },
+  "dependencies": {
+    "@pulumi/azure-native": "^1.67.0",
+    "@pulumi/pulumi": "^3.37.0"
+  }
+}
