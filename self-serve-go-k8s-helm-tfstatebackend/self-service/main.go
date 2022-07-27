@@ -11,7 +11,7 @@ import (
 	// "github.com/pulumi/pulumi/sdk/v3/go/auto/optdestroy"
 	// "github.com/pulumi/pulumi/sdk/v3/go/auto/optup"
 
-	"github.com/selfserve/deploy/automation"
+	"github.com/selfserve/automation"
 )
 
 func main() {

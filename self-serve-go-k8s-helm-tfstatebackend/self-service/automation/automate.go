@@ -45,7 +45,7 @@ func Automate(destroy bool, orgName string, stackName string) {
 	for _, projectDir := range projectDirs {
 
 		fmt.Printf("Processing project folder: %s\n", projectDir)
-		workDir := filepath.Join("../..", projectDir)
+		workDir := filepath.Join("..", projectDir)
 
 		// create or select a stack from a local workspace
 		s, err := auto.UpsertStackLocalSource(ctx, stackPath, workDir)

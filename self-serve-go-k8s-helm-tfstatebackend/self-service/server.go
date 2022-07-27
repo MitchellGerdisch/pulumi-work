@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/selfserve/deploy/automation"
+	"github.com/selfserve/automation"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Name = %s\n", name)
 
-	automation.Automate(true, "demo", name)	
+	automation.Automate(false, "demo", name)	
 
 }
 
