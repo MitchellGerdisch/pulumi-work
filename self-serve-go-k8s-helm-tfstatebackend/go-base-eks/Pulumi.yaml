@@ -1,0 +1,3 @@
+name: go-base-eks
+runtime: go
+description: Deploys an eks cluster and some support resources 

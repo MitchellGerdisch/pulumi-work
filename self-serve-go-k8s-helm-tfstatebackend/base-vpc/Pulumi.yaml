@@ -1,0 +1,6 @@
+name: base-infra
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Base Infra stack based on TF state
