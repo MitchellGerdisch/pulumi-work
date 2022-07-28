@@ -4,6 +4,8 @@ import pulumi
 from pulumi_pulumiservice import StackTag, StackTagArgs
 import pulumi_terraform as terraform
 
+stack_name = pulumi.get_stack()
+
 
 # Add a stack tag on the stack in the Pulumi Service.
 config = pulumi.Config()
@@ -11,10 +13,10 @@ org_name = config.require("orgName")
 app_name = config.require("appName")
 stackTag = StackTag("stackTag", StackTagArgs(
   name = "Application",
-  value= app_name,
+  value= f'{app_name}-{stack_name}',
   organization=org_name,
   project=pulumi.get_project(),
-  stack=pulumi.get_stack()
+  stack=stack_name
 ))
 
 config = pulumi.Config()

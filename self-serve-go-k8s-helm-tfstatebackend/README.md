@@ -7,6 +7,7 @@ This is also plugged into a super simple web form to request the stacks.
 * Accessing a Terraform backend state file residing in AWS S3
   * Uses a python project for this stack.
 * Stacks and stack references in Golang
+* Use of the Pulumi Service provider to set Stack Tags in Python and Go
 * Automation API in Golang
 * Simple web front-end to the automation API code to deploy stacks.
 

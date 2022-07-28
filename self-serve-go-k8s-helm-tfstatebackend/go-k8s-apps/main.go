@@ -23,12 +23,14 @@ func main() {
 		orgName := conf.Require("orgName")
 		appName := conf.Require("appName")
 
+		stackName := ctx.Stack()
+
 		_, err := pulumiservice.NewStackTag(ctx, "stackTag", &pulumiservice.StackTagArgs{
 			Name: pulumi.String("Application"),
-			Value: pulumi.String(appName),
+			Value: pulumi.String(appName+"-"+stackName),
 			Organization: pulumi.String(orgName),
 			Project: pulumi.String(ctx.Project()),
-			Stack: pulumi.String(ctx.Stack()),
+			Stack: pulumi.String(stackName),
 		}, nil)
 		if err != nil {
 			return fmt.Errorf("error creating StackTag: %v", err)
