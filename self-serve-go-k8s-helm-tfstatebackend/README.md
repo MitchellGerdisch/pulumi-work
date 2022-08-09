@@ -22,8 +22,8 @@ This is also plugged into a super simple web form to request the stacks.
 ## Pulumi  
 * Open a terminal and navigate to the `self-service` folder.
 * `export PULUMI_ACCESS_TOKEN=pul-dsfdsfdsfds`
- * You can create an access token in the Pulumi UI under Settings.
- * This is used to set the Pulumi stack tags. 
+  * You can create an access token in the Pulumi UI under Settings.
+  * This is used to set the Pulumi stack tags. 
 
 # How to Run
 NOTE: Defaults to run in `demo` Pulumi organization
@@ -40,9 +40,9 @@ Other Options:
 * Point browser at `http://localhost:8080/form.html`
 * Enter a string which will be used for the stack name and hit submit.
 * You can watch the progress from the terminal where you ran `go run server.go` or from Pulumi UI for three projects:
- * base-infra
- * go-base-eks
- * go-k8s-apps
+  * base-infra
+  * go-base-eks
+  * go-k8s-apps
 
 # Clean Up
 * from the `self-service` folder: `go run main.go -destroy -stack STACKNAME`
