@@ -1,0 +1,5 @@
+python-dotenv>=0.20.0,<1.0.0
+flask>=2.2.2,<3.0.0
+turbo-flask>=0.8.0,<1.0.0
+flask-wtf>=1.0.1,<2.0.0
+flask-bootstrap>=3.3.7.1,<4.0.0.0

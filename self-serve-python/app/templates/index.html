@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+        <h1>Hello, {{ user.username }}!</h1>
+        {% for stack in stacks %}
+        <div><p><b>{{ stack.name }}</b> outputs: 
+          {% for output in stack.outputs %}
+            <p>{{ output.outputname }}: {{ output.outputvalue }}</p>
+          {% endfor %}
+        </p></div>
+        {% endfor %}
+{% endblock %}
