@@ -6,3 +6,13 @@ Flask-based self-service portal to deploy Pulumi stacks.
   * Big shout out to this tutorial for walking through a very complete Flask example.
 * [Pulumi](https://pulumi.com)
 
+# Flask Notes
+* Pretty simple structure:
+  * Main page lists current stacks
+  * Deploy page allows you to deploy a new stack.
+  * TODO: Add rendering of stack progress
+* Calls pulumi automation api programs to do things and get things
+
+# Pulumi Notes
+* Local workspace based model - colocated under `pulumi/projects`
+* automation api code under `pulumi/automation`
