@@ -2,6 +2,9 @@ from pydoc import render_doc
 from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import StackDeployForm
+import sys
+sys.path.append('/pulumi/automation')
+import stack_utils
 
 @app.route('/')
 @app.route('/index')
@@ -44,5 +47,6 @@ def deploy():
     form = StackDeployForm()
     if form.validate_on_submit():
         flash('Accepted request to deploy stack: {}/{}/{}'.format(form.org.data, form.project.data, form.stack.data))
+
         return redirect(url_for('index'))
     return render_template('deploy.html', title="Deploy Stack", form=form)
