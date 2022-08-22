@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from config import Config
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_mapping(
+        SECRET_KEY="not-very-secret",
+)
 bootstrap = Bootstrap(app)
 
-from app import routes
-
+from flaskapp import routes

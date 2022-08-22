@@ -1,9 +1,13 @@
 from pulumi import automation as auto
-from project_utils import prep_workspace
+from pulumi.automation.project_utils import prep_workspace
 import sys
 import json
+import os
 
-def update_stack(project_dir: str, org: str, stack: str, destroy: bool):
+def update_stack(org: str, project: str, stack: str, destroy: bool):
+
+    # Set project_dir for the requested project
+    project_dir = os.path.join(os.path.dirname(__file__), "..", "projects", project, stack) 
 
     # Set up the environment for the pulumi project/stack
     prep_workspace(project_dir, "python")
