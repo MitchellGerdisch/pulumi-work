@@ -26,8 +26,9 @@ def deploy():
         project = form.project.data
         stack = form.stack.data
         flash('Accepted request to deploy stack: {}/{}/{}'.format(org, project, stack))
-        stacks = [update_stack(org, project, stack, False)]
-        return render_template('index.html', title="Pulumi Self-Service", stacks=stacks)
+        stack_results = [update_stack(org, project, stack, False)]
+        flash(f'stack_results: {stack_results}')
+        return render_template('index.html', title="Pulumi Self-Service", stacks=stack_results)
     return render_template('deploy.html', title="Deploy Stack", form=form)
 
 

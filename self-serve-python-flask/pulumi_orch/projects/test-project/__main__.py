@@ -23,3 +23,4 @@ primary_key = pulumi.Output.all(resource_group.name, account.name) \
     )).apply(lambda accountKeys: accountKeys.keys[0].value)
 
 pulumi.export("primary_storage_key", primary_key)
+pulumi.export("storage_account_id", account.id)
