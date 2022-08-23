@@ -1,4 +1,4 @@
-name: selfserve-test-project
+name: azure-storage-account
 runtime:
   name: python
   options:

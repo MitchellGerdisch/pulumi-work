@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+        <h1>Pulumi Self Service</h1>
+        {% for stack_results in stacks_results %}
+        <div><p><b>{{ stack_results.name }}</b> outputs: 
+          <table style="width:100%">
+            <style>
+              table, th, td {
+                margin: 10px 10px 10px 10px;
+                border: 1px solid;
+              }
+            </style>
+            <TR>
+              <TH>Output Name</TH>
+              <TH>Output Value</TH>
+            </TR>
+            {% for stack_output in stack_results.outputs %}
+            <TR>
+               <TD>{{ stack_output.name }}</TD>
+               <TD>{{ stack_output.value}}</TD>
+            </TR>
+            {% endfor %}
+            </table>
+          <br>
+        </p></div>
+        {% endfor %}
+{% endblock %}

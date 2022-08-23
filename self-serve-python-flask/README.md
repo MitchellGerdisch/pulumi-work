@@ -18,6 +18,13 @@ Flask-based self-service portal to deploy Pulumi stacks.
 * automation api code under `pulumi/automation`
 
 # How to Run
-* `cd self-serve`
 * `python3 -m venv venv && source ./venv/bin/activate && pip install -r requirements.txt`
 * `flask run`
+
+## Settings Files
+### .flaskenv  
+* `FLASK_APP=flaskapp` - tells it to run the code in the `flaskapp` folder.
+* `FLASK_DEBUG=1` - automatically reloads the web page when code changes.
+
+### .env
+* set `FLASK_PULUMI_ORG=` in the `.env` file to default the Pulumi Organization used by the self-service portal.

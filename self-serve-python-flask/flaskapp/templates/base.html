@@ -2,12 +2,14 @@
 {% block title %}
     {% if title %}{{ title }} {% else %}Pulumi Self-Service{% endif %}
 {% endblock %}
-    
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
 {% block navbar %}
   <nav class="navbar navbar-default">
     <div>Pulumi Self Service: 
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('deploy') }}">Deploy</a>
+      <!-- <a href="{{ url_for('current') }}">Current_Environments</a> -->
+      <a href="{{ url_for('deploy') }}">Deploy_New_Environment</a>
     </div>
   </nav>
 {% endblock %}

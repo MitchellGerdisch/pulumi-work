@@ -1,1 +1,2 @@
 FLASK_APP=flaskapp
+FLASK_DEBUG=1
