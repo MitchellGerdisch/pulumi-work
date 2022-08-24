@@ -43,7 +43,8 @@ def get_deployment_options():
   deployment_options_list = []
   for deployment_option in deployment_options:
     deployment_option_name = deployment_option["name"]
-    deployment_options_list.append((deployment_option_name, deployment_option_name))
+    # deployment_options_list.append((deployment_option_name, deployment_option_name))
+    deployment_options_list.append(deployment_option_name)
   return(deployment_options_list)
 
 # returns list of projects to deploy for a given deployment option as defined in the 

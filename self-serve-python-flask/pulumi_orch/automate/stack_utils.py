@@ -1,5 +1,6 @@
 from pulumi import automation as auto
-from pulumi_orch.automate.project_utils import get_deployment_projects, prep_workspace, get_project_base_dir
+from pulumi_orch.automate.project_utils import get_deployment_options, get_deployment_projects, prep_workspace, get_project_base_dir
+from flask import jsonify
 import sys
 import json
 import os
@@ -10,6 +11,8 @@ def update_stack(org: str, deployment_option: str, env: str, destroy: bool):
     print("env: ", env)
     # Get the projects for the requested deployment_option
     projects = get_deployment_projects(deployment_option)
+    if (destroy): # need to destroy the projects in reverse order
+        projects = projects[::-1] 
     print("projects to process:", projects)
     stacks_results = []
     for project in projects:
@@ -60,8 +63,20 @@ def update_stack(org: str, deployment_option: str, env: str, destroy: bool):
 
     return(stacks_results)
 
-def get_current_stacks():
-    current_stacks = [
-    ]
-    return(current_stacks)
+def get_existing_deployments():
+    existing_deployments = []
+    deployment_options = get_deployment_options()
+    for deployment_option in deployment_options:
+        # Only need to look for a stack for the base project if the deployment option deploys dependent stacks
+        deployment_projects = get_deployment_projects(deployment_option)
+        deployment_project = deployment_projects[0]
+        # Set project_dir for the requested project
+        project_base_dir = get_project_base_dir()
+        project_dir = os.path.join(os.path.dirname(__file__), project_base_dir, deployment_project) 
+        ws = auto.LocalWorkspace(project_dir)
+        stacks = ws.list_stacks()
+        for stack in stacks:
+            if (stack.resource_count > 0):
+                existing_deployments.append(f'{deployment_option}/{stack.name}')
+    return(existing_deployments)
 

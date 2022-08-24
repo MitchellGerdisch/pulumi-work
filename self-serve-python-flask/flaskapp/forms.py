@@ -13,6 +13,5 @@ class StackDeployForm(FlaskForm):
 class StackDestroyForm(FlaskForm):
     default_org = os.getenv("FLASK_PULUMI_ORG")
     org = StringField('Organization', default=default_org, validators=[DataRequired()])
-    deployment_option = SelectField('Deployment Options', validators=[InputRequired()])
-    existing_env = StringField('Existing Environment Name', validators=[DataRequired()])
+    existing_deployments = SelectField('Existing Environments', validators=[InputRequired()])
     submit = SubmitField('Destroy Stack')
