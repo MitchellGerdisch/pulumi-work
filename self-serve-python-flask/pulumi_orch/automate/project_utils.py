@@ -55,19 +55,15 @@ def get_deployment_projects(selected_deployment_option: str):
     if (deployment_option["name"] == selected_deployment_option):
       return(deployment_option["projects"])
 
-# Returns array of the deployment options given in the deployment_options json
+# Returns array of the deployment options given in the deployment_options json file
 def get_deployment_options_array():
   base_dir = get_project_base_dir()
   deployment_options_file = "deployment_options.json"
-
   # Opening offerings json file
   f = open(os.path.join(base_dir, deployment_options_file))
-    
   deployment_options = json.load(f)
-
   # Close file
   f.close()
-
   return(deployment_options["deployment_options"])
 
 

@@ -1,4 +1,4 @@
 config:
   azure-native:location: CentralUS
-  kubernetes-py-helm-release-wordpress:base_stack_project: kubernetes-py-helm-release-wordpress
+  kubernetes-py-helm-release-wordpress:base_stack_project: azure-py-aks
   kubernetes-py-helm-release-wordpress:org: MitchGerdisch
