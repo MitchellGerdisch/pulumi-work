@@ -1,0 +1,29 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+    {% if title %}{{ title }} {% else %}Pulumi Self-Service{% endif %}
+{% endblock %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+{% block navbar %}
+  <nav class="navbar navbar-default">
+    <div>Pulumi Self Service: 
+      <!-- <a href="{{ url_for('current') }}">Current_Environments</a> -->
+      <a href="{{ url_for('deploy') }}">Deploy_New_Environment</a>
+      <a href="{{ url_for('destroy') }}">Destroy_Existing_Environment</a>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="container"></div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-info" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {% block app_content %}{% endblock %}
+  </div>
+{% endblock %}
