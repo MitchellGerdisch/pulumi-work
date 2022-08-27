@@ -1,0 +1,4 @@
+config:
+  azure-native:location: CentralUS
+  azure-storage-account:base_stack_project: azure-storage-account
+  azure-storage-account:org: MitchGerdisch

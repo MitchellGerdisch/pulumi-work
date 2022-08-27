@@ -1,0 +1,16 @@
+{
+  "deployment_options": [
+    {
+      "name": "Storage Account",
+      "projects": [ "azure-storage-account"]
+    },
+    {
+      "name": "AKS Cluster",
+      "projects": [ "azure-py-aks"]
+    },
+    {
+      "name": "AKS Cluster with WordPress",
+      "projects": [ "azure-py-aks", "kubernetes-py-helm-release-wordpress"]
+    }
+  ]
+}

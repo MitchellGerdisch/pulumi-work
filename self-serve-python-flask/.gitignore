@@ -1,0 +1,4 @@
+*.pyc
+venv
+*kubeconfig*
+__pycache__
