@@ -3,7 +3,7 @@
 import pulumi
 import pulumi_aws as aws
 import pulumi_command as command
-from pulumi_wpinstance import WpInstanceArgs, WpInstance
+import pulumi_wpinstance as wpinstance
 
 config = pulumi.Config()
 # A path to the EC2 keypair's public key:
@@ -23,13 +23,6 @@ ec2_instance_size = config.get("ec2InstanceSize") or "t3.small"
 
 # Dynamically fetch AZs so we can spread across them.
 availability_zones = aws.get_availability_zones()
-# Dynamically query for the Amazon Linux 2 AMI in this region.
-aws_linux_ami = aws.ec2.get_ami(owners=["amazon"],
-    filters=[aws.ec2.GetAmiFilterArgs(
-        name="name",
-        values=["amzn2-ami-hvm-*-x86_64-ebs"],
-    )],
-    most_recent=True)
 
 # Read in the public key for easy use below.
 public_key = open(public_key_path).read()
@@ -79,41 +72,12 @@ prod_rta_public_subnet1 = aws.ec2.RouteTableAssociation("prod-rta-public-subnet-
     subnet_id=prod_subnet_public1.id,
     route_table_id=prod_public_rt.id)
 
-# Security group for EC2:
-ec2_allow_rule = aws.ec2.SecurityGroup("ec2-allow-rule",
-    vpc_id=prod_vpc.id,
-    ingress=[
-        aws.ec2.SecurityGroupIngressArgs(
-            description="HTTPS",
-            from_port=443,
-            to_port=443,
-            protocol="tcp",
-            cidr_blocks=["0.0.0.0/0"],
-        ),
-        aws.ec2.SecurityGroupIngressArgs(
-            description="HTTP",
-            from_port=80,
-            to_port=80,
-            protocol="tcp",
-            cidr_blocks=["0.0.0.0/0"],
-        ),
-        aws.ec2.SecurityGroupIngressArgs(
-            description="SSH",
-            from_port=22,
-            to_port=22,
-            protocol="tcp",
-            cidr_blocks=["0.0.0.0/0"],
-        ),
-    ],
-    egress=[aws.ec2.SecurityGroupEgressArgs(
-        from_port=0,
-        to_port=0,
-        protocol="-1",
-        cidr_blocks=["0.0.0.0/0"],
-    )],
-    tags={
-        "Name": "allow ssh,http,https",
-    })
+wp_instance = wpinstance.mlc.WpInstance("wp-instance", 
+    instance_type = ec2_instance_size,
+    public_key = public_key,
+    subnet_id = prod_subnet_public1.id,
+    vpc_id = prod_vpc.id
+)
 
 # Security group for RDS:
 rds_allow_rule = aws.ec2.SecurityGroup("rds-allow-rule",
@@ -123,7 +87,7 @@ rds_allow_rule = aws.ec2.SecurityGroup("rds-allow-rule",
         from_port=3306,
         to_port=3306,
         protocol="tcp",
-        security_groups=[ec2_allow_rule.id],
+        security_groups=[wp_instance.secrule_id],
     )],
     # allow all outbound traffic.
     egress=[aws.ec2.SecurityGroupEgressArgs(
@@ -155,25 +119,6 @@ wordpressdb = aws.rds.Instance("wordpressdb",
     password=db_password,
     skip_final_snapshot=True)
 
-# Create a keypair to access the EC2 instance:
-wordpress_keypair = aws.ec2.KeyPair("wordpress-keypair", public_key=public_key)
-
-# Create an EC2 instance to run Wordpress (after RDS is ready).
-wordpress_instance = aws.ec2.Instance("wordpress-instance",
-    ami=aws_linux_ami.id,
-    instance_type=ec2_instance_size,
-    subnet_id=prod_subnet_public1.id,
-    vpc_security_group_ids=[ec2_allow_rule.id],
-    key_name=wordpress_keypair.id,
-    tags={
-        "Name": "Wordpress.web",
-    },
-    # Only create after RDS is provisioned.
-    opts=pulumi.ResourceOptions(depends_on=[wordpressdb]))
-
-# Give our EC2 instance an elastic IP address.
-wordpress_eip = aws.ec2.Eip("wordpress-eip", instance=wordpress_instance.id)
-
 # Render the Ansible playbook using RDS info.
 render_playbook_cmd = command.local.Command("renderPlaybookCmd",
     create="cat playbook.yml | envsubst > playbook_rendered.yml",
@@ -187,7 +132,7 @@ render_playbook_cmd = command.local.Command("renderPlaybookCmd",
 # Run a script to update Python on the remote machine.
 update_python_cmd = command.remote.Command("updatePythonCmd",
     connection=command.remote.ConnectionArgs(
-        host=wordpress_eip.public_ip,
+        host=wp_instance.wpinstance_ip,
         port=22,
         user="ec2-user",
         private_key=private_key,
@@ -199,7 +144,7 @@ update_python_cmd = command.remote.Command("updatePythonCmd",
 
 # Finally, play the Ansible playbook to finish installing.
 play_ansible_playbook_cmd = command.local.Command("playAnsiblePlaybookCmd",
-    create=wordpress_eip.public_ip.apply(lambda public_ip: f"""\
+    create=wp_instance.wpinstance_ip.apply(lambda public_ip: f"""\
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
 -u ec2-user \
 -i '{public_ip},' \
@@ -211,4 +156,4 @@ opts=pulumi.ResourceOptions(depends_on=[
     ]))
 
 # Export the resulting wordpress EIP for easy access.
-pulumi.export("url", wordpress_eip.public_ip)
+pulumi.export("url", wp_instance.wpinstance_ip)

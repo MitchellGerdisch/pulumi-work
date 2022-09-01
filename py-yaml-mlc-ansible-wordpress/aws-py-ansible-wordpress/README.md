@@ -31,6 +31,8 @@ After cloning this repo, from this working directory, run these commands:
     pip install -r requirements.txt
     ```
 
+    NOTE: If you see an error related to importing the MLC package, go to the MLC folder where you are building it and remove the topmost `bin` folder and re-make generate, build, install, dist steps.
+
 1. Create a new stack, an isolated deployment target for this example:
 
     ```bash
