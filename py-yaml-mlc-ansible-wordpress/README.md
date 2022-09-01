@@ -24,7 +24,7 @@ Where
 
 ## Create Stacks
 ### Python Project
-NOTE: Make sure the `__main__.py` file imports has the correct path to the MLC Python SDK generated above.
+NOTE: Make sure the `requirements.txt` file points to the correct path to the MLC Python SDK generated above.
 ```bash
 cd aws-py-ansible-wordpress
 python3 -m venv venv

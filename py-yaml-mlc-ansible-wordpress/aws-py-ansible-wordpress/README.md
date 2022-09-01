@@ -10,23 +10,26 @@ commands to accomplish the desired effect. The result is repeatable automation t
 
 > Note: This code was adapted from https://github.com/devbhusal/terraform-ansible-wordpress. Thank you devbhusal!
 
-> Note: This example is available in many languages:
->
-> * [C#](../aws-cs-ansible-wordpress)
-> * [Java](../aws-java-ansible-wordpress)
-> * [Go](../aws-go-ansible-wordpress)
-> * [TypeScript](../aws-ts-ansible-wordpress)
-> * [YAML](../aws-yaml-ansible-wordpress)
 
 ## Prerequisites
 
 * [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 * [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 * [Configure AWS Credentials](https://www.pulumi.com/docs/intro/cloud-providers/aws/setup/)
+* [Build and Install Multilanguage Component](https://github.com/MitchellGerdisch/mlc-python-ec2_instance)
 
 ## Deploying Your Infrastructure
 
 After cloning this repo, from this working directory, run these commands:
+
+1. Set up Python Environment  
+    NOTE: Make sure the `requirements.txt` file points to the correct path to the MLC Python SDK generated above as part of the Prerequisites.
+    ```bash
+    cd aws-py-ansible-wordpress
+    python3 -m venv venv
+    source ./venv/bin/activate
+    pip install -r requirements.txt
+    ```
 
 1. Create a new stack, an isolated deployment target for this example:
 

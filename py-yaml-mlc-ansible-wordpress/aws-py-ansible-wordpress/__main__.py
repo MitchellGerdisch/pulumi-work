@@ -3,6 +3,7 @@
 import pulumi
 import pulumi_aws as aws
 import pulumi_command as command
+from pulumi_wpinstance import WpInstanceArgs, WpInstance
 
 config = pulumi.Config()
 # A path to the EC2 keypair's public key:
