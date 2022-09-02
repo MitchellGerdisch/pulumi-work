@@ -182,6 +182,17 @@ resources:
       dependsOn:
         - ${renderPlaybookCmd}
         - ${updatePythonCmd}
+  
+  # Add a stack tag
+  stackTag:
+    type: pulumiservice:StackTag
+    properties:
+      # organization: ${pulumi.organization}
+      organization: "demo"
+      project: ${pulumi.project}
+      stack: ${pulumi.stack}
+      name: Demo
+      value: Ansible-Wordpress
 
 # Export the resulting wordpress EIP for easy access.
 outputs:
