@@ -155,5 +155,6 @@ opts=pulumi.ResourceOptions(depends_on=[
         update_python_cmd,
     ]))
 
-# Export the resulting wordpress EIP for easy access.
-pulumi.export("url", wp_instance.wpinstance_ip)
+# Export the wordpress site URL
+wp_url = pulumi.Output.concat("http://", wp_instance.wpinstance_ip)
+pulumi.export("url", wp_url)
