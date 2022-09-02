@@ -1,8 +1,9 @@
-# Copyright 2022, Pulumi Corporation.
-
 import pulumi
 import pulumi_aws as aws
 import pulumi_command as command
+import pulumi_pulumiservice as pulumi_service
+
+# Custom Multilanguage Package
 import pulumi_wpinstance as wpinstance
 
 config = pulumi.Config()
@@ -154,6 +155,16 @@ opts=pulumi.ResourceOptions(depends_on=[
         render_playbook_cmd,
         update_python_cmd,
     ]))
+
+
+# Add a Pulumi Stack Tag
+stack_tag = pulumi_service.StackTag("stack-tag", #pulumi_service.StackTagArgs(
+    organization=pulumi.get_organization(),
+    project=pulumi.get_project(),
+    stack=pulumi.get_stack(),
+    name="Demo",
+    value="Ansible-Wordpress"
+)
 
 # Export the wordpress site URL
 wp_url = pulumi.Output.concat("http://", wp_instance.wpinstance_ip)
