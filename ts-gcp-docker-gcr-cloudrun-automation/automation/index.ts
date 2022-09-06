@@ -20,7 +20,13 @@ if (args.length > 0 && args[0]) {
 
 const run = async () => {
 
-  var projects = ["gcr-build-image", "cloud-run-deploy"]
+  var projects = [{
+    projectName: "gcr-build-image", 
+    projectOutputNames: ["gcrImageDigest"]
+  }, {
+    projectName: "cloud-run-deploy",
+    projectOutputNames: ["serviceUrl"]
+  }]
 
   // If destroy is true, destroy the stacks in opposite order
   if (destroy) {
@@ -29,9 +35,9 @@ const run = async () => {
     
   // Orchestrate the two stacks
   for (var project of projects) {
-    console.info(`Processing project: ${project}`)
+    console.info(`Processing project: ${project.projectName}`)
     // create (or select if one already exists) the stack that uses our local program
-    const stack = await LocalWorkspace.createOrSelectStack(getLocalProgramArgs(project, stackName));
+    const stack = await LocalWorkspace.createOrSelectStack(getLocalProgramArgs(project.projectName, stackName));
     console.info("successfully initialized stack");
     // Set the stack configs
     setConfigs(stack)
@@ -46,8 +52,10 @@ const run = async () => {
     } else {
       console.info("updating stack...");
       const upRes = await stack.up({ onOutput: console.info });
-      console.log(`update summary: \n${JSON.stringify(upRes.summary.resourceChanges, null, 4)}`);
-      console.log(upRes.outputs);
+      // console.log(`update summary: \n${JSON.stringify(upRes.summary.resourceChanges, null, 4)}`);
+      for (var output of project.projectOutputNames) {
+        console.log(`*** Stack Output, ${output}: ${upRes.outputs[output].value}`);
+      }
     }
   }
 };
