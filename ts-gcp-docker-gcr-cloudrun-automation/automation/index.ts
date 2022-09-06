@@ -39,7 +39,7 @@ const run = async () => {
     console.info(`Processing stack: ${stackInfo.stackName}`)
     console.info("successfully initialized stack");
     // Set the stack configs
-    setConfigs(stack)
+    await setConfigs(stack)
 
     if (destroy) {
         console.info("destroying stack...");
