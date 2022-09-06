@@ -4,8 +4,18 @@ import * as process from "process";
 
 const args = process.argv.slice(2);
 let destroy = false;
+let stackName = "dev";
 if (args.length > 0 && args[0]) {
-    destroy = args[0] === "destroy";
+  const param = args[0]
+  if (param === "destroy") {
+    destroy = true;
+  } else {
+    stackName = param
+  }
+} else {
+  console.log("USAGE: npm run projects destroy|STACKNAME")
+  console.log("Where STACKNAME is a stack name (e.g. dev)")
+  process.exit(1)
 }
 
 const run = async () => {
@@ -21,7 +31,7 @@ const run = async () => {
   for (var project of projects) {
     console.info(`Processing project: ${project}`)
     // create (or select if one already exists) the stack that uses our local program
-    const stack = await LocalWorkspace.createOrSelectStack(getLocalProgramArgs(project));
+    const stack = await LocalWorkspace.createOrSelectStack(getLocalProgramArgs(project, stackName));
     console.info("successfully initialized stack");
     // Set the stack configs
     setConfigs(stack)
@@ -44,9 +54,9 @@ const run = async () => {
 
 run();
 
-export function getLocalProgramArgs(projectName: string): LocalProgramArgs {
+export function getLocalProgramArgs(projectName: string, stackName: string): LocalProgramArgs {
   const programArgs: LocalProgramArgs = {
-      stackName: `demo/${projectName}/dev`,
+      stackName: `demo/${projectName}/${stackName}`,
       workDir: upath.joinSafe(__dirname, "..", projectName),
   };
   return programArgs
