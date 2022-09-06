@@ -3,3 +3,5 @@ config:
   cloud-run-deploy:imageStackName: gcr-build-image
   gcp:project: pulumi-ce-team
   gcp:region: us-central1
+  google-native:project: pulumi-ce-team
+  google-native:region: us-central1

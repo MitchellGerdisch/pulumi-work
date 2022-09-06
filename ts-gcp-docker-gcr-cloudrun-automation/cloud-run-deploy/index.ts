@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import { CloudFunction } from "./cloudFunction";
 
 const location = gcp.config.region || "us-central1";
 
@@ -29,5 +30,8 @@ const iam = new gcp.cloudrun.IamMember("cloudrun-everyone", {
     member: "allUsers",
 });
 
+const helloWorldFunction = new CloudFunction("hello")
+
 export const serviceUrl = service.statuses[0].url;
+export const functionUrl = helloWorldFunction.functionUrl;
 
