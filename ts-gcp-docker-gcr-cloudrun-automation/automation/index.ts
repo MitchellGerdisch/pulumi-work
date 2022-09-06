@@ -72,7 +72,6 @@ export async function setConfigs(stack: Stack) {
   await stack.setConfig("gcp:project", { value: "pulumi-ce-team" });
   await stack.setConfig("google-native:project", { value: "pulumi-ce-team" });
   await stack.setConfig("google-native:region", { value: "us-central1" });
-  await stack.setConfig("cloud-run-deploy:docker-config-file", { value: "/Users/mitch/.docker/config.json"});
   await stack.setConfig("cloud-run-deploy:imageStackName",{ value: "gcr-build-image"});
   console.info("config set");
 }

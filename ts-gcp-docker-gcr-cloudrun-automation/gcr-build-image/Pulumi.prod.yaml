@@ -1,5 +1,4 @@
 config:
-  cloud-run-deploy:docker-config-file: /Users/mitch/.docker/config.json
   cloud-run-deploy:imageStackName: gcr-build-image
   gcp:project: pulumi-ce-team
   gcp:region: us-central1
