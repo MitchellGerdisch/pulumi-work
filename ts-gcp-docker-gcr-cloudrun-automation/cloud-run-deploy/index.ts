@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import * as pulumiService from "@pulumi/pulumiService";
 import { CloudFunction } from "./cloudFunction";
 
 const location = gcp.config.region || "us-central1";
@@ -31,6 +32,14 @@ const iam = new gcp.cloudrun.IamMember("cloudrun-everyone", {
 });
 
 const helloWorldFunction = new CloudFunction("hello")
+
+const stackTag = new pulumiService.StackTag("stackTag", {
+    organization: pulumi.getOrganization(),
+    project: pulumi.getProject(),
+    stack: pulumi.getStack(),
+    name: "Demo",
+    value: "GCR-CloudRun-CloudFunction"
+})
 
 export const serviceUrl = service.statuses[0].url;
 export const functionUrl = helloWorldFunction.functionUrl;
