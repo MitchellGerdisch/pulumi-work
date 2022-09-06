@@ -1,0 +1,17 @@
+{
+  "name": "automate-stacks",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "@pulumi/pulumi": "^3.26.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "scripts": {
+    "projects": "./node_modules/ts-node/dist/bin.js index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37"
+  }
+}
