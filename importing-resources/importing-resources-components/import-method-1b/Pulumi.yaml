@@ -1,0 +1,3 @@
+name: import-method-1b
+runtime: nodejs
+description: A minimal TypeScript Pulumi program

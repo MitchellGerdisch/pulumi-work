@@ -1,5 +1,9 @@
 # Importing into Components Options
 
+Method 1b is the preferred approach.  
+It uses stack transformations to do the aliasing.  
+The stack transformation function allows you to compartmentalize the aliasing logic without polluting the component resource or project code.
+
 ## Method 0: Import into a one-off project/stack
 The idea here is to just accept the technical debt of existing infra and use `pulumi import` to get the infra imported and code
 generated and just use the generated code as-is.
@@ -27,7 +31,10 @@ A more clever approach may be to use stack transformation ....
 * Do `pulumi up` to confirm no change other than state update
 
 ### Method 1b: Import to stak and alias to component resource usng stack transforms.
-TBD NOT sure if doable.
+* `pulumi stack init dev`
+* `pulumi import` resource for each resource to be imported
+* Have stack transformation that handles the aliases needed for the component resource resources.
+* Create component resource with transformation that adds `aliases` option based on resource type and imported urns
 
 ## Method 2: Import directly to component resource
 **DO NOT LIKE THIS APPROACH**
