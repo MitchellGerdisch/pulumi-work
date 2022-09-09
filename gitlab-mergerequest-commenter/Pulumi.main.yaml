@@ -1,0 +1,3 @@
+config:
+  mr-test:max: "22332"
+  mr-test:min: "535"

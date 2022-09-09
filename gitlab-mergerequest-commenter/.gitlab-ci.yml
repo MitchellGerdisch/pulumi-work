@@ -1,0 +1,46 @@
+### Gitlab Pipeline with Merge Request Pulumi Preview Comments ###
+# This is pipeline is to test the idea of creating a Merge Request comment that shows the results
+# of `pulumi preview` to show what the merge will do to the target branch.
+# It is meant to emulate what https://www.pulumi.com/docs/guides/continuous-delivery/gitlab-app/ does.
+# But does not require (as the current gitlab app does) the Pulumi user to use gitlab SSO.
+# See: https://github.com/pulumi/service-requests/issues/44 
+# 
+# PREREQUISITES
+# * gitlab project and repo
+#   * Put this file in the repo as `.gitlab-ci.yml` 
+# * Add a simple Pulumi project to the repo:
+#   * `pulumi new typescript`
+#   * You can just use the pulumi random provider for a resource or two.
+#   * Assumes a single folder for the pipeline yml and pulumi project code.
+#
+
+image: pulumi/pulumi-nodejs:latest
+
+before_script:
+  - echo "CI_PIPELINE_SOURCE ${CI_PIPELINE_SOURCE}"
+  - apt-get --yes install curl 
+  - npm i
+
+after_script:
+  - echo "Eventually will be used to destroy and remove the stack that was created for the branch that was just merged."
+
+# This runs on any update to any branch (main, branchx, branchy, etc)
+deploy:
+  stage: deploy
+  script:
+    - pulumi stack select ${CI_COMMIT_BRANCH} -c
+    - pulumi preview --diff
+    - pulumi up --skip-preview
+
+# This only runs when an MR is created
+mr_preview:
+  only: 
+    - merge_requests
+  script:
+    - echo "CI_MERGE_REQUEST_PROJECT_ID	 ${CI_MERGE_REQUEST_PROJECT_ID}"
+    - echo "CI_MERGE_REQUEST_IID ${CI_MERGE_REQUEST_IID}"
+    - pulumi stack select ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} -c
+    - pulumi preview --diff 
+    - chmod +x ./add_mr_note.sh
+    - ./add_mr_note.sh ${GITLAB_ACCESS_TOKEN} ${CI_MERGE_REQUEST_PROJECT_ID} ${CI_MERGE_REQUEST_IID}
+
