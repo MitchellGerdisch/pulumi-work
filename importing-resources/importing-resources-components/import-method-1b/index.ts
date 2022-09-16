@@ -43,21 +43,5 @@ const myImportedComponent = new myComponent.MyComponent("importedComponent", {
     type: "Microsoft.Network/virtualNetworks/subnets",
   }],
   },
-  // {transformations: [args => {
-  //   if (args.type === "azure-native:resources:ResourceGroup") {
-  //     const mergedOpts = pulumi.mergeOptions(args.opts, {aliases: rgAlias})
-  //     return {
-  //       props: args.props, // just pass along the same props
-  //       opts: mergedOpts
-  //     }
-  //   }
-  //   if (args.type === "azure-native:network:VirtualNetwork") {
-  //     return {
-  //       props: args.props,
-  //       opts: pulumi.mergeOptions(args.opts, { aliases: vnetAlias })
-  //     }
-  //   }
-  //   return undefined;
-  // }
-// ]}
+  
 );

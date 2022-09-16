@@ -24,6 +24,6 @@ const myImportedComponent = new myComponent.MyComponent("importedComponent", {
     privateLinkServiceNetworkPolicies: "Enabled",
     type: "Microsoft.Network/virtualNetworks/subnets",
   }],
-  rgAlias: ["urn:pulumi:dev::import-method-1::azure-native:resources:ResourceGroup::myImportedRg"],
-  vnetAlias: ["urn:pulumi:dev::import-method-1::azure-native:network:VirtualNetwork::myImportedVnet"]
+  rgAlias: ["urn:pulumi:method-1a::import-method-1::azure-native:resources:ResourceGroup::myImportedRg"],
+  vnetAlias: ["urn:pulumi:method-1a::import-method-1::azure-native:network:VirtualNetwork::myImportedVnet"]
 });
