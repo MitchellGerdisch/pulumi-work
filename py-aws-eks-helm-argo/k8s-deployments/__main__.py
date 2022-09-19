@@ -1,11 +1,10 @@
 """
-- Creates VPC
-- Instantiates EKS cluster
 - Deploys ArgoCD service
 - Deploys one or more ArgoCD applications
 """
 
 import pulumi
+from pulumi.resource import ResourceOptions
 import pulumi_kubernetes as k8s
 
 from Gitops import OperatorArgs, Operator, ApplicationArgs, Application

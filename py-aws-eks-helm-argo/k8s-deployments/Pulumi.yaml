@@ -1,4 +1,4 @@
-name: eks_helm_argo
+name: eks_helm_argo_deployments
 runtime:
   name: python
   options:
