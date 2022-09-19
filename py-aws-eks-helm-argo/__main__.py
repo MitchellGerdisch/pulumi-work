@@ -9,6 +9,7 @@ import pulumi
 from pulumi.resource import ResourceOptions
 from pulumi_eks import ClusterArgs, Cluster 
 import pulumi_aws as aws
+import pulumi_kubernetes as k8s
 
 from Network import VpcArgs, Vpc
 from Gitops import OperatorArgs, Operator, ApplicationArgs, Application
@@ -26,9 +27,8 @@ cluster = Cluster(basename, ClusterArgs(
     vpc_id=vpc.id,
     max_size=4,
 ))
-k8s_provider = cluster.provider
 pulumi.export("kubeconfig", pulumi.Output.secret(cluster.kubeconfig))
-
+k8s_provider = k8s.Provider('k8s-provider', kubeconfig=cluster.kubeconfig, delete_unreachable=True)
 
 ### Deploy Operator
 operator = Operator(basename, OperatorArgs(
@@ -39,7 +39,7 @@ pulumi.export("Service URL", operator.service_url)
 pulumi.export("Admin Username", operator.service_admin_username)
 pulumi.export("Admin Password", operator.service_admin_password)
 
-# ### Deploy Some Apps
+### Deploy Some Apps
 # for app in apps:
 #     app_namespace=app["app_name"]
 #     app_name=app["app_name"]
