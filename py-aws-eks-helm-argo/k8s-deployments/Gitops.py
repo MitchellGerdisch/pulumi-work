@@ -29,7 +29,7 @@ class Operator(ComponentResource):
     # define an namespace for the argocd operator to live in
     ns_opts = opts
     ns_opts.parent=self
-    self.ns = k8s.core.v1.Namespace(f"{basename}-ns",
+    ns = k8s.core.v1.Namespace(f"{basename}-ns",
       metadata={
         "name": args.namespace
       },
@@ -38,12 +38,13 @@ class Operator(ComponentResource):
 
     # Deploy the ArgoCD operator using Helm
     chart_opts = opts
-    chart_opts.parent = self.ns
+    chart_opts.parent = ns
     chart_id = f"{basename}-chart"
-    self.argo = k8s.helm.v3.Release(chart_id,
+    argo = k8s.helm.v3.Release(chart_id,
         k8s.helm.v3.ReleaseArgs(
             chart="argo-cd",
-            namespace=self.ns.metadata.name,
+            version="5.4.4",
+            namespace=ns.metadata.name,
             repository_opts=k8s.helm.v3.RepositoryOptsArgs(
                 repo="https://argoproj.github.io/argo-helm"
             ),
@@ -60,23 +61,24 @@ class Operator(ComponentResource):
 
     # for the "gets" below
     get_opts = opts
-    get_opts.depends_on=[self.argo]
-    get_opts.parent=self.argo
+    get_opts.depends_on=[argo]
+    get_opts.parent=argo
 
     # URL for the Argo service UI
-    service_uri = Output.all(chart_ready=self.argo.status, argo_id=self.argo.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['argo_id']}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
+    service_uri = Output.all(chart_ready=argo.status, argo_id=argo.id).apply(lambda args: k8s.core.v1.Service.get("argo_service_lb",f"{args['argo_id']}-argocd-server",opts=get_opts).status.load_balancer.ingress[0].hostname)
     self.service_url = Output.concat("https://",service_uri)
 
     # Credentials for the Argo service UI
     self.service_admin_username = "admin" # default for Argo CD
-    service_admin_password_encoded = Output.all(chart_ready=self.argo.status, ns_id=self.ns.id).apply(lambda args: k8s.core.v1.Secret.get("argo_service_password",f"{args['ns_id']}/argocd-initial-admin-secret", opts=get_opts).data["password"])
+    service_admin_password_encoded = Output.all(chart_ready=argo.status, ns_id=ns.id).apply(lambda args: k8s.core.v1.Secret.get("argo_service_password",f"{args['ns_id']}/argocd-initial-admin-secret", opts=get_opts).data["password"])
     self.service_admin_password = service_admin_password_encoded.apply(lambda pwd: base64.b64decode(pwd).decode('utf-8'))
+    self.namespace = argo.status.apply(lambda status: ns.id)
 
     self.register_outputs({})
 
 class ApplicationArgs:
   def __init__(self,
-              app_namespace=None,
+              app_namespace="argocd",
               app_name=None,
               app_repo_url=None,
               app_repo_path=None,
@@ -103,7 +105,7 @@ class Application(ComponentResource):
     # define a namespace to deploy our app to.
     ns_opts = opts
     ns_opts.parent=self
-    self.ns = k8s.core.v1.Namespace(f"{basename}-ns",
+    ns = k8s.core.v1.Namespace(f"{basename}-ns",
       metadata={
         "name": args.app_namespace
       },
@@ -113,7 +115,7 @@ class Application(ComponentResource):
     # Deploy the app via argo as a custom resource
     app_opts = opts
     app_opts.parent=self
-    self.app = k8s.apiextensions.CustomResource(
+    app = k8s.apiextensions.CustomResource(
         args.app_name,
         api_version="argoproj.io/v1alpha1",
         kind="Application",
@@ -123,7 +125,7 @@ class Application(ComponentResource):
         ),
         spec={
             "destination": {
-                "namespace": self.ns.metadata.name,
+                "namespace": ns.metadata.name,
                 "server": "https://kubernetes.default.svc",
             },
             "project": "default",

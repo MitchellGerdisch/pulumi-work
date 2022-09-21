@@ -23,33 +23,12 @@ kubeconfig = base_stack.get_output("kubeconfig")
 k8s_provider = k8s.Provider('k8s-provider', kubeconfig=kubeconfig, delete_unreachable=True)
 
 ### Deploy Operator
-operator = Operator(basename, OperatorArgs(
-    namespace="argocd"),
-    opts=ResourceOptions(provider=k8s_provider)
-)
+# Probably makes more sense to deploy operator as part of the base-infra stack and keep this project solely about deploying applications.
+# But, I wanted to keep all the K8s-provider stuff in one project for demonstration purposes.
+operator = Operator(basename, OperatorArgs(), opts=ResourceOptions(provider=k8s_provider))
 pulumi.export("Service URL", operator.service_url)
 pulumi.export("Admin Username", operator.service_admin_username)
 pulumi.export("Admin Password", operator.service_admin_password)
-
-### Deploy Some Apps
-for app in apps:
-    app_namespace=app["app_name"]
-    app_name=app["app_name"]
-    app_repo_path=app["app_repo_path"]
-    app_repo_url=app["app_repo_url"]
-    app_repo_target_revision=app["app_repo_target_revision"]
-
-    resource_name = f"{basename}-{app_name}"
-    app = Application(resource_name, ApplicationArgs(
-        operator_namespace=operator.ns.id,
-        app_namespace=app_namespace,
-        app_name=app_name,
-        app_repo_path=app_repo_path,
-        app_repo_url=app_repo_url,
-        app_repo_target_revision=app_repo_target_revision
-        ),
-        opts=ResourceOptions(provider=k8s_provider)
-    )
 
 ### Deploy Some Apps using config data
 config_apps = config.get_object("apps")
@@ -62,7 +41,27 @@ for app in config_apps:
 
     resource_name = f"{basename}-{app_name}"
     app = Application(resource_name, ApplicationArgs(
-        operator_namespace=operator.ns.id,
+        operator_namespace=operator.namespace,
+        app_namespace=app_namespace,
+        app_name=app_name,
+        app_repo_path=app_repo_path,
+        app_repo_url=app_repo_url,
+        app_repo_target_revision=app_repo_target_revision
+        ),
+        opts=ResourceOptions(provider=k8s_provider)
+    )
+
+### Deploy Some Apps
+for app in apps:
+    app_namespace=app["app_name"]
+    app_name=app["app_name"]
+    app_repo_path=app["app_repo_path"]
+    app_repo_url=app["app_repo_url"]
+    app_repo_target_revision=app["app_repo_target_revision"]
+
+    resource_name = f"{basename}-{app_name}"
+    app = Application(resource_name, ApplicationArgs(
+        operator_namespace=operator.namespace,
         app_namespace=app_namespace,
         app_name=app_name,
         app_repo_path=app_repo_path,
