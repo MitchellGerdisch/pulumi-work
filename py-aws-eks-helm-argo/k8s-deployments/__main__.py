@@ -7,7 +7,7 @@ import pulumi
 from pulumi.resource import ResourceOptions
 import pulumi_kubernetes as k8s
 
-from Gitops import OperatorArgs, Operator, ApplicationArgs, Application
+from Gitops import ApplicationArgs, Application
 from apps import apps
 
 ### Config
@@ -18,17 +18,11 @@ base_stack_project = config.require("base_stack_project")
 base_stack_name = f"{pulumi.get_organization()}/{base_stack_project}/{pulumi.get_stack()}"
 base_stack = pulumi.StackReference(base_stack_name)
 kubeconfig = base_stack.get_output("kubeconfig")
+operator_namespace = base_stack.get_output("operator_namespace")
 
 # Instantiate K8s provider based on kubeconfig from the base infrastructure stack
+# k8s_provider = k8s.Provider('k8s-provider', kubeconfig=kubeconfig, delete_unreachable=True)
 k8s_provider = k8s.Provider('k8s-provider', kubeconfig=kubeconfig, delete_unreachable=True)
-
-### Deploy Operator
-# Probably makes more sense to deploy operator as part of the base-infra stack and keep this project solely about deploying applications.
-# But, I wanted to keep all the K8s-provider stuff in one project for demonstration purposes.
-operator = Operator(basename, OperatorArgs(), opts=ResourceOptions(provider=k8s_provider))
-pulumi.export("Service URL", operator.service_url)
-pulumi.export("Admin Username", operator.service_admin_username)
-pulumi.export("Admin Password", operator.service_admin_password)
 
 ### Deploy Some Apps using config data
 config_apps = config.get_object("apps")
@@ -41,7 +35,7 @@ for app in config_apps:
 
     resource_name = f"{basename}-{app_name}"
     app = Application(resource_name, ApplicationArgs(
-        operator_namespace=operator.namespace,
+        operator_namespace=operator_namespace,
         app_namespace=app_namespace,
         app_name=app_name,
         app_repo_path=app_repo_path,
@@ -61,7 +55,7 @@ for app in apps:
 
     resource_name = f"{basename}-{app_name}"
     app = Application(resource_name, ApplicationArgs(
-        operator_namespace=operator.namespace,
+        operator_namespace=operator_namespace,
         app_namespace=app_namespace,
         app_name=app_name,
         app_repo_path=app_repo_path,
