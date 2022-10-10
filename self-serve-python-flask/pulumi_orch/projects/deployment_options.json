@@ -2,14 +2,22 @@
   "deployment_options": [
     {
       "name": "Storage Account",
+      "language": "python",
       "projects": [ "azure-storage-account"]
     },
     {
+      "name": "Azure AppService",
+      "language": "csharp",
+      "projects": [ "azure-cs-appservice"]
+    },
+    {
       "name": "AKS Cluster",
+      "language": "python",
       "projects": [ "azure-py-aks"]
     },
     {
       "name": "AKS Cluster with WordPress",
+      "language": "python",
       "projects": [ "azure-py-aks", "kubernetes-py-helm-release-wordpress"]
     }
   ]

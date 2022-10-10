@@ -6,6 +6,8 @@ def prep_workspace(project_dir: str, language: str):
   print('project_dir: ', project_dir)
   if language == "python":
     prep_python_workspace(project_dir, language)
+  else:
+    print('No prep action taken for language: ', language)
 
 def prep_python_workspace(project_dir: str, language: str):
   print("preparing virtual environment...")
@@ -54,6 +56,13 @@ def get_deployment_projects(selected_deployment_option: str):
   for deployment_option in deployment_options:
     if (deployment_option["name"] == selected_deployment_option):
       return(deployment_option["projects"])
+
+# returns language for the deployment option
+def get_deployment_language(selected_deployment_option: str):
+  deployment_options = get_deployment_options_array()
+  for deployment_option in deployment_options:
+    if (deployment_option["name"] == selected_deployment_option):
+      return(deployment_option["language"])
 
 # Returns array of the deployment options given in the deployment_options json file
 def get_deployment_options_array():

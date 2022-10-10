@@ -1,5 +1,5 @@
 from pulumi import automation as auto
-from pulumi_orch.automate.project_utils import get_deployment_options_array, get_deployment_options, get_deployment_projects, prep_workspace, get_project_base_dir
+from pulumi_orch.automate.project_utils import get_deployment_options_array, get_deployment_language, get_deployment_projects, prep_workspace, get_project_base_dir
 from flask import jsonify
 import sys
 import json
@@ -9,6 +9,9 @@ def update_stack(org: str, deployment_option: str, env: str, destroy: bool):
 
     print("deployment option: ", deployment_option)
     print("env: ", env)
+
+    # Get the deployment option language for prep step below
+    deployment_language = get_deployment_language(deployment_option)
     # Get the projects for the requested deployment_option
     projects = get_deployment_projects(deployment_option)
     if (destroy): # need to destroy the projects in reverse order
@@ -22,7 +25,7 @@ def update_stack(org: str, deployment_option: str, env: str, destroy: bool):
         print("project_dir", project_dir)
 
         # Set up the environment for the pulumi project/stack
-        prep_workspace(project_dir, "python")
+        prep_workspace(project_dir, deployment_language)
 
         stack_name = f"{org}/{project}/{env}"
         # Create our stack using a local program in the ../aws-py-voting-app directory

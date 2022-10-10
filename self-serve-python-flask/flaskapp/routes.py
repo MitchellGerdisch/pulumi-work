@@ -38,8 +38,9 @@ def destroy():
     if form.validate_on_submit():
         org = form.org.data
         existing_deployment = form.existing_deployments.data
-        deployment = existing_deployment.split("/")[0]
-        stack = existing_deployment.split("/")[1]
+        selection_split = existing_deployment.split("/")
+        deployment = selection_split[0]
+        stack = selection_split[-1]
         # flash('Accepted request to deploy environment: {}, {}, {}'.format(org, deployment_option, env))
         destroy_result = update_stack(org, deployment, stack, True)
         # flash(f'stack_results: {stacks_results}')
