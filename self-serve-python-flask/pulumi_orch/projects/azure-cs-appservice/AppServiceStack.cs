@@ -1,5 +1,3 @@
-// Copyright 2016-2021, Pulumi Corporation.  All rights reserved.
-
 using Pulumi;
 using Pulumi.AzureNative.Insights;
 using Pulumi.AzureNative.Resources;
@@ -46,14 +44,16 @@ class AppServiceStack : Stack
             }
         });
 
+        var skuTier = config.Get("skuTier") ?? "Basic";
+        var skuName = config.Get("skuName") ?? "B1";
         var appServicePlan = new AppServicePlan("asp", new AppServicePlanArgs
         {
             ResourceGroupName = resourceGroup.Name,
             Kind = "App",
             Sku = new SkuDescriptionArgs
             {
-                Tier = "Basic",
-                Name = "B1",
+                Tier = skuTier,
+                Name = skuName
             },
         });
 

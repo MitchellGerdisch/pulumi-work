@@ -1,6 +1,7 @@
 config:
   azure-cs-appservice:base_stack_project: azure-cs-appservice
   azure-cs-appservice:org: demo
+  azure-cs-appservice:skuName: B2
   azure-cs-appservice:sqlPassword:
     secure: AAABADa5/HeH224fZzWfudW+x855n9H+Ym0BoIzq75Uns+qz0kS5Etal8JE=
   azure-native:location: CentralUS
