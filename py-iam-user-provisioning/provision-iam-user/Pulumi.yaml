@@ -1,0 +1,6 @@
+name: project-create-user
+description: used to create AWS users
+runtime:
+    name: python
+    options:
+        virtualenv: venv

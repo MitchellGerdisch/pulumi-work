@@ -1,0 +1,6 @@
+iam_user.py
+setup.py
+components.egg-info/PKG-INFO
+components.egg-info/SOURCES.txt
+components.egg-info/dependency_links.txt
+components.egg-info/top_level.txt

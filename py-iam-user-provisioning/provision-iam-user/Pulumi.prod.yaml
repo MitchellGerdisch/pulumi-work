@@ -1,0 +1,9 @@
+config:
+  aws:region: us-east-1
+  project-create-user:slackWebhookUrl:
+    secure: AAABABv9dGwc1qzQsxYgpygE61oGCQjqHli9Q52IIQEDk6N9pDqg/SCeZXD2jRX87qbMTeK5frdAAT+n5MVfjOGL/5Ns4QK4TqDIAS+LKyR1FkcNe+KN1WNHq1XNMYjEFwhhdKrxILIwT6i2+Cbg
+  project-create-user:users:
+  - name: jeanne
+    path: /admin/
+  - name: mitch
+    path: /admin/
