@@ -1,4 +1,4 @@
-name: project-create-user
+name: provision-iam-users
 description: used to create AWS users
 runtime:
     name: python
