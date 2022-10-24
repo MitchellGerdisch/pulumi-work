@@ -1,2 +1,2 @@
 # pulumi_work
-Ephemeral workspace
+Place to put various Pulumi-related projects and exercises.
