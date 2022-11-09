@@ -1,0 +1,2 @@
+# Simple script to set up aws environment
+aws sso login --profile pulumi-ce
