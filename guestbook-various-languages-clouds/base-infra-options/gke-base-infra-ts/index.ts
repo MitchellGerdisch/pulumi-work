@@ -2,12 +2,17 @@ import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 import * as pulumiService from "@pulumi/pulumiService";
 import { Cluster } from "./cluster";
+import { masterVersion, nodeCount, nodeMachineType } from "./config";
 
 // Build a name
 const name = `gkebase-${pulumi.getStack()}`;
 
 // Instantiate a gke cluster
-const k8sCluster = new Cluster(name);
+const k8sCluster = new Cluster(name, {
+    masterVersion: masterVersion,
+    nodeCount: nodeCount,
+    nodeMachineType: nodeMachineType,
+});
 const k8sProvider = k8sCluster.k8sProvider;
 
 // Create a canary deployment to test that this cluster works.
