@@ -68,7 +68,6 @@ const dnsRecord = new aws.route53.Record("frontEndDnsRecord", {
 export const frontEndIp = frontend.frontEndIp
 export const frontEndUrl = `http://${fqdn}`
 
-const config = new pulumi.Config()
 const stackTagName = config.get("stackTagName") ?? "Application"
 const stackTagValue = config.get("stackTagValue") ?? "Guestbook"
 const stackTag =  new pulumiService.StackTag("stackTag", {
