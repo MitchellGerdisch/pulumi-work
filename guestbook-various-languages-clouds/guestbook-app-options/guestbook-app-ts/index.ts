@@ -1,6 +1,7 @@
-import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as k8s from "@pulumi/kubernetes";
+import * as pulumi from "@pulumi/pulumi";
+import * as pulumiService from "@pulumi/pulumiService";
 import * as ServiceDeployment from "@pulumi/k8s-servicedeployment";
 
 const org = pulumi.getOrganization()
@@ -9,8 +10,6 @@ const project = pulumi.getProject()
 
 const config = new pulumi.Config()
 const eksStackProject = config.require("eksProject")
-const stackTagName = config.get("stackTagName") ?? "Application"
-const stackTagValue = config.get("stackTagValue") ?? "Guestbook"
 
 const eksStackName = `${org}/${eksStackProject}/${currentStack}`
 const eksStackRef = new pulumi.StackReference(eksStackName)
