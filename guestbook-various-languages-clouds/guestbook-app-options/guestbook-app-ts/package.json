@@ -1,0 +1,12 @@
+{
+    "name": "guestbook-app-ts",
+    "devDependencies": {
+        "@types/node": "^14"
+    },
+    "dependencies": {
+        "@pulumi/k8s-servicedeployment": "file:../../../../../../Documents/demo-envs/customer-engineering/demos/multilanguage-packages/pulumi-k8s-servicedeployment/sdk/nodejs",
+        "@pulumi/kubernetes": "^3.22.1",
+        "@pulumi/pulumi": "^3.47.0",
+        "@pulumi/pulumiservice": "^0.1.8"
+    }
+}

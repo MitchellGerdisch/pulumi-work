@@ -1,4 +1,3 @@
 config:
   guestbook-app-ts:eksProject: guestbook-base-eks-infra-ts
-  guestbook-app-ts:org: demo
   guestbook-app-ts:zoneName: pulumi-ce.team

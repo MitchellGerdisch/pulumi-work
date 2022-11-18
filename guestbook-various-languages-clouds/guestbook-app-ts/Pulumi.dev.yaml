@@ -1,4 +1,0 @@
-config:
-  guestbook-app-ts:eksProject: guestbook-base-gke-infra-go
-  guestbook-app-ts:org: demo
-  guestbook-app-ts:zoneName: pulumi-ce.team

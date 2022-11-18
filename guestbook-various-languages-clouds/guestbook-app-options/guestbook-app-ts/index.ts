@@ -3,12 +3,15 @@ import * as aws from "@pulumi/aws";
 import * as k8s from "@pulumi/kubernetes";
 import * as ServiceDeployment from "@pulumi/k8s-servicedeployment";
 
-
-const config = new pulumi.Config()
-const org = config.require("org")
-const eksStackProject = config.require("eksProject")
+const org = pulumi.getOrganization()
 const currentStack = pulumi.getStack()
 const project = pulumi.getProject()
+
+const config = new pulumi.Config()
+const eksStackProject = config.require("eksProject")
+const stackTagName = config.get("stackTagName") ?? "Application"
+const stackTagValue = config.get("stackTagValue") ?? "Guestbook"
+
 const eksStackName = `${org}/${eksStackProject}/${currentStack}`
 const eksStackRef = new pulumi.StackReference(eksStackName)
 
@@ -65,3 +68,13 @@ const dnsRecord = new aws.route53.Record("frontEndDnsRecord", {
 export const frontEndIp = frontend.frontEndIp
 export const frontEndUrl = `http://${fqdn}`
 
+const config = new pulumi.Config()
+const stackTagName = config.get("stackTagName") ?? "Application"
+const stackTagValue = config.get("stackTagValue") ?? "Guestbook"
+const stackTag =  new pulumiService.StackTag("stackTag", {
+  organization: pulumi.getOrganization(),
+  project: pulumi.getProject(),
+  stack: pulumi.getStack(),
+  name: stackTagName,
+  value: pulumi.interpolate`${stackTagValue}-${pulumi.getStack()}`
+})
