@@ -47,20 +47,20 @@ func main() {
 			Kubeconfig: kubeconfig,
 		})
 
-		// appNamespace, err := corev1.NewNamespace(ctx, "wordpress-ns", &corev1.NamespaceArgs{
-		_, err = corev1.NewNamespace(ctx, "wordpress-ns", &corev1.NamespaceArgs{
+		// appNamespace, err := corev1.NewNamespace(ctx, "app-ns", &corev1.NamespaceArgs{
+		_, err = corev1.NewNamespace(ctx, "app-ns", &corev1.NamespaceArgs{
 			Metadata: &metav1.ObjectMetaArgs{
-				Name: pulumi.String("wordpress-ns"),
+				Name: pulumi.String("app-ns"),
 			},
 		}, pulumi.Provider(k8sProvider))
 		if err != nil {
 			return err
 		}
 
-		// Deploy the bitnami/wordpress chart.
-		wordpress, err := helm.NewRelease(ctx, "wpdev", &helm.ReleaseArgs{
-			Version: pulumi.String("15.0.12"),
-			Chart:   pulumi.String("wordpress"),
+		// Deploy the bitnami/nginx chart.
+		app, err := helm.NewRelease(ctx, "nginx", &helm.ReleaseArgs{
+			Chart:   pulumi.String("nginx"),
+			Version: pulumi.String("12.0.0"),
 			Values:  pulumi.Map{"service": pulumi.StringMap{"type": pulumi.String("ClusterIP")}},
 			// Namespace: appNamespace.Metadata.Name(),
 			RepositoryOpts: &helm.RepositoryOptsArgs{
@@ -72,12 +72,12 @@ func main() {
 			return err
 		}
 
-		// Await on the Status field of the wordpress release and use that to lookup the WordPress service.
-		result := pulumi.All(wordpress.Status.Namespace(), wordpress.Status.Name()).ApplyT(func(r interface{}) ([]interface{}, error) {
+		// Await on the Status field of the app release and use that to lookup the app service.
+		result := pulumi.All(app.Status.Namespace(), app.Status.Name()).ApplyT(func(r interface{}) ([]interface{}, error) {
 			arr := r.([]interface{})
 			namespace := arr[0].(*string)
 			name := arr[1].(*string)
-			svc, err := corev1.GetService(ctx, "svc", pulumi.ID(fmt.Sprintf("%s/%s-wordpress", *namespace, *name)), nil, pulumi.Provider(k8sProvider))
+			svc, err := corev1.GetService(ctx, "svc", pulumi.ID(fmt.Sprintf("%s/%s", *namespace, *name)), nil, pulumi.Provider(k8sProvider))
 			if err != nil {
 				return nil, err
 			}
