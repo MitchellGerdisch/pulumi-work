@@ -6,6 +6,7 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
+
 		randoStuff, err := NewRandomStuff(ctx, "randoStuff", &RandomStuffArgs{
 			NumParts: pulumi.Int(2),
 		})

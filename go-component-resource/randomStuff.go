@@ -9,15 +9,14 @@ import (
 
 // The set of arguments for creating a RandomName component resource.
 type RandomStuffArgs struct {
-	// The HTML content for index.html.
 	NumParts pulumi.IntInput `pulumi:"numParts"`
 }
 
+// Structs used for output from the component
 type NestedStructPetNames struct {
 	PetNameAlpha pulumi.StringOutput `pulumi:"petNameAlpha"`
 	PetNameBeta pulumi.StringOutput `pulumi:"petNameBeta"`
 }
-
 type NestedStructRandomNumbers struct {
 	RandomNumberAlpha pulumi.IntOutput `pulumi:"randomNumberAlpha"`
 	RandomNumberBeta pulumi.IntOutput `pulumi:"randomNumberBeta"`
@@ -83,14 +82,10 @@ func NewRandomStuff(ctx *pulumi.Context,
 	return nil, err
 	}
 
-	var stuff RandomStuff
-
-	stuff.PetNames.PetNameAlpha = pulumi.StringOutput(pulumi.IDOutput(alphaPet.ID()))
-	stuff.PetNames.PetNameBeta = pulumi.StringOutput(pulumi.IDOutput(betaPet.ID()))
-	stuff.Numbers[0].RandomNumberAlpha = alphaNumber.Result
-	stuff.Numbers[0].RandomNumberBeta = betaNumber.Result
-
-	component=&stuff
+	component.PetNames.PetNameAlpha = pulumi.StringOutput(pulumi.IDOutput(alphaPet.ID()))
+	component.PetNames.PetNameBeta = pulumi.StringOutput(pulumi.IDOutput(betaPet.ID()))
+	component.Numbers[0].RandomNumberAlpha = alphaNumber.Result
+	component.Numbers[0].RandomNumberBeta = betaNumber.Result
 
 	if err := ctx.RegisterResourceOutputs(component, pulumi.Map{
 	}); err != nil {
