@@ -66,34 +66,36 @@ func NewRandomStuff(ctx *pulumi.Context,
 		return nil, err
 	}
 
-// Create another random pet name
-betaPet, err := random.NewRandomPet(ctx, fmt.Sprintf("%s-betapet", name), &random.RandomPetArgs{
+	// Create another random pet name
+	betaPet, err := random.NewRandomPet(ctx, fmt.Sprintf("%s-betapet", name), &random.RandomPetArgs{
 	Length: pulumi.IntPtrInput(args.NumParts),
-}, pulumi.Parent(component))
-if err != nil {
+	}, pulumi.Parent(component))
+	if err != nil {
 	return nil, err
-}
+	}
 
-// Create another random number for no real good reason other than testing stuff out
-betaNumber, err := random.NewRandomInteger(ctx, fmt.Sprintf("%s-betanumber", name), &random.RandomIntegerArgs{
+	// Create another random number for no real good reason other than testing stuff out
+	betaNumber, err := random.NewRandomInteger(ctx, fmt.Sprintf("%s-betanumber", name), &random.RandomIntegerArgs{
 	Max: randomMax,
 	Min: args.NumParts,
-}, pulumi.Parent(component))
-if err != nil {
+	}, pulumi.Parent(component))
+	if err != nil {
 	return nil, err
-}
+	}
 
-component.PetNames.PetNameAlpha = pulumi.StringOutput(pulumi.IDOutput(alphaPet.ID()))
-component.PetNames.PetNameBeta = pulumi.StringOutput(pulumi.IDOutput(betaPet.ID()))
-component.Numbers[0].RandomNumberAlpha = alphaNumber.Result
-component.Numbers[0].RandomNumberBeta = betaNumber.Result
+	var stuff RandomStuff
 
-	// if err := ctx.RegisterResourceOutputs(component, pulumi.Map{
-	// 	"petName": component.PetName,
-	// 	"number": component.PetName,
-	// }); err != nil {
-	// 	return nil, err
-	// }
+	stuff.PetNames.PetNameAlpha = pulumi.StringOutput(pulumi.IDOutput(alphaPet.ID()))
+	stuff.PetNames.PetNameBeta = pulumi.StringOutput(pulumi.IDOutput(betaPet.ID()))
+	stuff.Numbers[0].RandomNumberAlpha = alphaNumber.Result
+	stuff.Numbers[0].RandomNumberBeta = betaNumber.Result
+
+	component=&stuff
+
+	if err := ctx.RegisterResourceOutputs(component, pulumi.Map{
+	}); err != nil {
+		return nil, err
+	}
 
 	return component, nil
 }
