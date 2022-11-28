@@ -1,0 +1,3 @@
+name: go-component-resource
+description: A minimal Go Pulumi program
+runtime: go
