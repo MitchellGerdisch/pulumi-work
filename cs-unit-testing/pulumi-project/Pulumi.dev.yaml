@@ -1,0 +1,5 @@
+config:
+  azure-native:location: CentralUS
+  stack-component-resources:baseName: mitch
+  stack-component-resources:sqlPassword:
+    secure: AAABAEheCo6JwkogTJdd0OjOfLJQSldOXe1xLK0Rprn7DV6ZNUCBHjL6Yqs=
