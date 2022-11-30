@@ -6,7 +6,7 @@ using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 
-class StackCompResources: Stack
+public class StackCompResources: Stack
 {
     public StackCompResources()
     {

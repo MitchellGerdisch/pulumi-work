@@ -3,13 +3,14 @@ The main goals here are:
 * Show a way to test component resources.
   * In this case the idea is to make sure the component resource, itself, abides by some requirements 
     * e.g. the storage account `kind` property is set to "StorageV2" by the component
+* Also test at the stack level.
 
 ## Key Learnings
 * See Links below, but set up the directory structure in accordance with C# unit testing practices.
 * In the Tests folder I created a shim pulumi project to call my component resource.
   * Could use a single stack as such for multiple component resources.
   * But I'm thinking it makes sense to create one for each component resource and colocate all this stuff.
-* I had to make the component resource classes `public` to allow the test folder stuff to see/run them.
+* I had to make the component resource classes and the main stack class `public` to allow the test folder stuff to see/run them.
   * I suspect there may be a better c#-way to accomplish this.
 
 ## Main Components of the Environment
@@ -21,10 +22,14 @@ The main goals here are:
     * NOTE that the outputs are added in camelCase and not CamelCase even though C# expects properties with uppercase first letter.
 
 ### StorageInfraTests.cs
-* This is where the tests are written and assertions made.
+* This is where the tests for the StorageInfra component resource are written and assertions made.
 
 ### StorageInfraTestStack.cs
-* This is a thin stack that runs my StorageInfra component resource
+* This is a thin stack that runs the StorageInfra component resource. It is called by StorageInfraTests.cs.
+
+## StackTests.cs
+* Calls the main StackCompResources stack to test it as a whole.
+* NOTE HOW it uses the `PULUMI_CONFIG` environment variable to set config values to be consumed by the test stack.
 
 ## Useful Links
 * Based on https://www.pulumi.com/docs/guides/testing/unit/ 
