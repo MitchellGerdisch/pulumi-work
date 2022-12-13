@@ -1,0 +1,3 @@
+name: deploy-prometheus-ts
+description: Deploys prometheus helm chart on K8s cluster so operator can send metrics
+runtime: nodejs
