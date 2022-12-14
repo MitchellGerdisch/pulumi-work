@@ -11,7 +11,7 @@ Links of note:
 * get the kubeconfig from the K8s cluster and store in a file, e.g. kubeconfig.txt
   * export KUBECONFIG=kubeconfig.txt
 * Run `pulumi up` for the 3 projects in the numbered order given
-  * prometheus needs to be deployed before operator
+  * **Note: prometheus needs to be deployed before operator**
   * The `3_deploy-test-stack` stack has a couple of loops with variables to drive how many successful stacks to deploy and how many failing stacks to deploy.
 
 ## K8s Operator Helpful Tools
