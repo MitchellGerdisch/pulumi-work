@@ -1,0 +1,3 @@
+config:
+  k8s-operator-test-stack:pulumiAccessToken:
+    secure: AAABACsKS2dekP5vq/AusdgXDoxVADU71XEDeXNxBwX46egT5kavdQwg1K87Qs+amKdqiY4voNvzF9fcjUZcmUxTrMTBIeiXKHuwCQ==
