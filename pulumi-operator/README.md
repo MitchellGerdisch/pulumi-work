@@ -8,6 +8,7 @@ Links of note:
 
 ## Steps
 * Deploy a K8s cluster (e.g. eks or aks, or whatever)
+  * FWIW, the AKS cluster from https://github.com/pulumi/examples/tree/master/azure-ts-aks launches relatively quickly (about 5 minutes).
 * get the kubeconfig from the K8s cluster and store in a file, e.g. kubeconfig.txt
   * export KUBECONFIG=kubeconfig.txt
 * Run `pulumi up` for the 3 projects in the numbered order given
