@@ -36,7 +36,7 @@ for (let i = 0; i < numGoodStacks; i++) {
     });
 }
 
-const numBadStacks = 4
+const numBadStacks = 1
 for (let i = 0; i < numBadStacks; i++) {
 
     // Create a failed stack in the operator that uses my simple random pet project
