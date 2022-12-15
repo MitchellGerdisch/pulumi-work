@@ -1,0 +1,6 @@
+name: py-snowflake
+description: Python Snowflake example
+runtime:
+    name: python
+    options:
+        virtualenv: venv
