@@ -1,0 +1,2 @@
+pulumi==3.49.0
+pulumi-snowflake==0.14.0

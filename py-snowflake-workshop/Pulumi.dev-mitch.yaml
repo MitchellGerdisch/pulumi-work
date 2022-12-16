@@ -1,0 +1,9 @@
+config:
+  py-snowflake-basics:user_password:
+    secure: AAABACjiUasWkoliLP6yR+Zm3wZ0dsEpRvqwfyJ52abcdyJtlpLsjIXGwphbw9k=
+  snowflake:account:
+    secure: AAABAITSeQHh15iN5QzVnovQwji7KBi46Gngu8cJC7Ze+iFWtNYdxA==
+  snowflake:password:
+    secure: AAABAMTaqyLGQed+JXAceYeZo6E4fK9sxBbyLQxzdjjlte3ywNRyQLSxZA==
+  snowflake:region: us-east-1
+  snowflake:username: PULUMI
