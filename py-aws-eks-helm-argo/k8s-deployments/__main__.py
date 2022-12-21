@@ -1,6 +1,6 @@
 """
-- Deploys ArgoCD service
 - Deploys one or more ArgoCD applications
+  - Demostrates using Pulumi config as well as using a local JSON file to specify the apps
 """
 
 import pulumi
@@ -45,7 +45,7 @@ for app in config_apps:
         opts=ResourceOptions(provider=k8s_provider)
     )
 
-### Deploy Some Apps
+### Deploy Some Apps using local JSON file
 for app in apps:
     app_namespace=app["app_name"]
     app_name=app["app_name"]
