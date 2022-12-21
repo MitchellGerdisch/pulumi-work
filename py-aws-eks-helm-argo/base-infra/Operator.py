@@ -1,9 +1,7 @@
-# Module that provides two component resources:
-# - Operator: Deploys the gitops operator.
-# - Application: Configures the operator to watch a Repo and continuously update.
+# Module that deploys the gitops operator.
 
 # This component resource is currently written to use ArgoCD.
-# But it could be substituted with Flux of Pulumi's K8s Operator.
+# But it could be substituted with Flux or Pulumi's K8s Operator.
 
 from pulumi import ComponentResource, ResourceOptions, Output
 import pulumi_kubernetes as k8s
