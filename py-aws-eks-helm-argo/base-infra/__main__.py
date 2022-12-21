@@ -1,6 +1,7 @@
 """
 - Creates VPC
 - Instantiates EKS cluster
+- Deploys ArgoCd Operator
 """
 
 import pulumi
