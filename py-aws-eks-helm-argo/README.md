@@ -29,4 +29,4 @@ Point your browser at the `Service URL` and login to Argo using the `Admin Usern
 - Note: `pulumi stack output "Admin Password" --show-secrets`
 
 # Clean Up
-`pulumi stack destroy` the k8s-deployment stack first and then the base-infra stack.
+`pulumi destroy` the k8s-deployment stack first and then the base-infra stack.
