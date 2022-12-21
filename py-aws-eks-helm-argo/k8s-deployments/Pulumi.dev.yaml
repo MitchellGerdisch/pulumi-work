@@ -1,12 +1,13 @@
 config:
   aws:region: us-west-2
-  eks_helm_argo_deployments:apps:
-  - app_name: sock-shop-1
-    app_repo_path: sock-shop
-    app_repo_target_revision: HEAD
-    app_repo_url: https://github.com/argoproj/argocd-example-apps
-  - app_name: guestbook-1
-    app_repo_path: kustomize-guestbook
-    app_repo_target_revision: HEAD
-    app_repo_url: https://github.com/argoproj/argocd-example-apps
-  eks_helm_argo_deployments:base_stack_project: eks_helm_argo_base_infra
+### MOVED THIS TO PROJECT LEVEL CONFIG
+#  eks_helm_argo_deployments:apps:
+# - app_name: sock-shop-1
+#   app_repo_path: sock-shop
+#   app_repo_target_revision: HEAD
+#   app_repo_url: https://github.com/argoproj/argocd-example-apps
+# - app_name: guestbook-1
+#   app_repo_path: kustomize-guestbook
+#   app_repo_target_revision: HEAD
+#   app_repo_url: https://github.com/argoproj/argocd-example-apps
+# eks_helm_argo_deployments:base_stack_project: eks_helm_argo_base_infra
