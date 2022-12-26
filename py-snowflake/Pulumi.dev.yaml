@@ -1,7 +1,7 @@
 config:
   snowflake:account: opa78606
-  snowflake:role: ACCOUNTADMIN
   snowflake:password:
-    secure: AAABAAQxJs3zaAQIqW5fn9pa76qUCUCfCULyghU3IJ9FVv
+    secure: AAABAOOnJFyWoQloEvui7njv7hiAThP+omlbqw1QOv8ENcCJ+dKcBe/1oVq05+N13lywlg==
   snowflake:region: us-west-2
+  snowflake:role: ACCOUNTADMIN
   snowflake:username: pulumibot

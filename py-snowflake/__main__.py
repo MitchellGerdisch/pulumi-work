@@ -2,6 +2,21 @@ import pulumi
 import pulumi_snowflake as snowflake
 import pulumi_random as random
 
+
+user_pattern = '%user%' # find any user with "user" in the name as per https://docs.snowflake.com/en/sql-reference/sql/show-users.html#parameters
+specific_user = "cs-user-xxxxx"
+matching_users = snowflake.get_users(pattern=user_pattern).users
+if matching_users: 
+    for user in matching_users:
+        if user.name == specific_user:
+            pulumi.export("found user", user)
+        else:
+            pulumi.export("users were found but none named: ", specific_user)
+else:
+    pulumi.export("no users matched pattern: ", user_pattern)
+
+    
+
 prod_repos = ['RAMPS', 'TRAFFICLIGHTS']
 base_functions = ['RABBIT', 'DOG']
 prod_functions = ['PROD_' + repo for repo in prod_repos]
