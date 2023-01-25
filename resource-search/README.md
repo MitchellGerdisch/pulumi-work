@@ -19,7 +19,6 @@ pulumi-resource-search -access_token $PULUMI_ACCESS_TOKEN -orgs "JohnSmith,AcmeO
 * The fully qualified stackname that the resource belongs to.
 
 # TODOs
-* Automatically find the orgs a user belongs to.
 * Generate a CSV of all the stacks resource Ids that can then be used for searching.
 
 # Build Notes
