@@ -1,5 +1,5 @@
 if [ $# -lt 2 ]; then
-  echo "missing parameters"
+  echo "usage: $0 PULUMI_PROJECT_NAME PULUMI_CONFIG_FILE"
   exit 1
 fi
 python3 -m venv venv
@@ -11,9 +11,9 @@ export PULUMI_CONFIG=$(yq eval ${CONFIG_FILE} --output-format=json | jq -c '.con
 echo '\nHit enter to run "python -m unittest"'
 read n
 echo '\nRunning "python -m unittest" ...'
-python -m unittest
+python -m unittest 
 echo "\n*****************\n"
 echo '\nHit enter to run "pytest"'
 read n
 echo '\nRunning "pytest" ...'
-pytest
+pytest --disable-pytest-warnings
