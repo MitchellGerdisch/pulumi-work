@@ -1,2 +1,3 @@
 config:
   python-unit-testing:byte_length: 4
+  python-unit-testing:delete_age: 2
