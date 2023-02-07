@@ -1,0 +1,4 @@
+config:
+  assume-role:otherAccountBucket: mitch-assumerole-test
+  assume-role:roleToAssumeARN: arn:aws:iam::420942475186:role/mitch-assumerole-test-role
+  aws:region: us-west-2
