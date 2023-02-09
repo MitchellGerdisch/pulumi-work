@@ -1,2 +1,5 @@
 config:
+  arm-lb-backendpool-translation:adminPassword:
+    secure: AAABAJNPdBSu1Emx/N5qeikk3840Bsmc8IOmLyEWCZ+AFSeB8dW+TeCNSi0=
+  arm-lb-backendpool-translation:subscriptionId: 32b9cb2e-69be-4040-80a6-02cd6b2cc5ec
   azure-native:location: CentralUS
