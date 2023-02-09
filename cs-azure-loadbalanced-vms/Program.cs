@@ -19,8 +19,8 @@ return await Pulumi.Deployment.RunAsync(() =>
 {
     // Analogous to the ARM template's "parameters" section
     var config = new Pulumi.Config();
-    var projectName = config.Get("projectName") ?? "mitchxlate";
-    var adminUsername = config.Get("adminUsername") ?? "mitchadmin";
+    var projectName = config.Get("projectName") ?? Pulumi.Deployment.Instance.ProjectName;
+    var adminUsername = config.Get("adminUsername") ?? "vmadmin";
     var adminPassword = config.RequireSecret("adminPassword");
     var vmSize = config.Get("vmSize") ?? "Standard_D2s_v3";
     var subscriptionId = config.Require("subscriptionId");
