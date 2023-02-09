@@ -15,6 +15,7 @@ using System.Collections.Generic;
 
 return await Pulumi.Deployment.RunAsync(() =>
 {
+    // Analogous to the ARM template's "parameters" section
     var config = new Pulumi.Config();
     var projectName = config.Get("projectName") ?? "mitchxlate";
     var adminUsername = config.Get("adminUsername") ?? "mitchadmin";
@@ -22,6 +23,7 @@ return await Pulumi.Deployment.RunAsync(() =>
     var vmSize = config.Get("vmSize") ?? "Standard_D2s_v3";
     var subscriptionId = config.Require("subscriptionId");
 
+    // Analogous to the ARM template's "variables" section.
     var rgName = $"{projectName}-rg";
     var lbName = $"{projectName}-lb";
     var lbSkuName = "Standard";
@@ -41,8 +43,10 @@ return await Pulumi.Deployment.RunAsync(() =>
     var bastionSubnetName = "AzureBastionSubnet";
     var vNetBastionSubnetAddressPrefix = "10.0.1.0/24";
     var bastionPublicIPAddressName = $"{projectName}-bastionPublicIP";
-    var vmStorageAccountType ="Premium_LRS";
+    // UNCOMMENT when VM decalrations are added
+    //var vmStorageAccountType ="Premium_LRS";
 
+    // Centralized Id creation as seen scattered around the ARM template.
     var baseId = $"/subscriptions/{subscriptionId}/resourceGroups/{rgName}/providers";
     var vNetSubnetId = $"{baseId}/Microsoft.Network/virtualNetworks/{vNetName}/subnets/{vNetSubnetName}";
     var lbBackendPoolId = $"{baseId}/Microsoft.Network/loadBalancers/{lbName}/backendAddressPools/{lbBackendPoolName}";
@@ -72,7 +76,6 @@ return await Pulumi.Deployment.RunAsync(() =>
     });
 
     // Subnets
-    // var bastionSubnet = new Subnet(bastionSubnetName, new Pulumi.AzureNative.Network.SubnetArgs
     var bastionSubnet = new Subnet(bastionSubnetName, new ()
     {
         SubnetName = bastionSubnetName,
@@ -80,7 +83,6 @@ return await Pulumi.Deployment.RunAsync(() =>
         VirtualNetworkName = vNet.Name,
         AddressPrefix = vNetBastionSubnetAddressPrefix
     });
-    // var vNetSubnet = new Subnet(vNetSubnetName, new Pulumi.AzureNative.Network.SubnetArgs
     var vNetSubnet = new Subnet(vNetSubnetName, new ()
     {
         SubnetName = vNetSubnetName,
@@ -233,122 +235,8 @@ return await Pulumi.Deployment.RunAsync(() =>
         }
     });
 
-
-    //   "properties": {
-    //     "frontendIPConfigurations": [
-    //       {
-    //         "name": "[variables('lbFrontEndName')]",
-    //         "properties": {
-    //           "publicIPAddress": {
-    //             "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('lbPublicIpAddressName'))]"
-    //           }
-    //         }
-    //       },
-    //       {
-    //         "name": "[variables('lbFrontEndNameOutbound')]",
-    //         "properties": {
-    //           "publicIPAddress": {
-    //             "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('lbPublicIPAddressNameOutbound'))]"
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     "backendAddressPools": [
-    //       {
-    //         "name": "[variables('lbBackendPoolName')]"
-    //       },
-    //       {
-    //         "name": "[variables('lbBackendPoolNameOutbound')]"
-    //       }
-    //     ],
-    //     "loadBalancingRules": [
-    //       {
-    //         "name": "myHTTPRule",
-    //         "properties": {
-    //           "frontendIPConfiguration": {
-    //             "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('lbName'), variables('lbFrontEndName'))]"
-    //           },
-    //           "backendAddressPool": {
-    //             "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('lbName'), variables('lbBackendPoolName'))]"
-    //           },
-    //           "frontendPort": 80,
-    //           "backendPort": 80,
-    //           "enableFloatingIP": false,
-    //           "idleTimeoutInMinutes": 15,
-    //           "protocol": "Tcp",
-    //           "enableTcpReset": true,
-    //           "loadDistribution": "Default",
-    //           "disableOutboundSnat": true,
-    //           "probe": {
-    //             "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('lbName'), variables('lbProbeName'))]"
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     "probes": [
-    //       {
-    //         "name": "[variables('lbProbeName')]",
-    //         "properties": {
-    //           "protocol": "Tcp",
-    //           "port": 80,
-    //           "intervalInSeconds": 5,
-    //           "numberOfProbes": 2
-    //         }
-    //       }
-    //     ],
-    //     "outboundRules": [
-    //       {
-    //         "name": "myOutboundRule",
-    //         "properties": {
-    //           "allocatedOutboundPorts": 10000,
-    //           "protocol": "All",
-    //           "enableTcpReset": false,
-    //           "idleTimeoutInMinutes": 15,
-    //           "backendAddressPool": {
-    //             "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('lbName'), variables('lbBackendPoolNameOutbound'))]"
-    //           },
-    //           "frontendIPConfigurations": [
-    //             {
-    //               "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('lbName'), variables('lbFrontEndNameOutbound'))]"
-    //             }
-    //           ]
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   "dependsOn": [
-    //     "[resourceId('Microsoft.Network/publicIPAddresses', variables('lbPublicIpAddressName'))]",
-    //     "[resourceId('Microsoft.Network/publicIPAddresses', variables('lbPublicIPAddressNameOutbound'))]"
-    //   ]
-    // },
-    // {
-    //   "type": "Microsoft.Network/publicIPAddresses",
-    //   "apiVersion": "2021-08-01",
-    //   "name": "[variables('lbPublicIpAddressName')]",
-    //   "location": "[parameters('location')]",
-    //   "sku": {
-    //     "name": "[variables('lbSkuName')]"
-    //   },
-    //   "properties": {
-    //     "publicIPAddressVersion": "IPv4",
-    //     "publicIPAllocationMethod": "Static"
-    //   }
-    // },
-    // {
-    //   "type": "Microsoft.Network/publicIPAddresses",
-    //   "apiVersion": "2021-08-01",
-    //   "name": "[variables('lbPublicIPAddressNameOutbound')]",
-    //   "location": "[parameters('location')]",
-    //   "sku": {
-    //     "name": "[variables('lbSkuName')]"
-    //   },
-    //   "properties": {
-    //     "publicIPAddressVersion": "IPv4",
-    //     "publicIPAllocationMethod": "Static"
-    //   }
-    // },
-
     // Network Interfaces
+    // TODO: Add VM declarations
     for (int vm = 0; vm < 3; vm++)
     {
         var networkInterfaceName = $"{projectName}-vm{vm}-networkInterface";
@@ -386,36 +274,4 @@ return await Pulumi.Deployment.RunAsync(() =>
             }
         }, new CustomResourceOptions {DependsOn=loadBalancer});
     };
-
-
-    // //////--------
-
-    // // Create an Azure resource (Storage Account)
-    // var storageAccount = new StorageAccount("sa", new StorageAccountArgs
-    // {
-    //     ResourceGroupName = resourceGroup.Name,
-    //     Sku = new SkuArgs
-    //     {
-    //         Name = SkuName.Standard_LRS
-    //     },
-    //     Kind = Kind.StorageV2
-    // });
-
-    // var storageAccountKeys = ListStorageAccountKeys.Invoke(new ListStorageAccountKeysInvokeArgs
-    // {
-    //     ResourceGroupName = resourceGroup.Name,
-    //     AccountName = storageAccount.Name
-    // });
-
-    // var primaryStorageKey = storageAccountKeys.Apply(accountKeys =>
-    // {
-    //     var firstKey = accountKeys.Keys[0].Value;
-    //     return Output.CreateSecret(firstKey);
-    // });
-
-    // // Export the primary key of the Storage Account
-    // return new Dictionary<string, object?>
-    // {
-    //     ["primaryStorageKey"] = primaryStorageKey
-    // };
 });
