@@ -5,6 +5,8 @@
 // Running the ARM template as per that tutorial produces an LB with all the right settings.
 // So seeing how it would look in Pulumi ....
 
+//// TODO: Add VM declarations as per the ARM template /////
+
 using Pulumi;
 using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
