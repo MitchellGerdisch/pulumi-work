@@ -1,0 +1,5 @@
+config:
+  azure-native:location: CentralUS
+  cs-azure-loadbalanced-vms:adminPassword:
+    secure: AAABAGHezuXxXkhfDmrJSeQA9GMf3xB6c7Knnjw6FtXVOlHng7ebUWZ0FLI=
+  cs-azure-loadbalanced-vms:subscriptionId: 32b9cb2e-69be-4040-80a6-02cd6b2cc5ec
