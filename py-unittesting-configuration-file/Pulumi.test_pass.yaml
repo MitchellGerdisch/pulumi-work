@@ -1,3 +1,4 @@
 config:
   gcp:project: pulumi-ce-team
-  python-unit-testing:byte_length: "8"
+  python-unit-testing:byte_length:
+    secure: AAABAN/+WqtsRoepBjlfI3fx13p4BfeymZWO6tx99/aP
