@@ -18,7 +18,7 @@ const sunnyDayBucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock("sunn
 // the bucket's "id" property instead of the "bucket" property.
 const partlyCloudyBucket = new aws.s3.BucketV2("partlyCloudyBucket", {});
 const partlyCloudyBucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock("partlyCloudyBucketPublicAccessBlock", {
-  bucket: sunnyDayBucket.id,
+  bucket: partlyCloudyBucket.id,
   blockPublicAcls: true,
   blockPublicPolicy: true,
   ignorePublicAcls: true,

@@ -11,3 +11,29 @@ to be validated via policy.
   * Although `validateStack` does give you access to post-creation properties, it does run during preview and does allow you to see pre-creation properties.
 * However, when creating a `BucketPublicAccessBlock` one can reference the bucket via `bucket` or `id` - they both work. But `id` is not known pre-deployment and 
   * So this then requires some policies to enforce people to use the `bucket` property but also allow for the post-creation case where `id` is used.
+
+# How to Use
+* Copy both the `pulumi-project` and `policy-pack` folders.
+* `cd pulumi-project`
+* `pulumi stack init dev`
+
+## Pre Deployment Testing
+* `pulumi preview --policy-pack ../policy-pack`
+* You should see policy violations for:  
+  **NOTE NOTE NOTE**  
+  You may not see all of these violations and may need to rerun the `pulumi preview --policy-pack` command a few times to see all the violations. 
+  * `partlyCloudyBucketPublicAccessBlock`: Not referencing a bucket correctly.
+  * `partlyCloudyBucket`: Missing a Public Access Block. 
+    * This is because of the other violation about `partlyCloudBucketPublicAccessBlock`
+  * `rainyDayBucket`: Missing a Public Access Block. 
+    * This is because there is no Public Access Block declared for this bucket in the Pulumi program. 
+    * This is the raison d`etre for this policy pack.
+
+## Post Deployment Testing
+* `pulumi up --policy-pack ../policy-pack`
+  * You will see policy violations
+* Response `y` to do the deployment.
+* `pulumi preview --policy-pack ../policy-pack`
+  * You should only see policy violation for the `rainyDayBucket`.
+  * Again, you may need to run the `pulumi preview` a couple of times to see the violation.
+ 

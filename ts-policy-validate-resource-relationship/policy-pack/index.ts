@@ -50,9 +50,12 @@ new PolicyPack("s3-accessblock", {
                 buckets.forEach(function (bucket) {
                     const bucketResourceName = bucket.props.bucket
                     // DEBUGGING STUFF:
-                    // console.log("Bucket Found: ", bucketResourceName)
+                    // console.log("Bucket Name Found: ", bucket.props.bucket )
+                    // console.log("Bucket Id Found: ", bucket.props.id)
                     publicAccessBlocks.forEach(function (accessBlock) {
-                        if (accessBlock.props.bucket == bucketResourceName) {
+                        // DEBUGGING STUFF:
+                        // console.log("Access Block Found: ", accessBlock)
+                        if (accessBlock.props.bucket == bucketResourceName) { 
                             bucketAccessBlockFound = true
                         }
                     })
