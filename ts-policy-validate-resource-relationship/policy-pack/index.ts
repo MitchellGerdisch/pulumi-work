@@ -15,7 +15,8 @@ new PolicyPack("s3-accessblock", {
     policies: [
         {
             // This policy checks if a publicaccessblock is referencing a bucket's `id` property instead of `bucket` property
-            // and throws an error if `id` is used (predeployment) and thus it is not known.
+            // and throws a policy violation error if `id` is used (predeployment) and thus it is not known.
+            // Note: In a post-deployment scenario, if one uses `id` this policy will will pass since it is known and matches the `bucket` property
             name: "check-accessblock-bucket-reference",
             description: "Make sure BucketPublicAccessBlock \"bucket\" property is set to a bucket `bucket` property and not `id`.",
             // enforcementLevel: "mandatory",
@@ -67,18 +68,6 @@ new PolicyPack("s3-accessblock", {
                 })
             },
         },
-        // DEBUG: This policy is helpful to validate the policy engine is running as expected when not getting any output.
-        // {
-        //     name: "test policy",
-        //     description: "Checks policies are running as expected",
-        //     enforcementLevel: "advisory",
-        //     validateResource: validateResourceOfType(aws.s3.BucketV2, (bucket, args, reportViolation) => {
-        //             reportViolation(
-        //                 "resource validation ran"
-        //             )
-        //         }
-        //     ),
-        // }
     ],
 });
 
