@@ -21,7 +21,8 @@ to be validated via policy.
 * `pulumi preview --policy-pack ../policy-pack`
 * You should see policy violations for:  
   **NOTE NOTE NOTE**  
-  You may not see all of these violations and may need to rerun the `pulumi preview --policy-pack` command a few times to see all the violations. 
+  You may not see all of these violations and may need to rerun the `pulumi preview --policy-pack` command a few times to see all the violations. This issue has been opened to track this: https://github.com/pulumi/pulumi-policy/issues/305  
+  But, after repeated runs you should see these 3 violations.
   * `partlyCloudyBucketPublicAccessBlock`: Not referencing a bucket correctly.
   * `partlyCloudyBucket`: Missing a Public Access Block. 
     * This is because of the other violation about `partlyCloudBucketPublicAccessBlock`
@@ -35,5 +36,6 @@ to be validated via policy.
 * Response `y` to do the deployment.
 * `pulumi preview --policy-pack ../policy-pack`
   * You should only see policy violation for the `rainyDayBucket`.
-  * Again, you may need to run the `pulumi preview` a couple of times to see the violation.
+    * This is because the test for `partlyCloudyBucketPublicAccessBlock` passes now that the bucket has an `id` property.
+  * Again, as per the note above, you may need to run the `pulumi preview` a couple of times to see the violation.
  
