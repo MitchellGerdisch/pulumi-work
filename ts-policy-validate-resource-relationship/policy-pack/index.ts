@@ -1,4 +1,5 @@
 import * as aws from "@pulumi/aws";
+import * as pulumi from "@pulumi/pulumi";
 import { PolicyPack, validateResourceOfType } from "@pulumi/policy";
 
 // PolicyPack that catches the case where an S3 bucket does not have a "BucketPublicAccessBlock" associated with it.
@@ -14,25 +15,16 @@ import { PolicyPack, validateResourceOfType } from "@pulumi/policy";
 new PolicyPack("s3-accessblock", {
     policies: [
         {
-            // This policy checks if a publicaccessblock is referencing a bucket's `id` property instead of `bucket` property
-            // and throws a policy violation error if `id` is used (predeployment) and thus it is not known.
-            // Note: In a post-deployment scenario, if one uses `id` this policy will will pass since it is known and matches the `bucket` property
-            name: "check-accessblock-bucket-reference",
-            description: "Make sure BucketPublicAccessBlock \"bucket\" property is set to a bucket `bucket` property and not `id`.",
-            // enforcementLevel: "mandatory",
+            // This is just a simple test policy for the sake of seeing some output regardless if the main use-case is firing
+            // a policy violation or not.
+            // This policy is NOT needed.
+            name: "test-policy",
+            description: "A test policy that fires everytime.",
             enforcementLevel: "advisory",
-            validateResource: validateResourceOfType(aws.s3.BucketPublicAccessBlock, (publicAccessBlock, args, reportViolation) => {
-                    // DEBUGGING STUFF:
-                    // console.log("doing the property check", publicAccessBlock)
-                    try {
-                        // This is to cause the policy engine to throw an error if the bucket property is unknown 
-                        // so it can be caught below.
-                        let _ = publicAccessBlock.bucket
-                    } catch {
-                        reportViolation(
-                            `*** ${args.name} ***\nBucketPublicAccessBlock.bucket field is not set to a \`BUCKET.bucket\` property.\nThe likely problem is that the field is being set to a \`BUCKET.id\`.\nChange to use \`BUCKET.bucket\` property instead.`
-                        )
-                    }
+            validateResource: validateResourceOfType(aws.s3.BucketV2, (bucket, args, reportViolation) => {
+                reportViolation(
+                    `TEST POLICY: (${args.name}) This is a test policy. You can ignore.`
+                )
                 }
             ),
         },
@@ -49,14 +41,14 @@ new PolicyPack("s3-accessblock", {
                 // console.log(buckets)
                 // console.log(publicAccessBlocks)
                 buckets.forEach(function (bucket) {
-                    const bucketResourceName = bucket.props.bucket
-                    // DEBUGGING STUFF:
-                    // console.log("Bucket Name Found: ", bucket.props.bucket )
-                    // console.log("Bucket Id Found: ", bucket.props.id)
+                    const bucketResourceUrn = bucket.urn
                     publicAccessBlocks.forEach(function (accessBlock) {
                         // DEBUGGING STUFF:
-                        // console.log("Access Block Found: ", accessBlock)
-                        if (accessBlock.props.bucket == bucketResourceName) { 
+                        // console.log("Access Block Found: ", accessBlock.name)
+                        // console.log("propertyDependencies", accessBlock.propertyDependencies)
+                        // Since an access block only supports a single bucket reference, 
+                        // it'll always be the first element of the propertyDependencies.bucket property array.
+                        if (accessBlock.propertyDependencies.bucket[0].urn == bucketResourceUrn) { 
                             bucketAccessBlockFound = true
                         }
                     })
