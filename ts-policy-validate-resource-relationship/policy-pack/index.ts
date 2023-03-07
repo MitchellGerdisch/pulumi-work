@@ -7,10 +7,6 @@ import { PolicyPack, validateResourceOfType } from "@pulumi/policy";
 // Note that although Stack Validation enables checking values of resources that only exist after creation, 
 // Stack Validation does run during preview as well and provides access to properties that are known before creation.
 // So this is used to loop through each Bucket and for each bucket loop through the BucKetPublicAccessBlock resources to see if one references the bucket.
-// 
-// HOWEVER, for this to work, the BucketPublicAccessBlock resource must reference the bucket via the bucket's `bucket` property
-// instead of using the bucket's `id` field since `id` is not known predeployment.
-// Thus there are policies in place to enforce this.
 
 new PolicyPack("s3-accessblock", {
     policies: [
