@@ -11,6 +11,15 @@ const sunnyDayBucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock("sunn
     restrictPublicBuckets: true,
 });
 
+const sunnyDayBucket2 = new aws.s3.BucketV2("sunnyDayBucket2", {});
+const sunnyDayBucketPublicAccessBlock2 = new aws.s3.BucketPublicAccessBlock("sunnyDayBucketPublicAccessBlock2", {
+    bucket: sunnyDayBucket2.id,
+    blockPublicAcls: true,
+    blockPublicPolicy: true,
+    ignorePublicAcls: true,
+    restrictPublicBuckets: true,
+});
+
 // This set of resources is the main use-case being tested.
 // A bucket is created WITHOUT a BucketPublicAccessBlock associated with it.
 const rainyDayBucket = new aws.s3.BucketV2("rainyDayBucket", {});

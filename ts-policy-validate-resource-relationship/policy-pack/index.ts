@@ -1,4 +1,5 @@
 import * as aws from "@pulumi/aws";
+import * as pulumi from "@pulumi/pulumi";
 import { PolicyPack, validateResourceOfType } from "@pulumi/policy";
 
 // PolicyPack that catches the case where an S3 bucket does not have a "BucketPublicAccessBlock" associated with it.
@@ -20,9 +21,9 @@ new PolicyPack("s3-accessblock", {
             name: "test-policy",
             description: "A test policy that fires everytime.",
             enforcementLevel: "advisory",
-            validateResource: validateResourceOfType(aws.s3.BucketPublicAccessBlock, (publicAccessBlock, args, reportViolation) => {
+            validateResource: validateResourceOfType(aws.s3.BucketV2, (bucket, args, reportViolation) => {
                 reportViolation(
-                    "TEST POLICY: This is a test policy. You can ignore."
+                    `TEST POLICY: (${args.name}) This is a test policy. You can ignore.`
                 )
                 }
             ),
