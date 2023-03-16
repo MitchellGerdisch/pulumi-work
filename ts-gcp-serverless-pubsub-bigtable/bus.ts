@@ -7,7 +7,7 @@ interface BusArgs {
 
 
 export class Bus extends pulumi.ComponentResource {
-  public readonly busName: Output<string>
+  public readonly topicName: Output<string>
   public readonly subscriptionName: Output<string>
 
   constructor(name: string, args?: BusArgs, opts?: pulumi.ComponentResourceOptions) {
@@ -32,7 +32,7 @@ export class Bus extends pulumi.ComponentResource {
       enableMessageOrdering: false
     }, {parent: this})
 
-    this.busName = bus.name
+    this.topicName = bus.name
     this.subscriptionName = subscription.name
 
     this.registerOutputs()

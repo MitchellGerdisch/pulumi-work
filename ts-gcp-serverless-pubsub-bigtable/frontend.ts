@@ -1,16 +1,17 @@
 import * as pulumi from "@pulumi/pulumi";
-import { Output } from "@pulumi/pulumi";
+import { Input, Output } from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
 interface FrontendArgs {
   appPath: string;
+  topicName: Input<string>;
 };
 
 
 export class Frontend extends pulumi.ComponentResource {
   public readonly url: Output<string>
 
-  constructor(name: string, args?: FrontendArgs, opts?: pulumi.ComponentResourceOptions) {
+  constructor(name: string, args: FrontendArgs, opts?: pulumi.ComponentResourceOptions) {
     super("custom:EventProcessor:Frontend", name, args, opts);
 
     const nameBase = `${name}-fe`
@@ -22,7 +23,7 @@ export class Frontend extends pulumi.ComponentResource {
     const frontendAppFile = new gcp.storage.BucketObject(`${nameBase}-file`, {
       bucket: frontendAppBucket.name,
       source: new pulumi.asset.AssetArchive({
-        ".": new pulumi.asset.FileArchive("./frontend-app")
+        ".": new pulumi.asset.FileArchive(args.appPath)
       })
     }, {parent: this})
 
@@ -33,10 +34,8 @@ export class Frontend extends pulumi.ComponentResource {
       sourceArchiveObject: frontendAppFile.name,
       triggerHttp: true,
       environmentVariables: {
-        // TEMPORARY DEBUG
         "GOOGLE_PROJECT_ID": gcp.config.project,
-        // TEMPORARY DEBUG
-        "TOPIC_NAME": "data-pipeline-bus-hellos-1bcb8e3"
+        "TOPIC_NAME": args.topicName
       }
     }, {parent: this})
 
