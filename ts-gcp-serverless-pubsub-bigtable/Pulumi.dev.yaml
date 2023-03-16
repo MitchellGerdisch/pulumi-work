@@ -1,2 +1,3 @@
 config:
   gcp:project: pulumi-ce-team
+  gcp:region: us-central1

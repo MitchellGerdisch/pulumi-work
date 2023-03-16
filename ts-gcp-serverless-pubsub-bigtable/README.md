@@ -7,7 +7,8 @@ Goals for this example:
     - the backend bits may make more sense to be owned by a different dev team.
 
 # Architecture
-Pretty much want to emulate this AWS example: https://github.com/MitchellGerdisch/pulumi-work/tree/master/ts-aws-api-lambda-eventbridge-lambda-dynamodb
+Pretty much want to emulate this AWS example: 
+https://github.com/MitchellGerdisch/pulumi-work/tree/master/ts-aws-api-lambda-eventbridge-lambda-dynamodb
 
 Frontend:
 - Cloud function provides an API
@@ -21,6 +22,21 @@ Backend:
 
 # References
 Capturing URLs of (possibly) useful information
+
+General
+- https://www.pulumi.com/blog/simple-serverless-programming-with-google-cloud-functions-and-pulumi/ 
+
+Frontend-related
+- https://github.com/pulumi/examples/tree/master/gcp-py-functions 
+- https://github.com/pulumi/examples/tree/master/gcp-ts-functions 
+
+
+
+
+
 - https://cloud.google.com/functions/docs/tutorials/use-cloud-bigtable
 - https://github.com/GoogleCloudPlatform/nodejs-docs-samples/tree/main/functions
 - https://krapes.github.io/pubsub_bigtable/ 
+- https://cloud.google.com/pubsub/docs/publish-receive-messages-client-library#node.js
+
+- https://codelabs.developers.google.com/codelabs/serverless-web-apis#5
