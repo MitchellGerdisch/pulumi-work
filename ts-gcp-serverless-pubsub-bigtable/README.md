@@ -20,6 +20,14 @@ Backend:
 - Pushes data into BigTable
 
 
+# How to Use
+- Deploy stack
+- Click on the `frontendUrl` to generate data into pubsub and thus into bigtable.
+  - To generate different "message body" add `?message=WHATEVERYOUWANT` to the URL.
+- To see the data in pubsub go to the given pubsub resource and select subscriptions and then Messages and click the `Pull` "button" to show values.
+- To sese the data in BigTable, ....
+
+
 # References
 Capturing URLs of (possibly) useful information
 
@@ -31,6 +39,8 @@ Frontend-related
 - https://github.com/pulumi/examples/tree/master/gcp-ts-functions 
 
 
+Backend-related
+- https://cloud.google.com/functions/docs/writing/write-event-driven-functions#cloudevent-functions 
 
 
 

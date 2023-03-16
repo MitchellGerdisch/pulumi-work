@@ -1,72 +1,45 @@
 import os
-from datetime import datetime
-import googlemaps
-import twilio.rest
+import time
+import json
 
+from google.cloud import pubsub_v1
 
-def get_travel_time(origin, destination, offset):
-    """Returns the estimated travel time using the Google Maps API.
+# Get project id as env variable
+GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')
+TOPIC_NAME = os.getenv('TOPIC_NAME')
 
-    Returns: A string, such as '3 minutes'"""
-    key = os.getenv("GOOGLE_MAPS_API_KEY", "")
-    if key == "":
-        return "[ENABLE GOOGLE MAPS TO DETERMINE TRAVEL TIME]"
+# Instantiates a Pub/Sub client
+publisher = pubsub_v1.PublisherClient()
 
-    gmaps = googlemaps.Client(key=key)
-    now = datetime.now()
-    directions_result = gmaps.directions(
-        origin=origin,
-        destination=destination,
-        mode="driving",
-        departure_time=now)
-
-    travel_time = directions_result[0]["legs"][0]["duration"]["value"]
-    travel_time /= 60  # seconds to minutes
-    travel_time += offset
-
-    return "%d minutes" % travel_time
-
-def send_text(message_body):
-    """Sends an SMS using the Twilio API."""
-    to_number = os.getenv("TO_PHONE_NUMBER", "")
-    from_number = os.getenv("FROM_PHONE_NUMBER", "")
-    account_sid = os.getenv("TWILLIO_ACCOUNT_SID", "")
-    auth_token = os.getenv("TWILLIO_ACCESS_TOKEN", "")
-
-    if account_sid and auth_token and to_number and from_number:
-        client = twilio.rest.Client(account_sid, auth_token)
-        client.messages.create(
-            to=to_number,
-            from_=from_number,
-            body=message_body)
-        return "Sent text message to %s\n%s" % (to_number, message_body)
-    return "[ENABLE TWILIO TO SEND A TEXT]: \n%s" % (message_body)
-
-def get_demo(request):
+# Publishes a message to a Cloud Pub/Sub topic.
+def demo(request):
     """Simple API to write to pubsub"""
 
-    
+    # Get a timestamp to pass along 
+    now = str(int(time.time()))
+    # Get the `?message=XXXXX` parameter, if any, passed in the URL.
+    message = request.args.get("message")
+    if not message:
+        message = "Hello World"
 
-    # Get origin location from URL-query parameters.
-    lat = request.args.get("lat")
-    long = request.args.get("long")
-    if lat and long:
-        origin = "%s, %s" % (lat, long)
-    else:
-        origin = "Pulumi HQ, Seattle, WA"
+    print(f'Publishing to {TOPIC_NAME}: Timestamp: {now}; Message: {message}')
 
-    destination = os.getenv(
-        "DESTINATION",
-        "Space Needle, Seattle, WA")
+    # References an existing topic
+    topic_path = publisher.topic_path(GOOGLE_PROJECT_ID, TOPIC_NAME)
 
-    # Optional travel time offset, e.g. add a static 5m delay.
-    travel_offset_str = os.getenv("TRAVEL_OFFSET", "0")
-    travel_offset = int(travel_offset_str)
+    message_json = json.dumps({
+        'data': {'timestamp': now,
+                 'message': message},
+    })
+    message_bytes = message_json.encode('utf-8')
 
-    travel_time_str = get_travel_time(
-        origin=origin, destination=destination, offset=travel_offset)
+    # Publishes a message
+    try:
+        publish_future = publisher.publish(topic_path, data=message_bytes)
+        publish_future.result()  # Verify the publish succeeded
+        return "Pushed to '%s': Timestamp: '%s'; Message: '%s'" % (TOPIC_NAME, now, message)
+    except Exception as e:
+        print(e)
+        return (e, 500)
 
-    # Send the message. Returns a summary in the Cloud Function's response.
-    message = "Hey! I'm leaving now, I'll be at '%s' to pick you up in about %s." % (
-        destination, travel_time_str)
-    return send_text(message)
+    # return "Did not push to '%s': Timestamp: '%s'; Message: '%s'" % (TOPIC_NAME, now, message)

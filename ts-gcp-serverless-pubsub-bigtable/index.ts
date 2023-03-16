@@ -15,4 +15,4 @@ const backend = new Backend(nameBase, {
   zone: "us-central1-a"
 })
 
-// const pubsub = new Bus(nameBase)
+const pubsub = new Bus(nameBase)

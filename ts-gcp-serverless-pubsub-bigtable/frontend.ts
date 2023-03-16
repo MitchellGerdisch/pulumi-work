@@ -27,11 +27,17 @@ export class Frontend extends pulumi.ComponentResource {
     }, {parent: this})
 
     const frontEndApp = new gcp.cloudfunctions.Function(`${nameBase}-function`, {
-      entryPoint: "get_demo",
+      entryPoint: "demo",
       runtime: "python37",
       sourceArchiveBucket: frontendAppBucket.name,
       sourceArchiveObject: frontendAppFile.name,
-      triggerHttp: true
+      triggerHttp: true,
+      environmentVariables: {
+        // TEMPORARY DEBUG
+        "GOOGLE_PROJECT_ID": gcp.config.project,
+        // TEMPORARY DEBUG
+        "TOPIC_NAME": "data-pipeline-bus-hellos-1bcb8e3"
+      }
     }, {parent: this})
 
     const invoker = new gcp.cloudfunctions.FunctionIamMember(`${nameBase}-iam`, {
@@ -40,9 +46,7 @@ export class Frontend extends pulumi.ComponentResource {
       cloudFunction: frontEndApp.name,
       role: "roles/cloudfunctions.invoker",
       member: "allUsers"
-    }
-      
-  )
+    }, {parent: this})
 
     this.url = pulumi.interpolate`${frontEndApp.httpsTriggerUrl}`
 
