@@ -1,7 +1,0 @@
-gcloud functions deploy nodejs-pubsub-function \
---runtime=nodejs18 \
---region=us-central1 \
---source=. \
---entry-point=helloPubSub\
---trigger=google.cloud.pubsub.topic.v1.messagePublished \
---trigger-topic=data-pipeline-bus-hellos-126e3cc
