@@ -44,6 +44,8 @@ Frontend-related
 
 Backend-related
 - https://cloud.google.com/functions/docs/writing/write-event-driven-functions#cloudevent-functions 
+- https://cloud.google.com/bigtable/docs/writing-data
+- https://cloud.google.com/python/docs/reference/bigtable/latest 
 
 
 

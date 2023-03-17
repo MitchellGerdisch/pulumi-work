@@ -27,3 +27,5 @@ const backend = new Backend(nameBase, {
   location: "us-central1-a"
 })
 
+export const cbtCommand= pulumi.interpolate`cbt -instance ${backend.tableInstance} read ${backend.tableName}`
+
