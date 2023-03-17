@@ -8,6 +8,7 @@ interface BusArgs {
 
 export class Bus extends pulumi.ComponentResource {
   public readonly topicName: Output<string>
+  public readonly topicId: Output<string>
   public readonly subscriptionName: Output<string>
 
   constructor(name: string, args?: BusArgs, opts?: pulumi.ComponentResourceOptions) {
@@ -16,10 +17,10 @@ export class Bus extends pulumi.ComponentResource {
     const nameBase = `${name}-bus`
 
     const topicName = `${nameBase}-hellos`
-    const bus = new gcp.pubsub.Topic(topicName, {}, {parent: this})
+    const topic = new gcp.pubsub.Topic(topicName, {}, {parent: this})
 
     const subscription = new gcp.pubsub.Subscription(`${topicName}-sub`, {
-      topic: bus.name,
+      topic: topic.name,
       messageRetentionDuration: "1200s",
       retainAckedMessages: true,
       ackDeadlineSeconds: 20,
@@ -32,7 +33,8 @@ export class Bus extends pulumi.ComponentResource {
       enableMessageOrdering: false
     }, {parent: this})
 
-    this.topicName = bus.name
+    this.topicName = topic.name
+    this.topicId = topic.id
     this.subscriptionName = subscription.name
 
     this.registerOutputs()

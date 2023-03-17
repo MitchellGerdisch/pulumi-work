@@ -1,8 +1,11 @@
 import * as pulumi from "@pulumi/pulumi";
-import { Output } from "@pulumi/pulumi";
+import { Input, Output } from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
 interface BackendArgs {
+  appPath: string;
+  pubsubTopicName: Input<string>;
+  pubsubTopicId: Input<string>;
   zone: string;
   storageType?: string;
 };
@@ -38,6 +41,66 @@ export class Backend extends pulumi.ComponentResource {
     }, {parent: this});
 
     this.tableName = backendTable.name
+
+
+    // Storage bucket for the backend cloud function code
+    // DRY TODO: This is identical to frontend code so move into a function 
+    const backendAppBucket = new gcp.storage.Bucket(`${nameBase}-bucket`, {
+      location: "US"
+    }, {parent: this})
+    const backendAppFile = new gcp.storage.BucketObject(`${nameBase}-file`, {
+      bucket: backendAppBucket.name,
+      source: new pulumi.asset.AssetArchive({
+        ".": new pulumi.asset.FileArchive(args.appPath)
+      })
+    }, {parent: this})
+
+    // const backendFunction = new gcp.cloudfunctionsv2.Function("function", {
+    //   location: gcp.config.region,
+    //   // project: gcp.config.project,
+    //   buildConfig: {
+    //       runtime: "nodejs12",
+    //       entryPoint: "helloPubSub",
+    //       environmentVariables: {
+    //           BUILD_CONFIG_TEST: "build_test",
+    //       },
+    //       source: {
+    //           storageSource: {
+    //               bucket: backendAppBucket.name,
+    //               object: backendAppFile.name,
+    //           },
+    //       },
+    //   },
+    //   // serviceConfig: {
+    //   //     maxInstanceCount: 2,
+    //   //     minInstanceCount: 1,
+    //   //     availableMemory: "256M",
+    //   //     timeoutSeconds: 60,
+    //   //     environmentVariables: {
+    //   //         SERVICE_CONFIG_TEST: "config_test",
+    //   //     },
+    //   //     ingressSettings: "ALLOW_INTERNAL_ONLY",
+    //   //     allTrafficOnLatestRevision: true,
+    //   //     serviceAccountEmail: account.email,
+    //   // },
+    //   eventTrigger: {
+    //       triggerRegion: gcp.config.region,
+    //       eventType: "google.cloud.pubsub.topic.v1.messagePublished", // https://cloud.google.com/eventarc/docs/cloudevents#pubsub_1
+    //       pubsubTopic: args.pubsubTopic,
+    //       retryPolicy: "RETRY_POLICY_RETRY",
+    //   }
+    // }, {parent: this})
+
+    const backendFunction = new gcp.cloudfunctions.Function(`${nameBase}-function`, {
+      entryPoint: "backendFunction",
+      runtime: "nodejs16",
+      sourceArchiveBucket: backendAppBucket.name,
+      sourceArchiveObject: backendAppFile.name,
+      eventTrigger: {
+        eventType: "providers/cloud.pubsub/eventTypes/topic.publish", // https://cloud.google.com/eventarc/docs/cloudevents#pubsub_1
+        resource: args.pubsubTopicId,
+      }
+    }, {parent: this})
 
     this.registerOutputs()
   }

@@ -20,5 +20,8 @@ export const frontendUrl = frontend.url
 
 // Create backend process to consume topic and push to table
 const backend = new Backend(nameBase, {
+  appPath: "./backend-app",
+  pubsubTopicName: pubsub.topicName,
+  pubsubTopicId: pubsub.topicId,
   zone: "us-central1-a"
 })
