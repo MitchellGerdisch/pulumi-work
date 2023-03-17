@@ -1,7 +1,7 @@
-# GCP Serverless-Pubsub-BigTable Example
+# GCP Serverless-Pubsub-Firestore Example
 Goals for this example:
 - Use GCP to build a data pipeline of sorts.
-- Demonstrate use case along the lines of:
+- Maybe demonstrate use case along the lines of:
   - app team writes front-end code and owns deploying the applicable front-end (i.e. serverless) infrastructure.
   - central team deploys and owns the shared resources like the pubsub and backend bits (maybe?)
     - the backend bits may make more sense to be owned by a different dev team.
@@ -17,7 +17,7 @@ Middle:
 - pubsub
 Backend:
 - Cloud function or similar reads data from pubsub
-- Pushes data into BigTable
+- Pushes data into backend nosql
 
 
 # How to Use
@@ -25,7 +25,10 @@ Backend:
 - Click on the `frontendUrl` to generate data into pubsub and thus into bigtable.
   - To generate different "message body" add `?message=WHATEVERYOUWANT` to the URL.
 - To see the data in pubsub go to the given pubsub resource and select subscriptions and then Messages and click the `Pull` "button" to show values.
-- To sese the data in BigTable, ....
+- To see the data in BigTable, you can use the `cbt` CLI
+  - Installation: https://cloud.google.com/bigtable/docs/cbt-overview#installing 
+
+
 
 
 # References

@@ -8,6 +8,7 @@ import { Bus } from "./bus";
 
 import { nameBase } from "./config";
 
+
 // Create pubsub topic and subscription
 const pubsub = new Bus(nameBase)
 
@@ -23,5 +24,6 @@ const backend = new Backend(nameBase, {
   appPath: "./backend-app",
   pubsubTopicName: pubsub.topicName,
   pubsubTopicId: pubsub.topicId,
-  zone: "us-central1-a"
+  location: "us-central1-a"
 })
+
