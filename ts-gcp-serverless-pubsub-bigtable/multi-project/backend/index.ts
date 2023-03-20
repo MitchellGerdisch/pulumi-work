@@ -10,7 +10,7 @@ const pubsub = new Bus(nameBase)
 
 // Create backend process to consume topic and push to table
 const backend = new Backend(nameBase, {
-  appPath: "../../backend-app",
+  appPath: "../../application-code/backend-app",
   pubsubTopicName: pubsub.topicName,
   pubsubTopicId: pubsub.topicId,
   location: bigtableLocation,

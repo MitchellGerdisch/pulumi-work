@@ -11,7 +11,7 @@ const pubsubTopicName = baseStackRef.getOutput("pubsubTopicName")
 
 // Create frontend api to feed the pubsub topic
 const frontend = new Frontend(nameBase, {
-  appPath: "../../frontend-app",
+  appPath: "../../application-code/frontend-app",
   topicName: pubsubTopicName,
 })
 export const frontendUrl = frontend.url

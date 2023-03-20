@@ -12,14 +12,14 @@ const pubsub = new Bus(nameBase)
 
 // Create frontend api to feed the pubsub topic
 const frontend = new Frontend(nameBase, {
-  appPath: "../frontend-app",
+  appPath: "../application-code/frontend-app",
   topicName: pubsub.topicName,
 })
 export const frontendUrl = frontend.url
 
 // Create backend process to consume topic and push to table
 const backend = new Backend(nameBase, {
-  appPath: "../backend-app",
+  appPath: "../application-code/backend-app",
   pubsubTopicName: pubsub.topicName,
   pubsubTopicId: pubsub.topicId,
   location: bigtableLocation,

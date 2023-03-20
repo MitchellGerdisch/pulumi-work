@@ -41,6 +41,7 @@ Backend:
     - You can install the cbt command as per: 
       - https://cloud.google.com/bigtable/docs/cbt-overview#installing 
 
+# Unit Testing
 
 
 
@@ -60,11 +61,9 @@ Backend-related
 - https://cloud.google.com/bigtable/docs/writing-data
 - https://cloud.google.com/python/docs/reference/bigtable/latest 
 
-
-
+Misc
 - https://cloud.google.com/functions/docs/tutorials/use-cloud-bigtable
 - https://github.com/GoogleCloudPlatform/nodejs-docs-samples/tree/main/functions
 - https://krapes.github.io/pubsub_bigtable/ 
 - https://cloud.google.com/pubsub/docs/publish-receive-messages-client-library#node.js
-
 - https://codelabs.developers.google.com/codelabs/serverless-web-apis#5
