@@ -4,4 +4,5 @@ description: Frontend project for the multi-project version of the serverless-pu
 config:
   gcp:project: pulumi-ce-team
   gcp:region: us-central1
+  ts-gcp-serverless-pubsub-bigtable-frontend:baseProjectName: ts-gcp-serverless-pubsub-bigtable-backend
 

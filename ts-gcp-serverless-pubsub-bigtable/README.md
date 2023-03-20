@@ -20,6 +20,19 @@ Backend:
 
 # How to Use
 - Deploy stack or stacks if using the multi-project version.
+  - From top folder:
+    - `npm i`
+  - If doing `single-project`
+    - cd to folder
+    - `pulumi stack init dev`
+    - `pulumi up`
+  - If doing `multi-project`
+    - cd to `backend` project folder
+      - `pulumi stack init dev`
+      - `pulumi up`
+    - cd to `frontend` project folder
+      - `pulumi stack init dev`
+      - `pulumi up`
 - The stack(s) will provide a couple of outputs:
   - `frontendUrl` click on this to generate data into pubsub and thus into bigtable.
     - To generate different "message body" add `?message=WHATEVERYOUWANT` to the URL.
