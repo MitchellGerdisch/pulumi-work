@@ -1,4 +1,0 @@
-name: ts-gcp-serverless-pubsub-bigtable
-runtime: nodejs
-description: A minimal Google Cloud TypeScript Pulumi program
-

@@ -9,8 +9,9 @@ interface BackendArgs {
   pubsubTopicName: Input<string>;
   pubsubTopicId: Input<string>;
   location: string;
+  storageType: string;
+  numNodes: number;
 };
-
 
 export class Backend extends pulumi.ComponentResource {
   public readonly tableInstance: Output<string>
@@ -25,9 +26,9 @@ export class Backend extends pulumi.ComponentResource {
     const backendTableCluster = new gcp.bigtable.Instance(clusterName, {
       clusters: [{
           clusterId: `${nameBase}-c1`,
-          numNodes: 1,
+          numNodes: args.numNodes,
           zone: args.location,
-          storageType: "SSD"
+          storageType: args.storageType,
       }],
       displayName: clusterName,
       name: clusterName,

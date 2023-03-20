@@ -1,30 +1,31 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as gcp from "@pulumi/gcp";
 
-import { Backend } from "./backend";
-import { Frontend } from "./frontend";
+import { Frontend } from "../components/frontend";
 
-import { Bus } from "./bus";
+import { nameBase, baseProjectName } from "../components/config";
 
-import { nameBase } from "./config";
+if (!baseProjectName) {
+  console.log("Missing base infrastructure project name.")
+  new pulumi.
+}
 
 
-// Create pubsub topic and subscription
-const pubsub = new Bus(nameBase)
 
 // Create frontend api to feed the pubsub topic
 const frontend = new Frontend(nameBase, {
-  appPath: "./frontend-app",
+  appPath: "../frontend-app",
   topicName: pubsub.topicName,
 })
 export const frontendUrl = frontend.url
 
 // Create backend process to consume topic and push to table
 const backend = new Backend(nameBase, {
-  appPath: "./backend-app",
+  appPath: "../backend-app",
   pubsubTopicName: pubsub.topicName,
   pubsubTopicId: pubsub.topicId,
-  location: "us-central1-a"
+  location: bigtableLocation,
+  storageType: bigtableStorageType,
+  numNodes: bigtableNumNodes,
 })
 
 export const cbtCommand= pulumi.interpolate`cbt -instance ${backend.tableInstance} read ${backend.tableName}`

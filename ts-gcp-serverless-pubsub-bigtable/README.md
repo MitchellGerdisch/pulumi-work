@@ -1,32 +1,32 @@
 # GCP Serverless-Pubsub-Firestore Example
 Goals for this example:
 - Use GCP to build a data pipeline of sorts.
-- Maybe demonstrate use case along the lines of:
-  - app team writes front-end code and owns deploying the applicable front-end (i.e. serverless) infrastructure.
-  - central team deploys and owns the shared resources like the pubsub and backend bits (maybe?)
-    - the backend bits may make more sense to be owned by a different dev team.
+- Show single-project and multi-project examples.
+- Show component resources and modules.
+- Testing
+  - Unit testing for sure
+  - Maybe property testing using policy as code
 
 # Architecture
-Pretty much want to emulate this AWS example: 
-https://github.com/MitchellGerdisch/pulumi-work/tree/master/ts-aws-api-lambda-eventbridge-lambda-dynamodb
 
 Frontend:
 - Cloud function provides an API
-- Calls to the API push data into pubsub
-Middle:
-- pubsub
+  - Calls to the API push data into pubsub
 Backend:
-- Cloud function or similar reads data from pubsub
-- Pushes data into backend nosql
-
+- Bigtable
+- Pubsub 
+- Cloud function
+  - reads data from pubsub and pushes it into bigtable
 
 # How to Use
-- Deploy stack
-- Click on the `frontendUrl` to generate data into pubsub and thus into bigtable.
-  - To generate different "message body" add `?message=WHATEVERYOUWANT` to the URL.
-- To see the data in pubsub go to the given pubsub resource and select subscriptions and then Messages and click the `Pull` "button" to show values.
-- To see the data in BigTable, you can use the `cbt` CLI
-  - Installation: https://cloud.google.com/bigtable/docs/cbt-overview#installing 
+- Deploy stack or stacks if using the multi-project version.
+- The stack(s) will provide a couple of outputs:
+  - `frontendUrl` click on this to generate data into pubsub and thus into bigtable.
+    - To generate different "message body" add `?message=WHATEVERYOUWANT` to the URL.
+  - `cbtCommand` this is a cbt command you can run to see the contents of bigtable.
+    - The contents are simply a timestamp and the message sent in the URL (default is "Hello World").
+    - You can install the cbt command as per: 
+      - https://cloud.google.com/bigtable/docs/cbt-overview#installing 
 
 
 

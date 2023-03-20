@@ -1,0 +1,7 @@
+name: ts-gcp-serverless-pubsub-bigtable-backend
+runtime: nodejs
+description: Backend project for the multi-project version of the serverless-pubsub-bigtable solution.
+config:
+  gcp:project: pulumi-ce-team
+  gcp:region: us-central1
+
