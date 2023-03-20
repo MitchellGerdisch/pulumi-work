@@ -2,6 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 import { Input, Output } from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
+import { createAppBucket } from "./app-bucket";
+
 interface BackendArgs {
   appPath: string;
   pubsubTopicName: Input<string>;
@@ -46,23 +48,17 @@ export class Backend extends pulumi.ComponentResource {
     this.tableName = backendTable.name
 
     // Storage bucket for the backend cloud function code
-    // DRY TODO: This is identical to frontend code so move into a function 
-    const backendAppBucket = new gcp.storage.Bucket(`${nameBase}-bucket`, {
-      location: "US"
-    }, {parent: this})
-    const backendAppFile = new gcp.storage.BucketObject(`${nameBase}-file`, {
-      bucket: backendAppBucket.name,
-      source: new pulumi.asset.AssetArchive({
-        ".": new pulumi.asset.FileArchive(args.appPath)
-      })
-    }, {parent: this})
+    const backendAppBucket = createAppBucket(nameBase, {
+      appPath: args.appPath,
+      parent: this
+    })
 
     // Function that reads pubsub and pushes to Bigtable
     const backendFunction = new gcp.cloudfunctions.Function(`${nameBase}-function`, {
       entryPoint: "process_pubsub_event",
       runtime: "python38",
       sourceArchiveBucket: backendAppBucket.name,
-      sourceArchiveObject: backendAppFile.name,
+      sourceArchiveObject: backendAppBucket.fileName,
       eventTrigger: {
         eventType: "providers/cloud.pubsub/eventTypes/topic.publish", // https://cloud.google.com/eventarc/docs/cloudevents#pubsub_1
         resource: args.pubsubTopicId,

@@ -2,11 +2,12 @@ import * as pulumi from "@pulumi/pulumi";
 import { Input, Output } from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
+import { createAppBucket } from "./app-bucket";
+
 interface FrontendArgs {
   appPath: string;
   topicName: Input<string>;
 };
-
 
 export class Frontend extends pulumi.ComponentResource {
   public readonly url: Output<string>
@@ -17,21 +18,16 @@ export class Frontend extends pulumi.ComponentResource {
     const nameBase = `${name}-fe`
 
     // Storage bucket for the cloud function code
-    const frontendAppBucket = new gcp.storage.Bucket(`${nameBase}-bucket`, {
-      location: "US"
-    }, {parent: this})
-    const frontendAppFile = new gcp.storage.BucketObject(`${nameBase}-file`, {
-      bucket: frontendAppBucket.name,
-      source: new pulumi.asset.AssetArchive({
-        ".": new pulumi.asset.FileArchive(args.appPath)
-      })
-    }, {parent: this})
+    const frontendAppBucket = createAppBucket(nameBase, {
+      appPath: args.appPath,
+      parent: this
+    })
 
     const frontEndApp = new gcp.cloudfunctions.Function(`${nameBase}-function`, {
       entryPoint: "demo",
       runtime: "python37",
       sourceArchiveBucket: frontendAppBucket.name,
-      sourceArchiveObject: frontendAppFile.name,
+      sourceArchiveObject: frontendAppBucket.fileName,
       triggerHttp: true,
       environmentVariables: {
         "GOOGLE_PROJECT_ID": gcp.config.project,
