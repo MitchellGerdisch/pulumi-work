@@ -1,0 +1,14 @@
+{
+    "name": "ts-gcp-serverless-pubsub-bigtable",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^16"
+    },
+    "dependencies": {
+        "@pulumi/gcp": "^6.0.0",
+        "@pulumi/pulumi": "^3.0.0",
+        "@types/mocha": "^10.0.1",
+        "mocha": "^10.2.0",
+        "ts-node": "^10.9.1"
+    }
+}
