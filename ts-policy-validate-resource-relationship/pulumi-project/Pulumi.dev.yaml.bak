@@ -1,2 +1,3 @@
 config:
   aws:region: us-east-1
+  policy-project:stack_name: test-dev

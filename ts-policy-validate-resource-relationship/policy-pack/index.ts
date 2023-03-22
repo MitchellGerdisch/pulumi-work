@@ -25,6 +25,25 @@ new PolicyPack("s3-accessblock", {
             ),
         },
         {
+            // Checks the stack config for a stack_name value and confirms it meets a given pattern
+            name: "stack-name-config-check",
+            description: "Checks that the stack_name config property meets the naming convention.",
+            // enforcementLevel: "mandatory",
+            enforcementLevel: "advisory",
+            // Don't have to use validateStack - could use validateResource.
+            // But then you have to have the given type of resource in the stack for the policy to run.
+            validateStack: (stack, reportViolation) => {
+                const stackConfig = new pulumi.Config()
+                const configStackName = stackConfig.require("stack_name")
+                // DEBUGGING STUFF:
+                // console.log("configStackName", configStackName)
+                const stackNameRegExp = new RegExp("teststack-*")
+                if (!stackNameRegExp.test(configStackName)) {
+                    reportViolation(`Stack name config: ${configStackName}, violates naming convention.`)
+                }
+            },
+        },
+        {
             name: "bucket-has-access-block",
             description: "Checks if S3 bucket has an access block defined",
             // enforcementLevel: "mandatory",
