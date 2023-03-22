@@ -14,6 +14,7 @@ to be validated via policy.
 * Copy both the `pulumi-project` and `policy-pack` folders.
 * `cd pulumi-project`
 * `pulumi stack init dev`
+* `pulumi config set stack_name test-dev`
 
 ## Pre Deployment Testing
 * `pulumi preview --policy-pack ../policy-pack`
