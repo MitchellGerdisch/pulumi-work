@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as pulumiservice from "@pulumi/pulumiservice";
 
 import { Frontend } from "../../components/frontend";
 
@@ -14,6 +15,16 @@ const frontend = new Frontend(nameBase, {
   appPath: "../../application-code/frontend-app",
   topicName: pubsubTopicName,
 })
+
+// Add a stack tag in Pulumi
+const stackTag =  new pulumiservice.StackTag("stackTag", {
+  organization: pulumi.getOrganization(),
+  project: pulumi.getProject(),
+  stack: pulumi.getStack(),
+  name: "Application",
+  value: "GCP Data Pipeline"
+})
+
 export const frontendUrl = frontend.url
 
 
