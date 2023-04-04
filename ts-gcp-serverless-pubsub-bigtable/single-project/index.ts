@@ -27,5 +27,14 @@ const backend = new Backend(nameBase, {
   numNodes: bigtableNumNodes,
 })
 
+// Add a stack tag in Pulumi
+const stackTag =  new pulumiservice.StackTag("stackTag", {
+  organization: pulumi.getOrganization(),
+  project: pulumi.getProject(),
+  stack: pulumi.getStack(),
+  name: "Application",
+  value: "GCP Data Pipeline"
+})
+
 export const cbtCommand= pulumi.interpolate`cbt -instance ${backend.tableInstance} read ${backend.tableName}`
 
