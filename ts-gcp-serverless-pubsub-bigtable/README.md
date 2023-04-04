@@ -40,8 +40,7 @@ Backend:
       - https://cloud.google.com/bigtable/docs/cbt-overview#installing 
 
 # Testing
-
-
+See the `testing` folder.
 
 # References
 Capturing URLs of (possibly) useful information
