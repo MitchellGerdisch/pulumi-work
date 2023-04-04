@@ -3,9 +3,7 @@ Goals for this example:
 - Use GCP to build a data pipeline of sorts.
 - Show single-project and multi-project examples.
 - Show component resources and modules.
-- Testing
-  - Unit testing for sure
-  - Maybe property testing using policy as code
+- Testing examples
 
 # Architecture
 
@@ -41,7 +39,7 @@ Backend:
     - You can install the cbt command as per: 
       - https://cloud.google.com/bigtable/docs/cbt-overview#installing 
 
-# Unit Testing
+# Testing
 
 
 
