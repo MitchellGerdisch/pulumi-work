@@ -1,0 +1,5 @@
+*.pyc
+venv
+*kubeconfig*
+__pycache__
+launched_arrangements.json
