@@ -1,3 +1,7 @@
+**DEPRECATED**
+
+Use `self-serve-flask-demos` instead.
+
 # Flask Self-Service Portal using Pulumi Automation API
 Flask-based self-service portal to deploy Pulumi stacks.
 
