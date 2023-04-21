@@ -1,3 +1,5 @@
 name: vpc-apigw
 runtime: nodejs
 description: A minimal AWS TypeScript Pulumi program
+config:
+  aws:region: us-east-2

@@ -2,14 +2,10 @@ import * as pulumi from "@pulumi/pulumi";
 import { Input, Output } from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 
-const config = new pulumi.Config();
-const existingApiGwName = config.require("existingApiGwName")
-const existingApiGwId = config.require("existingApiGwId")
-const stack = pulumi.getStack();
-
 interface FrontendArgs {
   busArn: Input<string>;
   appName: Input<string>;
+  apiGwId: Input<string>;
 };
 
 export class Frontend extends pulumi.ComponentResource {
@@ -24,7 +20,7 @@ export class Frontend extends pulumi.ComponentResource {
     const frontEndRoute = `/${eventSource}`
 
     // Find existing API gateway
-    const apiGw = aws.apigatewayv2.Api.get(existingApiGwName, existingApiGwId)
+    const apiGw = aws.apigatewayv2.Api.get(`${nameBase}-apiGw`, args.apiGwId)
 
     // Build frontend lambda which receives requests from the API GW
     const lambdaRole = new aws.iam.Role(`${nameBase}-lambdarole`, {
@@ -94,7 +90,7 @@ export class Frontend extends pulumi.ComponentResource {
 
     const stage = new aws.apigatewayv2.Stage(`${nameBase}-apiStage`, {
       apiId: apiGw.id,
-      name: stack,
+      name: pulumi.getStack(),
       routeSettings: [
         {
           routeKey: lambdaRoute.routeKey,
