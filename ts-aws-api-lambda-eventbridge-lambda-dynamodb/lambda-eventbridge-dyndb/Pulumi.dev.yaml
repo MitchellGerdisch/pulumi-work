@@ -1,5 +1,4 @@
 config:
-  lambda-eventbridge-dyndb:appName: my.EventProcessor
   newrelic:accountId: "2318745"
   newrelic:apiKey:
     secure: AAABAPR/0G/QeqlVyCjgdV7ZqSBYs+GtyeEBUBozVE1PN6P4yHFaENgdJoHWyn2/m6Si/YieX07q0FPaUn0qbA==

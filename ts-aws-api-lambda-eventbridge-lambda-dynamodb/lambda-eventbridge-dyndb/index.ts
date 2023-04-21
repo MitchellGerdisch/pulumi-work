@@ -26,10 +26,7 @@ export const apiUrl = frontend.url
 // DynamodDB console link to make it easier to demo/test.
 const awsConfig = new pulumi.Config("aws");
 const region = awsConfig.require("region");
-export const EventsTableLink = pulumi.interpolate`https://console.aws.amazon.com/dynamodbv2/home?region=${region}#table?name=${backend.eventsTableName}`
-export const EventsTableItems = pulumi.interpolate`https://${region}.console.aws.amazon.com/dynamodbv2/home?region=${region}#item-explorer?table=${backend.eventsTableName}&maximize=true`
-// https://us-east-2.console.aws.amazon.com/dynamodbv2/home?region=us-east-2#item-explorer?table=pipeline-be-events-table-e89a888&maximize=true
-// https://us-east-2.console.aws.amazon.com/dynamodbv2/home?region=us-east-2#item-explorer?table=pipeline-be-events-table-e89a888
+export const EventsTableLink = pulumi.interpolate`https://${region}.console.aws.amazon.com/dynamodbv2/home?region=${region}#item-explorer?table=${backend.eventsTableName}&maximize=true`
 
 // The URL for New Relic Dashboard
 export const dashboardUrl = dashboard.url
