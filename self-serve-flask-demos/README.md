@@ -27,7 +27,7 @@ So the heavy lifting is left to the automation api code in the `pulumi-demos/exa
   * This initializes a file to use to store backup of launched arrangements info.
 * `export AUTOMTION_API_DIR=XXXX`
   * Where `XXXX` is the full path to the pulumi demos `python/automation-api` folder.
-* `export PYTHONPATH=$PYTHONPATH:$PROJECTS_DIR/utils`
+* `export PYTHONPATH=$PYTHONPATH:$AUTOMATION_API_DIR`
 * `python3 -m venv venv && source ./venv/bin/activate && pip install -r requirements.txt`
 * `flask run`
 * Point browser at provide link.
