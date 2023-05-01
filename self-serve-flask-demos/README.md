@@ -2,7 +2,7 @@
 A Flask-based front-end to serve up [pulumi demos](https://github.com/pulumi-demos/examples).  
 Specifically, it integrates with the [automation API demo](https://github.com/pulumi-demos/examples/tree/main/python/automation-api)
 
-This code implements the (arguably simple) Flask app to present and execute the pulumi stacks managed by the automation api code in the `pulumi-demos/examples` repo referenced above.
+This code implements an arguably simple Flask app to present and execute the pulumi stacks managed by the automation api code in the `pulumi-demos/examples` repo referenced above.
 So the heavy lifting is left to the automation api code in the `pulumi-demos/examples` repo and this code just provides a thin layer on top to present it as a Flask app.
 
 ## References
@@ -14,20 +14,21 @@ So the heavy lifting is left to the automation api code in the `pulumi-demos/exa
 * Pretty simple structure:
   * Main page lists current stacks
   * Deploy page allows you to deploy a new stack.
-  * TODO: Add rendering of stack progress
-* Calls pulumi automation api programs to do things and get things
+* Calls pulumi automation api programs to do things and get things.
 
-# Pulumi Notes
-* Local workspace based model 
+## TODOs
+* Add rendering of the stack progress in the UI.
+* Instead of keeping track of launched arrangements in a local file, use the automation API to get real time status of things for displaying existing deployments.
+
 
 # How to Run
 * `git clone` the examples repo
   * Modify `python/automation-api/arrangements.yaml` to provide the arrangements you want to demo.
 * `export LAUNCHED_ARRANGEMENTS_FILE=./launched_arrangements.json && echo "{}" > $LAUNCHED_ARRANGEMENTS_FILE`
   * This initializes a file to use to store backup of launched arrangements info.
-* `export AUTOMTION_API_DIR=XXXX`
+* `export AUTOMATION_API_DIR=XXXX`
   * Where `XXXX` is the full path to the pulumi demos `python/automation-api` folder.
-* `export PYTHONPATH=$PYTHONPATH:$PROJECTS_DIR/utils`
+* `export PYTHONPATH=$PYTHONPATH:$AUTOMATION_API_DIR`
 * `python3 -m venv venv && source ./venv/bin/activate && pip install -r requirements.txt`
 * `flask run`
 * Point browser at provide link.
