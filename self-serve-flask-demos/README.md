@@ -24,8 +24,9 @@ So the heavy lifting is left to the automation api code in the `pulumi-demos/exa
 # How to Run
 * `git clone` the examples repo
   * Modify `python/automation-api/arrangements.yaml` to provide the arrangements you want to demo.
-* `export LAUNCHED_ARRANGEMENTS_FILE=./launched_arrangements.json && echo "{}" > $LAUNCHED_ARRANGEMENTS_FILE`
-  * This initializes a file to use to store backup of launched arrangements info.
+* `export LAUNCHED_ARRANGEMENTS_FILE=./launched_arrangements.json` 
+  * If first time running in the given environment, also do: `echo "{}" > $LAUNCHED_ARRANGEMENTS_FILE`
+    * This initializes a file to use to store backup of launched arrangements info.
 * `export AUTOMATION_API_DIR=XXXX`
   * Where `XXXX` is the full path to the pulumi demos `python/automation-api` folder.
 * `export PYTHONPATH=$PYTHONPATH:$AUTOMATION_API_DIR`
