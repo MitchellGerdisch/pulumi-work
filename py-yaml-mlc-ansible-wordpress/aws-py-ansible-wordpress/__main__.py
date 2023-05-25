@@ -179,7 +179,7 @@ stack_tag = pulumi_service.StackTag("stack-tag", #pulumi_service.StackTagArgs(
 
 ### CREATE DNS NAME FOR INSTANCE IF ZONE NAME GIVEN ###
 wp_instance_ip = wp_instance.wpinstance_ip
-# fqdn to use if no dns record is created
+# fqdn to use if no zone name given and thus no DNS entry created
 fqdn = wp_instance_ip
 if zone_name:
     dns_name = f"wordpress-{stack}"
