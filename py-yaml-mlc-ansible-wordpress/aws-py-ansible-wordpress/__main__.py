@@ -6,6 +6,7 @@ import pulumi_pulumiservice as pulumi_service
 # Custom Multilanguage Package
 import pulumi_wpinstance as wpinstance
 
+### GET CONFIG VALUES FOR STACK ###
 config = pulumi.Config()
 # A path to the EC2 keypair's public key:
 public_key_path = config.require("publicKeyPath")
@@ -21,6 +22,8 @@ db_username = config.get("dbUsername") or "admin"
 db_password = config.require_secret("dbPassword")
 # The WordPress EC2 instance's size:
 ec2_instance_size = config.get("ec2InstanceSize") or "t3.small"
+# Route53 zone name given
+zone_name = config.get("zoneName")
 
 # Dynamically fetch AZs so we can spread across them.
 availability_zones = aws.get_availability_zones()
@@ -30,6 +33,7 @@ public_key = open(public_key_path).read()
 # Read in the private key for easy use below (and to ensure it's marked a secret!)
 private_key = pulumi.Output.secret(open(private_key_path).read())
 
+### SET UP VPC ###
 # Set up a Virtual Private Cloud to deploy our EC2 instance and RDS datbase into.
 prod_vpc = aws.ec2.Vpc("prod-vpc",
     cidr_block="10.192.0.0/16",
@@ -73,6 +77,8 @@ prod_rta_public_subnet1 = aws.ec2.RouteTableAssociation("prod-rta-public-subnet-
     subnet_id=prod_subnet_public1.id,
     route_table_id=prod_public_rt.id)
 
+
+### CREATE WPINSTANCE USING MLC ###
 wp_instance = wpinstance.mlc.WpInstance("wp-instance", 
     instance_type = ec2_instance_size,
     public_key = public_key,
@@ -80,6 +86,7 @@ wp_instance = wpinstance.mlc.WpInstance("wp-instance",
     vpc_id = prod_vpc.id
 )
 
+### SETUP RDS ###
 # Security group for RDS:
 rds_allow_rule = aws.ec2.SecurityGroup("rds-allow-rule",
     vpc_id=prod_vpc.id,
@@ -120,6 +127,8 @@ wordpressdb = aws.rds.Instance("wordpressdb",
     password=db_password,
     skip_final_snapshot=True)
 
+
+### RUN ANSIBLE TO CONFIGURE WP INSTANCE ###
 # Render the Ansible playbook using RDS info.
 render_playbook_cmd = command.local.Command("renderPlaybookCmd",
     create="cat playbook.yml | envsubst > playbook_rendered.yml",
@@ -156,16 +165,35 @@ opts=pulumi.ResourceOptions(depends_on=[
         update_python_cmd,
     ]))
 
-
-# Add a Pulumi Stack Tag
+### ADD PULUMI STACK TAG ###
+org = pulumi.get_organization()
+project = pulumi.get_project()
+stack = pulumi.get_stack()
 stack_tag = pulumi_service.StackTag("stack-tag", #pulumi_service.StackTagArgs(
-    organization=pulumi.get_organization(),
-    project=pulumi.get_project(),
-    stack=pulumi.get_stack(),
+    organization=org,
+    project=project,
+    stack=stack,
     name="Demo",
     value="Ansible-Wordpress"
 )
 
+### CREATE DNS NAME FOR INSTANCE IF ZONE NAME GIVEN ###
+wp_instance_ip = wp_instance.wpinstance_ip
+# fqdn to use if no dns record is created
+fqdn = wp_instance_ip
+if zone_name:
+    dns_name = f"wordpress-{stack}"
+    fqdn = f"{dns_name}.{zone_name}"
+    zone = aws.route53.get_zone_output(name=zone_name)
+    www = aws.route53.Record("www",
+        zone_id=zone.zone_id,
+        name=fqdn,
+        type="A",
+        ttl=300,
+        records=[wp_instance.wpinstance_ip])
+else:
+    print("Run `pulumi config set zoneName ROUTE53_ZONENAME` if you want a DNS record created for the instance.")
+
 # Export the wordpress site URL
-wp_url = pulumi.Output.concat("http://", wp_instance.wpinstance_ip)
-pulumi.export("url", wp_url)
+wp_url = pulumi.Output.concat("http://", fqdn)
+pulumi.export("URL", wp_url)

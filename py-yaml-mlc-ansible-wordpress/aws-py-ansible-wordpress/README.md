@@ -57,13 +57,14 @@ After cloning this repo, from this working directory, run these commands:
     $ pulumi config set aws:region us-east-1 # any valid AWS region
     $ pulumi config set publicKeyPath wordpress-keypair.pub # your newly generated public key
     $ pulumi config set privateKeyPath wordpress-keypair # your newly generated private key
-    $ pulumi config set dbPassword Sup45ekreT@ --secret # your RDS database password -- keep it safe!
+    $ pulumi config set dbPassword Sup45ekreT#419 --secret # your RDS database password -- keep it safe!
     ```
 
     There are some other optional variables you can set if you choose. Feel free to skip these. If you don't
     set them, they'll receive the default values shown below:
 
     ```bash
+    $ pulumi config set zoneName ROUTE53_ZONENAME # A Route53 zone name. Note: will skip DNS if not set.
     $ pulumi config set dbInstanceSize db.t3.small # the RDS instance size to use
     $ pulumi config set dbName wordpressdb # the name of the Wordpress database in RDS
     $ pulumi config set dbUsername admin # the name of the Wordpress user that will be used
