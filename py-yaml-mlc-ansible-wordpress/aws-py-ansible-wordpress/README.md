@@ -54,7 +54,7 @@ After cloning this repo, from this working directory, run these commands:
    a way to work in any AWS region, including fetching the right Amazon Linux 2 AMI and availability zones:
 
     ```bash
-    $ pulumi config set aws:region us-east-1 # any valid AWS region
+    $ pulumi config set aws:region us-east-2 # any valid AWS region
     $ pulumi config set publicKeyPath wordpress-keypair.pub # your newly generated public key
     $ pulumi config set privateKeyPath wordpress-keypair # your newly generated private key
     $ pulumi config set dbPassword Sup45ekreT#419 --secret # your RDS database password -- keep it safe!
