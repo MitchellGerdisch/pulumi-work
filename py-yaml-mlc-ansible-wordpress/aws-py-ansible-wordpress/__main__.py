@@ -125,7 +125,8 @@ wordpressdb = aws.rds.Instance("wordpressdb",
     db_name=db_name,
     username=db_username,
     password=db_password,
-    skip_final_snapshot=True)
+    skip_final_snapshot=True, 
+    opts=pulumi.ResourceOptions(depends_on=[wp_instance]))
 
 
 ### RUN ANSIBLE TO CONFIGURE WP INSTANCE ###
