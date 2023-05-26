@@ -137,7 +137,9 @@ render_playbook_cmd = command.local.Command("renderPlaybookCmd",
         "DB_NAME": db_name,
         "DB_USERNAME": db_username,
         "DB_PASSWORD": db_password,
-    })
+    },
+    triggers=[db_password, db_username, db_name, wordpressdb.endpoint]
+    )
 
 # Run a script to update Python on the remote machine.
 update_python_cmd = command.remote.Command("updatePythonCmd",
@@ -160,6 +162,7 @@ ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
 -i '{public_ip},' \
 --private-key {private_key_path} \
 playbook_rendered.yml"""),
+triggers=[render_playbook_cmd],
 opts=pulumi.ResourceOptions(depends_on=[
         render_playbook_cmd,
         update_python_cmd,
