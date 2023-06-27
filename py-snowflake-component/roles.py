@@ -22,23 +22,23 @@ class FlakeyRoles(ComponentResource):
 
         self.accountadmin_name="ACCOUNTADMIN"
 
-        self.rolename=(prefix+"TEST_ROLE")
-        self.test_role = snowflake.Role("test-role", 
+        self.rolename=(prefix+"MAIN_ROLE")
+        self.test_role = snowflake.Role("main-role", 
           name=self.rolename,
           opts=ResourceOptions(parent=self)
         )
 
-        self.rolename1=(prefix+"OTHER_ROLE_1")
+        self.rolename1=(prefix+"MILL_DATA_PRIVATE_WRITER_ROLE")
         self.other_role_1 = snowflake.Role("other-role-1", 
           name=self.rolename1,
           opts=ResourceOptions(parent=self)
         )
 
-        self.rolename2=(prefix +"OTHER_ROLE_2")
-        self.other_role_2 = snowflake.Role("other-role-2", 
-          name=self.rolename2,
-          opts=ResourceOptions(parent=self)
-        )
+        # self.rolename2=(prefix +"OTHER_ROLE_2")
+        # self.other_role_2 = snowflake.Role("other-role-2", 
+        #   name=self.rolename2,
+        #   opts=ResourceOptions(parent=self)
+        # )
 
         self.rolegrant = snowflake.RoleGrants("test-role-grant",
           role_name=self.test_role.name,
@@ -46,8 +46,8 @@ class FlakeyRoles(ComponentResource):
           roles=[self.accountadmin_name, self.rolename1],
           # roles=[self.rolename1],
           # roles=[self.rolename1, self.rolename2],
-          users=[args.username],
-          opts=ResourceOptions(parent=self)
+          # users=[args.username],
+          opts=ResourceOptions(parent=self, protect=False)
         )
 
         self.register_outputs({})

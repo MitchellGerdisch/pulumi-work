@@ -3,18 +3,21 @@
 import pulumi
 import pulumi_snowflake as snowflake
 import roles
+import roles_class
 
-config = pulumi.Config()
-user_password = config.require_secret("user_password")
+# config = pulumi.Config()
+# user_password = config.require_secret("user_password")
 
-user = snowflake.User("test-user", 
-  name="TEST_USER",
-  password=user_password,
-)
+# user = snowflake.User("test-user", 
+#   name="TEST_USER",
+#   password=user_password,
+# )
 
-flakey_role = roles.FlakeyRoles("PROD", roles.FlakeyRolesArgs(
-    username=user.name
-))
+mill_roles = roles_class.Roles("PROD_")
+
+# flakey_role = roles.FlakeyRoles("PROD", roles.FlakeyRolesArgs(
+#     username=user.name
+# ))
 
 # rolename="TEST_ROLE"
 # test_role = snowflake.Role("test-role", 
