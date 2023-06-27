@@ -1,0 +1,10 @@
+config:
+  py-snowflake-basics:user_password:
+    secure: AAABAA1Z4Bu5NGstS+PXjvCJvA/Xyi+FLHoo1TVbB6WBalFdFmlbl1BSJZk=
+  snowflake:account: opa78606
+  snowflake:password:
+    secure: AAABAGjoRcJTs3XBOQMFG65k+A2DFipRoXeX/uUQXydljz56vYdBImiJRuJSJlJyk8bjkA==
+  snowflake:region: us-west-2
+  snowflake:username: pulumibot
+  snowflake:role: ACCOUNTADMIN
+
