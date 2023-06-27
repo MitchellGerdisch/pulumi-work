@@ -20,6 +20,8 @@ class FlakeyRoles(ComponentResource):
 
         prefix = (name+"_")
 
+        self.accountadmin_name="ACCOUNTADMIN"
+
         self.rolename=(prefix+"TEST_ROLE")
         self.test_role = snowflake.Role("test-role", 
           name=self.rolename,
@@ -40,8 +42,10 @@ class FlakeyRoles(ComponentResource):
 
         self.rolegrant = snowflake.RoleGrants("test-role-grant",
           role_name=self.test_role.name,
+          # roles=[self.accountadmin_name],
+          roles=[self.accountadmin_name, self.rolename1],
           # roles=[self.rolename1],
-          roles=[self.rolename1, self.rolename2],
+          # roles=[self.rolename1, self.rolename2],
           users=[args.username],
           opts=ResourceOptions(parent=self)
         )
