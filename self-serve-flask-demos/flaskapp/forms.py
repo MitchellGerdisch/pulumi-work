@@ -8,6 +8,7 @@ class StackDeployForm(FlaskForm):
     org = StringField('Organization', default=default_org, validators=[DataRequired()])
     deployment_option = SelectField('Deployment Options', validators=[InputRequired()])
     env = StringField('Environment Name', validators=[DataRequired()])
+    config = StringField('Config Options', validators=[DataRequired()])
     submit = SubmitField('Deploy Stack')
 
 class StackDestroyForm(FlaskForm):

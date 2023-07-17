@@ -10,6 +10,7 @@ from pulumi_demos_integration.automate.project_utils import get_deployment_optio
 # See the README for setting up PYTHONPATH so this reference works.
 # TODO: Make the reference more automatic
 from utils.run_automation import run_automation
+from utils.run_automation import gen_config_list
 
 # Keep track of launched deployments
 # TODO: Use the automation API arrangements and Pulumi cloud as a source of truth for current deployments.
@@ -46,11 +47,12 @@ def deploy():
         org = form.org.data
         deployment_option = form.deployment_option.data
         env = form.env.data
+        config = gen_config_list(form.config.data.split())
         # flash('Accepted request to deploy environment: {}, {}, {}'.format(org, deployment_option, env))
-        stacks_results = run_automation(base_folder, arrangements_file, deployment_option, org, env, False) #update_stack(org, deployment_option, env, False)
+        stacks_results = run_automation(base_folder, arrangements_file, deployment_option, org, env, False, config) #update_stack(org, deployment_option, env, False)
         # flash(f'stack_results: {stacks_results}')
         launched_arrangements[deployment_option+"/"+env]={"base_folder": base_folder, "arrangements_file": arrangements_file, "org": org, "deployment_option": deployment_option, "env": env}
-        print("launched_arrangements", launched_arrangements)
+        # print("launched_arrangements", launched_arrangements)
         save_launched_arrangements(launched_arrangements_file, launched_arrangements)
         return render_template('current.html', title="Pulumi Self-Service", stacks_results=stacks_results)
     return render_template('deploy.html', title="Deploy Stack", form=form)
@@ -71,7 +73,7 @@ def destroy():
         # deployment = selection_split[0]
         # stack = selection_split[-1]
         # flash('Accepted request to deploy environment: {}, {}, {}'.format(org, deployment_option, env))
-        destroy_result = run_automation(launched_info["base_folder"], launched_info["arrangements_file"], launched_info["deployment_option"], launched_info["org"], launched_info["env"], True) #update_stack(org, deployment_option, env, False)
+        destroy_result = run_automation(launched_info["base_folder"], launched_info["arrangements_file"], launched_info["deployment_option"], launched_info["org"], launched_info["env"], True, {}) #update_stack(org, deployment_option, env, False)
         # flash(f'stack_results: {stacks_results}')
         launched_arrangements.pop(existing_deployment)
         save_launched_arrangements(launched_arrangements_file, launched_arrangements)
