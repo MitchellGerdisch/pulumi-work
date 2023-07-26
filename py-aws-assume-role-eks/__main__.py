@@ -1,7 +1,6 @@
 # Assumes you did Steps 1 and 2 from https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html
-# BUT with permissions for deploying with pulumi_eks package.
-# It also sets things up for the default provider.
-# This project changes some of the names, etc and basically replaces step 3 to use Pulumi to use the assumed role.
+# BUT with permissions for deploying with pulumi_eks package - see the README.
+# It also uses the default provider.
 
 import pulumi_aws as aws
 from pulumi import Config, ResourceOptions, export, FileAsset
