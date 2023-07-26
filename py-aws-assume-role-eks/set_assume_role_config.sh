@@ -1,0 +1,1 @@
+pulumi config set --path aws:assumeRole.roleArn arn:aws:iam::420942475186:role/mitch-assumerole-test-role
