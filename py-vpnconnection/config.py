@@ -12,12 +12,11 @@ name = config.get("name") or pulumi.get_stack()
 
 tenant_id = config.require("tenant_id")
 customer_gateway_id = config.get("customer_gateway_id") # optional. if not set program will create a customer gateway
-enable_acceleration=config.get("enable_acceleration") or True # We are using an ec2 transit gateway so True seems like a good default
+enable_acceleration=config.get_bool("enable_acceleration") or True # We are using an ec2 transit gateway so True seems like a good default
 type = config.get("type") or "ipsec.1" # currently only ipsec.1 is supported so default to that if no config set
 
 # static_routes are provided as an array in a structured config
-static_routes = config.require_object("static_routes")
-static_routes_only=True if len(static_routes) > 0 else False
+static_routes = config.get_object("static_routes")
 
 tenant_bgp_asn = config.require("tenant_gbp_asn")
 tenant_public_ip = config.require("tenant_public_ip")
@@ -50,13 +49,13 @@ tunnel2_dpd_timeout_action=config.require("tunnel2_dpd_timeout_action")
 tunnel2_dpd_timeout_seconds=config.require_int("tunnel2_dpd_timeout_seconds")
 tunnel2_ike_versions=config.require("tunnel2_ike_versions")
 tunnel2_inside_cidr=config.require("tunnel2_inside_cidr")
-tunnel2_phase1_dh_group_numbers=config.require("tunnel2_phase1_dh_group_numbers")
-tunnel2_phase1_encryption_algorithms=config.require("tunnel2_phase1_encryption_algorithms")
-tunnel2_phase1_integrity_algorithms=config.require("tunnel2_phase1_integrity_algorithms")
+tunnel2_phase1_dh_group_numbers=config.require_object("tunnel2_phase1_dh_group_numbers")
+tunnel2_phase1_encryption_algorithms=config.require_object("tunnel2_phase1_encryption_algorithms")
+tunnel2_phase1_integrity_algorithms=config.require_object("tunnel2_phase1_integrity_algorithms")
 tunnel2_phase1_lifetime_seconds=config.require_int("tunnel2_phase1_lifetime_seconds")
-tunnel2_phase2_dh_group_numbers=config.require("tunnel2_phase2_dh_group_numbers")
-tunnel2_phase2_encryption_algorithms=config.require("tunnel2_phase2_encryption_algorithms")
-tunnel2_phase2_integrity_algorithms=config.require("tunnel2_phase2_integrity_algorithms")
+tunnel2_phase2_dh_group_numbers=config.require_object("tunnel2_phase2_dh_group_numbers")
+tunnel2_phase2_encryption_algorithms=config.require_object("tunnel2_phase2_encryption_algorithms")
+tunnel2_phase2_integrity_algorithms=config.require_object("tunnel2_phase2_integrity_algorithms")
 tunnel2_phase2_lifetime_seconds=config.require_int("tunnel2_phase2_lifetime_seconds")
 tunnel2_preshared_key=config.require("tunnel2_preshared_key")
 tunnel2_rekey_fuzz_percentage=config.require("tunnel2_rekey_fuzz_percentage")
