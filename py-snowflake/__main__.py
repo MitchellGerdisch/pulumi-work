@@ -56,13 +56,26 @@ for function in functions:
             , opts = pulumi.ResourceOptions(depends_on=[fn_role])
         ) 
 
-    wh_grant = snowflake.WarehouseGrant(
-        function + '_WH_GRANT'
-        , privilege = 'USAGE'
-        , roles = ['FUNCTION_'+function]
-        , warehouse_name = wh.name
-        , with_grant_option = False
-        # , opts = pulumi.ResourceOptions(provider = securityadmin)
+    #### DEPRECATED: The "WarehouseGrant" resource is being deprecated.
+    #### v0.30.2 and later introduce the "GrantPrivilegesToRole" resource (See below) instead.
+    # wh_grant = snowflake.WarehouseGrant(
+    #     function + '_WH_GRANT'
+    #     , privilege = 'USAGE'
+    #     , roles = ['FUNCTION_'+function]
+    #     , warehouse_name = wh.name
+    #     , with_grant_option = False
+    #     # , opts = pulumi.ResourceOptions(provider = securityadmin)
+    # )
+
+    #### REPLACES "WarehouseGrant" resource (see above)
+    wh_grant = snowflake.GrantPrivilegesToRole(
+        function + '_WH_GRANT_TO_ROLE',
+        role_name= 'FUNCTION_'+function,
+        privileges=['USAGE'],
+        on_account_object=snowflake.GrantPrivilegesToRoleOnAccountObjectArgs(
+            object_name=wh.name,
+            object_type="WAREHOUSE"
+        )
     )
 
 # for function in prod_function_names:
