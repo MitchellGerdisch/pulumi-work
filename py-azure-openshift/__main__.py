@@ -11,7 +11,7 @@ import pulumi
 from pulumi_azure_native import redhatopenshift as openshift
 from pulumi_azure_native import resources
 import pulumi_azure_native as azure_native
-import pulumi_command as cmd
+# import pulumi_command as cmd
 import pulumi_azuread as azuread
 from pulumi_azure_native import network
 
@@ -19,10 +19,29 @@ base_name = "mitch"
 name = "mitch"
 
 # Create an Azure Resource Group
+# rg_name = f"{base_name}-rg"
 resource_group = resources.ResourceGroup(f"{base_name}-rg")
 
 # create a rg for the cluster
 cluster_resource_group = resources.ResourceGroup(f"{base_name}-cluster-rg")
+
+
+virtual_network = network.VirtualNetwork(f"{base_name}-vnet",
+    resource_group_name=resource_group.name,
+    address_space={
+        'addressPrefixes': ['10.0.0.0/16'],
+    })
+
+# Create a Subnet
+subnet = network.Subnet(f"{base_name}-subnet",
+    resource_group_name=resource_group.name,
+    virtual_network_name=virtual_network.name,
+    address_prefix='10.0.1.0/24')
+
+subnet_worker = network.Subnet(f"{base_name}-subnet-worker",
+    resource_group_name=resource_group.name,
+    virtual_network_name=virtual_network.name,
+    address_prefix='10.0.2.0/24')
 
 ad_app_name = f"{name}-aks-app"
 current = azuread.get_client_config()
@@ -59,11 +78,12 @@ os_cluster = openshift.OpenShiftCluster(f"{base_name}-openshift", openshift.Open
         client_secret=ad_sp_password.value
     ),
     worker_profiles=[azure_native.redhatopenshift.WorkerProfileArgs(
-        count=3,
+        count=2,
         disk_size_gb=128,
         name="worker",
-        subnet_id="/subscriptions/mySubscription/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet",
-        vm_size="Standard_D2s_v3",
+        subnet_id=subnet_worker.id,
+        vm_size="Standard_D4s_v3",
+        encryption_at_host=azure_native.redhatopenshift.EncryptionAtHost.ENABLED
     )],
     console_profile=azure_native.redhatopenshift.ConsoleProfileArgs(),
     ingress_profiles=[azure_native.redhatopenshift.IngressProfileArgs(
@@ -72,7 +92,7 @@ os_cluster = openshift.OpenShiftCluster(f"{base_name}-openshift", openshift.Open
     )],
     master_profile=azure_native.redhatopenshift.MasterProfileArgs(
         encryption_at_host="Enabled",
-        subnet_id="/subscriptions/mySubscription/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet",
+        subnet_id=subnet.id,
         vm_size="Standard_D8s_v3",
     ),
     network_profile=azure_native.redhatopenshift.NetworkProfileArgs(
