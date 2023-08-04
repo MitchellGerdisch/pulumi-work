@@ -1,0 +1,3 @@
+name: go-aws-eks
+runtime: go
+description: AWS EKS deployment
