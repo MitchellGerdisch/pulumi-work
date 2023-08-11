@@ -67,7 +67,8 @@ assumed_provider = aws.Provider(
         # cannot be assumed will be returned
         session_name='PulumiSession',
     ),
-    region="us-west-2"
+    ## region="us-west-2"
+    region=Config("aws").require("region")
 )
 
 # Create the new S3 bucket using the assumed role
