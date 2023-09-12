@@ -10,12 +10,15 @@ from argsparser import create_parser
 def pulumi_program():
     # Gather up the settings for the deployment configuration
     config = pulumi.Config()
+    org = config.require("organization")
+    project = config.require("project")
+    stack = config.require("stack")
 
     # Use the Pulumi Cloud SDK to configure deployments for a given stack
     deployment = pulumicloud.DeploymentSettings(f"{org}-{project}-{stack}", pulumicloud.DeploymentSettingsArgs(
-        organization=config.require("organization"),
-        project=config.require("project"),
-        stack=config.require("stack"),
+        organization=org,
+        project=project,
+        stack=stack,
         github=pulumicloud.DeploymentSettingsGithubArgs(
             deploy_commits=True,
             preview_pull_requests=True,
@@ -30,7 +33,7 @@ def pulumi_program():
             )
         ),
         operation_context=pulumicloud.DeploymentSettingsOperationContextArgs(
-            environment_variables=[{"GITHUB_TOKEN": config.require_secret("github_token")}],
+            environment_variables=config.require_secret("github_token").apply(lambda github_token: {"GITHUB_TOKEN": github_token}),
             oidc=pulumicloud.OperationContextOIDCArgs(
                 aws=pulumicloud.AWSOIDCConfigurationArgs(
                     role_arn=config.require("oidc_role_arn"),
@@ -81,7 +84,7 @@ elif args.core:
    if tenant_stack != "prod":
         tenant_branch = f"{tenant_branch_base}/{tenant_stack}"
 elif args.edge:
-   tenant_project = "edge-platform"
+   tenant_project_folder = "edge-platform"
    tenant_project_name = f"{tenant}-edge"
    tenant_stack = args.stack
    if tenant_stack != "prod":
@@ -91,14 +94,16 @@ else:
    sys.exit(255)
 
 # Deployment config related settings
-github_repo = "modusintegration/vnext-tenants"
-repo_dir = f"tenants/{tenant}/{tenant_project_folder}"
+### github_repo = "modusintegration/vnext-tenants"
+github_repo = "pulumi-demos/pulumi-deployments"
+### repo_dir = f"tenants/{tenant}/{tenant_project_folder}"
+repo_dir = "simple-stack"
 filter_path = f"**/{repo_dir}/**"
 
 # project/stack information for the stack that is being run here to create the deployment configuration for the tenant's stack.
 # kinda meta
 project_name = "deployment_configuration"
-stack_name = auto.fully_qualified_stack_name(org, tenant_project_name, tenant)
+stack_name = auto.fully_qualified_stack_name(org, project_name, tenant)
 
 # create or select a stack matching the specified name and project.
 # this will set up a workspace with everything necessary to run our inline program (pulumi_program)
@@ -110,13 +115,13 @@ print("successfully initialized stack")
 
 # for inline programs, we must manage plugins ourselves
 print("installing plugins...")
-stack.workspace.install_plugin("pulumi-pulumiservice", "v0.11.0")
+stack.workspace.install_plugin("pulumiservice", "v0.11.0")
 print("plugins installed")
 
 # set stack configuration specifying the AWS region to deploy
 print("setting up config")
 stack.set_config("organization", auto.ConfigValue(value=org))
-stack.set_config("project", auto.ConfigValue(value=tenant_project))
+stack.set_config("project", auto.ConfigValue(value=tenant_project_name))
 stack.set_config("stack", auto.ConfigValue(value=tenant_stack))
 stack.set_config("repository", auto.ConfigValue(value=github_repo))
 stack.set_config("filter_path", auto.ConfigValue(value=filter_path))
