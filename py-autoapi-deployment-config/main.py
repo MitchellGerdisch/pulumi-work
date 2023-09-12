@@ -33,7 +33,7 @@ def pulumi_program():
             )
         ),
         operation_context=pulumicloud.DeploymentSettingsOperationContextArgs(
-            environment_variables=config.require_secret("github_token").apply(lambda github_token: {"GITHUB_TOKEN": github_token}),
+            environment_variables={"GITHUB_TOKEN": config.require_secret("github_token")},
             oidc=pulumicloud.OperationContextOIDCArgs(
                 aws=pulumicloud.AWSOIDCConfigurationArgs(
                     role_arn=config.require("oidc_role_arn"),
