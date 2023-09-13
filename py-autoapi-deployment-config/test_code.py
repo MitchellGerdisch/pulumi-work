@@ -1,13 +1,15 @@
 # A little program to create a bunch of stacks to test the stack_management code with.
 # Passing the -d option will destory the stacks.
+# Passing the -dd option will destroy and REMOVE the stacks.
+
 import argparse
 import os
 import pulumi
 from pulumi import automation as auto
 from stacks_base_properties import stack_properties
 
+# A fake inline program to use when creating the test stacks.
 def fake_program():
-    # Gather up the settings for the deployment configuration
     pulumi.export("Nothing burger")
 
 def create_params_parser():
@@ -26,8 +28,7 @@ tenant = args.tenant
 destroy = args.destroy
 destroy_and_remove = args.destroy_and_remove
 
-existing_stacks_file = "existing_stacks.json"
-existing_stacks = []
+# Use the stack_properties files to create a full set of test stacks
 for stack_info in stack_properties:
     tenant_project_name = f'{tenant}-{stack_info["project_basename"]}'
     tenant_stack_name = auto.fully_qualified_stack_name(org, tenant_project_name, stack_info["stack_name"])

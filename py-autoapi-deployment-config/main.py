@@ -17,44 +17,6 @@ github_repo = args.github_repo
 github_token =  args.github_token
 debug = args.debug
 
-# # Get/set the tenant's project and stack information for which deployments should be set up.
-# tenant_project_folder: str
-# tenant_project_name:str 
-# tenant_stack:str
-# tenant_branch_base = "refs/head"
-# tenant_branch = f"{tenant_branch_base}/main"
-# if args.account:
-#     tenant_project_folder = "account"
-#     tenant_project_name = f"{tenant}-account"
-#     tenant_stack = "account"
-# elif args.github:
-#    tenant_project_folder = "github"
-#    tenant_project_name = f"{tenant}-github"
-#    tenant_stack = "github"
-# elif args.route53:
-#    tenant_project_folder = "route53-record"
-#    tenant_project_name = f"{tenant}-route53" # NEED TO CONFIRM THIS NAMING
-#    tenant_stack = "records"
-# elif args.core:
-#    tenant_project_folder = "core-platform"
-#    tenant_project_name = f"{tenant}-core"
-#    tenant_stack = args.stack
-#    if tenant_stack != "prod":
-#         tenant_branch = f"{tenant_branch_base}/{tenant_stack}"
-# elif args.edge:
-#    tenant_project_folder = "edge-platform"
-#    tenant_project_name = f"{tenant}-edge"
-#    tenant_stack = args.stack
-#    if tenant_stack != "prod":
-#         tenant_branch = f"{tenant_branch_base}/{tenant_stack}"
-# else:
-#    print("Must specify at least one project (e.g. -a, -g, -r, -c, -e).\nRun with --help for more information.")
-#    sys.exit(255)
-
-### repo_dir = f"tenants/{tenant}/{tenant_project_folder}"
-# repo_dir = "simple-stack"
-# filter_path = f"**/{repo_dir}/**"
-
 # project/stack information for the stack that is being run here to create the deployment configuration for the tenant's stack.
 # kinda meta
 this_project_name = "stack_management"
@@ -92,8 +54,6 @@ for stack_info in stack_properties:
     except:
         print(f"Skipping stack (not found): {tenant_stack_name}")
 
-
-
 # set stack configuration to be consumed by the inline program.
 print("setting up config")
 this_stack.set_config("organization", auto.ConfigValue(value=org))
@@ -104,6 +64,7 @@ this_stack.set_config("aws_oidc_role_arn", auto.ConfigValue(value=aws_oidc_arn))
 this_stack.set_config("existing_stacks_file", auto.ConfigValue(value=existing_stacks_file))
 
 # The existing_stacks information is just pushed out to a file as json instead of trying to create stack config for it.
+# Unless the debug argument is set, the file will be deleted after the code has run (see below).
 with open(existing_stacks_file, "w") as outfile:
     json.dump(existing_stacks, outfile)
 
