@@ -24,6 +24,7 @@ args = params_parser.parse_args()
 org = args.org
 tenant = args.tenant
 destroy = args.destroy
+destroy_and_remove = args.destroy_and_remove
 
 existing_stacks_file = "existing_stacks.json"
 existing_stacks = []
@@ -32,10 +33,11 @@ for stack_info in stack_properties:
     tenant_stack_name = auto.fully_qualified_stack_name(org, tenant_project_name, stack_info["stack_name"])
     print(f"Create or select stack: {tenant_stack_name}")
     test_stack=auto.create_or_select_stack(stack_name=tenant_stack_name, project_name=tenant_project_name, program=fake_program)
-    if destroy:
+    if destroy or destroy_and_remove: 
       print(f"Destroying stack: {tenant_stack_name}")
       test_stack.destroy(on_output=print)
-      print(f"Removing stack: {tenant_stack_name}")
-      os.system(f"pulumi stack rm {tenant_stack_name} --yes")
+      if destroy_and_remove:
+        print(f"Removing stack: {tenant_stack_name}")
+        os.system(f"pulumi stack rm {tenant_stack_name} --yes")
 
  
