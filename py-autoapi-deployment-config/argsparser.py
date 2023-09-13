@@ -10,7 +10,7 @@ def create_parser():
   parser.add_argument("-o", "--org", nargs="?", default="PUTDEFAULTORGHERE", help="Name of organization in which the stacks reside.")
   parser.add_argument("-t", "--tenant", required=True, help="Name of tenant for which the deployment is being created.")
   parser.add_argument("-a", "--awsoidc", required=True, help="OIDC role arn for deployments to use when talking to AWS.")
-  parser.add_argument("-r", "--github_repo", required=True, help="Github repo where the projects are stored.")
+  parser.add_argument("-r", "--github_repo", nargs="?", default="GITHUBORG/GITHUBREPO", help="Github repo where the projects are stored.")
   parser.add_argument("-g", "--github_token", required=True, help="GITHUB access token with access to the vnext-tenants repo.")
 
   return parser
