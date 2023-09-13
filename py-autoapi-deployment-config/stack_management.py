@@ -84,8 +84,8 @@ def stack_management():
         organization=this_org,
         project=this_project,
         stack=this_stack,
-        name="tenant",
-        value=tenant
+        name=tenant,
+        value="stacks",
     ))
 
   
