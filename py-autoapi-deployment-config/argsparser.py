@@ -1,7 +1,10 @@
 import argparse
 
 # Build the command line arguments
-# NOTE: Defaults can be added for things like awsoidc, github_repo, etc by following the pattern seen for the org argument
+# NOTE: Set proper values for teh defaults:
+# - org
+# - github_repo
+
 def create_parser():
   parser = argparse.ArgumentParser(description="Pulumi stack management.",
                                   formatter_class=argparse.ArgumentDefaultsHelpFormatter)
