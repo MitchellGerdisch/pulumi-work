@@ -1,9 +1,10 @@
+import os
 import sys
 import json
 from pulumi import automation as auto
 from argsparser import create_parser
 from stack_management import stack_management
-from stacks_base_properties import github_repo, vnext_stacks
+from stacks_base_properties import stack_properties
 
 # Get the command line arguments
 parser = create_parser()
@@ -12,7 +13,9 @@ org = args.org
 tenant = args.tenant
 destroy = args.destroy
 aws_oidc_arn = args.awsoidc
+github_repo = args.github_repo
 github_token =  args.github_token
+debug = args.debug
 
 # # Get/set the tenant's project and stack information for which deployments should be set up.
 # tenant_project_folder: str
@@ -70,14 +73,22 @@ print("installing plugins...")
 this_stack.workspace.install_plugin("pulumiservice", "v0.11.0")
 print("plugins installed")
 
+# If this is a stack destroy, then just destroy and get out.
+if destroy:
+    print("destroying stack...")
+    this_stack.destroy(on_output=print)
+    print("stack destroy complete")
+    sys.exit()
+
 # Test the stacks to see which exist and thus can have Pulumi Cloud settings configured for them
+existing_stacks_file = "existing_stacks.json"
 existing_stacks = []
-for project_info in vnext_stacks:
-    tenant_project_name = f'{tenant}-{project_info["project_basename"]}'
-    tenant_stack_name = auto.fully_qualified_stack_name(org, tenant_project_name, project_info["stack_name"])
+for stack_info in stack_properties:
+    tenant_project_name = f'{tenant}-{stack_info["project_basename"]}'
+    tenant_stack_name = auto.fully_qualified_stack_name(org, tenant_project_name, stack_info["stack_name"])
     try:
         test_stack=auto.select_stack(stack_name=tenant_stack_name, project_name=tenant_project_name, work_dir=".")
-        existing_stacks.append(project_info)
+        existing_stacks.append(stack_info)
     except:
         print(f"Skipping stack (not found): {tenant_stack_name}")
 
@@ -90,9 +101,10 @@ this_stack.set_config("tenant", auto.ConfigValue(value=tenant))
 this_stack.set_config("repository", auto.ConfigValue(value=github_repo))
 this_stack.set_config("github_token", auto.ConfigValue(value=auto.Secret(github_token)))
 this_stack.set_config("aws_oidc_role_arn", auto.ConfigValue(value=aws_oidc_arn))
+this_stack.set_config("existing_stacks_file", auto.ConfigValue(value=existing_stacks_file))
 
 # The existing_stacks information is just pushed out to a file as json instead of trying to create stack config for it.
-with open("existing_stacks.json", "w") as outfile:
+with open(existing_stacks_file, "w") as outfile:
     json.dump(existing_stacks, outfile)
 
 print("config set")
@@ -101,12 +113,12 @@ print("refreshing stack...")
 this_stack.refresh(on_output=print)
 print("refresh complete")
 
-if destroy:
-    print("destroying stack...")
-    this_stack.destroy(on_output=print)
-    print("stack destroy complete")
-    sys.exit()
-
 print("updating stack...")
 up_res = this_stack.up(on_output=print)
 print(f"update summary: \n{json.dumps(up_res.summary.resource_changes, indent=4)}")
+
+# Remove the existing stacks file since we are done with it.
+if not debug:
+    os.remove(existing_stacks_file)
+else:
+    print(f"**DEBUG** Not deleting file: {existing_stacks_file}")

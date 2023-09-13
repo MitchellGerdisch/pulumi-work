@@ -1,8 +1,5 @@
-# tenant's repo
-github_repo = "modusintegration/vnext-tenants"
-
-# The list of possible vnext stacks
-vnext_stacks = [
+# The list of possible stacks and related properties
+stack_properties = [
   {
     "project_basename": "account",
     "stack_name": "account",

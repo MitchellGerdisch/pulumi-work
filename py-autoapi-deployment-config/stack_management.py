@@ -13,9 +13,10 @@ def stack_management():
     repository = config.require("repository")
     github_token = config.require_secret("github_token")
     aws_oidc_role_arn = config.require("aws_oidc_role_arn")
+    existing_stacks_file = config.require("existing_stacks_file")
 
     # Load the json of existing stacks to be processed
-    with open("existing_stacks.json", "r") as openfile:
+    with open(existing_stacks_file, "r") as openfile:
         existing_stacks = json.load(openfile)
 
     # Loop through the stacks that were found to exist
@@ -70,8 +71,8 @@ def stack_management():
             organization=org,
             project=project_name,
             stack=stack_name,
-            name="tenant",
-            value=tenant,
+            name=tenant,
+            value="stacks",
         ))
 
     # Add a stack tag to this stack which creates the deployments and other stack tags to show it is associated with the given tenant as well
@@ -83,7 +84,7 @@ def stack_management():
         organization=this_org,
         project=this_project,
         stack=this_stack,
-        name="tenant"
+        name="tenant",
         value=tenant
     ))
 
