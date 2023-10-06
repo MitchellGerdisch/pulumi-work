@@ -1,0 +1,5 @@
+name: ts-azure-storage
+runtime: nodejs
+description: A minimal Azure Native TypeScript Pulumi program
+config:
+  azure-native:location: CentralUS

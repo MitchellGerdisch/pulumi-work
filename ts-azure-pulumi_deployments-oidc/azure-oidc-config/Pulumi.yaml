@@ -1,0 +1,5 @@
+name: azure-oidc-config
+runtime: nodejs
+description: Configures Azure AD app and Pulumi Cloud Deployments OIDC etc
+config:
+  azure-native:location: CentralUS
