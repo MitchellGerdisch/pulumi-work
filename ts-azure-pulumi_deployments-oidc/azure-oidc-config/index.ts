@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as pulumicloud from "@pulumi/pulumiservice";
+import * as pcloud from "@pulumi/pulumiservice";
 import * as azuread from "@pulumi/azuread";
 import * as azure from "@pulumi/azure-native";
 import * as auth from "@pulumi/azure-native/authorization";
@@ -13,17 +13,22 @@ const org = pulumi.getOrganization()
 const config = new pulumi.Config()
 const deployedProject = config.require("deployedProject")
 const deployedStack = config.require("deployedStack")
+const deployedRepoUrl = config.require("deployedRepoUrl")
+const deployedRepoDir = config.require("deployedRepoDir")
+const deployedRepoBranch = config.require("deployedRepoBranch")
 
 const name = "demo-deploy-oidc"
 const currentClient = auth.getClientConfigOutput()
 const clientOwners = [currentClient.objectId]
-const subscriptionId = pulumi.interpolate`subscriptions/${currentClient.subscriptionId}`
+export const subscriptionId = currentClient.subscriptionId
+export const tenantId = currentClient.tenantId
 
 const appName = `${name}-app`
 const adApp = new azuread.Application(appName, {
     displayName: appName,
     owners: clientOwners,
 });
+export const clientId = adApp.applicationId
 
 // See: https://www.pulumi.com/docs/pulumi-cloud/deployments/oidc/azure/#adding-federated-credentials
 const fedIdCredName = `${name}-fed-id-cred`
@@ -59,16 +64,38 @@ const STORAGE_BLOB_DATA_CONTRIBUTOR="ba92f5b4-2d11-453d-a403-e96b0029c9fe"
 // Obviously, creating role assignments for the storage contributor roles is unnecessary given the CONTRIBUTOR role.
 // But wanted to show/test looping through a set of different roles.
 const roleIds = [CONTRIBUTOR, STORAGE_ACCOUNT_CONTRIBUTOR, STORAGE_BLOB_DATA_CONTRIBUTOR]
-
+const fullSubId = pulumi.interpolate`subscriptions/${subscriptionId}`
 for (let roleId of roleIds) {
-    const roleDefinitionId = pulumi.interpolate`${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleId}`
+    const roleDefinitionId = pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${roleId}`
     const roleAssignment = new auth.RoleAssignment(roleId, {
         principalId: adSp.id, 
         principalType: "ServicePrincipal",
         roleDefinitionId: roleDefinitionId,
-        scope: subscriptionId,
+        scope: fullSubId,
     });
 }
+
+const settings = new pcloud.DeploymentSettings("deployment_settings", {
+    organization: org,
+    project: deployedProject,
+    stack: deployedStack,
+    sourceContext: {
+        git: {
+            repoUrl: deployedRepoUrl,
+            branch: deployedRepoBranch,
+            repoDir: deployedRepoDir,
+        }
+    },
+    operationContext: {
+        oidc: {
+            azure: {
+                clientId: clientId,
+                tenantId: tenantId,
+                subscriptionId: subscriptionId
+            }
+        }
+    }
+});
 
 // const adRoleAssignment = new auth.RoleAssignment(`${name}-roleassign`, {
 //     principalId: adSp.id,
