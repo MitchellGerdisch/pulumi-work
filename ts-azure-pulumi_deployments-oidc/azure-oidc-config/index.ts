@@ -93,12 +93,17 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
                 tenantId: tenantId,
                 subscriptionId: subscriptionId
             }
-        }
-    }
+        },
+        // // Some test code
+        // preRunCommands: [
+        //     // this proves the basic settings are correct.
+        //     "az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN"
+        // ]
+    },
 });
 
 /*
-# PRERUN commands that can be used to test things
+# Additional PRERUN commands that can be used to test things
 echo "arm_client_id: $ARM_CLIENT_ID"
 echo "arm_tenant_id: $ARM_TENANT_ID"
 echo "arm_sub_id: $ARM_SUBSCRIPTION_ID"
@@ -107,4 +112,9 @@ echo "pulumi_oidc_token: $PULUMI_OIDC_TOKEN"
 echo "arm_oidc_request_token: $ARM_OIDC_REQUEST_TOKEN"
 echo "arm_oidc_request_url: $ARM_OIDC_REQUEST_URL"
 az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN
+*/
+
+/* 
+# Another prerun command to get a sense of what might be going on
+ARM_USE_OIDC=false; az login; /pulumi-deploy-executor pulumi preview --stackIdentity="MitchGerdisch/ts-azure-storage/dev" --workDir="/deployment/ts-azure-pulumi_deployments-oidc/ts-azure-storage"
 */
