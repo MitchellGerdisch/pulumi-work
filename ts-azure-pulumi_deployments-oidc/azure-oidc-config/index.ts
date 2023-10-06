@@ -94,11 +94,11 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
                 subscriptionId: subscriptionId
             }
         },
-        // // Some test code
-        // preRunCommands: [
-        //     // this proves the basic settings are correct.
-        //     "az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN"
-        // ]
+        // Some test code
+        preRunCommands: [
+            // gives a bit of a warm fuzzy that the SP and stuff was set up correctly for OIDC.
+           "az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN" 
+        ]
     },
 });
 
@@ -116,5 +116,7 @@ az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-tok
 
 /* 
 # Another prerun command to get a sense of what might be going on
+# NOTE: You'll need to watch deployments and do the azure web device login stuff with the given code.
+# Using the az login with the federated-token as given above doesn't work since the provider does not support "az login" with service principal
 ARM_USE_OIDC=false; az login; /pulumi-deploy-executor pulumi preview --stackIdentity="MitchGerdisch/ts-azure-storage/dev" --workDir="/deployment/ts-azure-pulumi_deployments-oidc/ts-azure-storage"
 */
