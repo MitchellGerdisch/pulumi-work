@@ -97,33 +97,14 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
     }
 });
 
-// const adRoleAssignment = new auth.RoleAssignment(`${name}-roleassign`, {
-//     principalId: adSp.id,
-//     principalType: "ServicePrincipal",
-
-// })
-
-// Creating a role definition
-// const roleName = `${name}-role`
-// const role = new auth.RoleDefinition(roleName, {
-//     roleName: roleName,
-//     scope: currentClient.subscriptionId,
-//     permissions: [
-//         {
-//             actions: ["*"],
-//             notActions: [],
-//         },
-//     ],
-// });
-
-
-
-// const adSpPassword = new azuread.ServicePrincipalPassword(`${name}-sp-pwd`, {
-//     servicePrincipalId: adSp.id,
-// });
-
-// const generatedKeyPair = new tls.PrivateKey("ssh-key", {
-//     algorithm: "RSA",
-//     rsaBits: 4096,
-// }, {parent: this});
-// const sshPublicKey = generatedKeyPair.publicKeyOpenssh;
+/*
+# PRERUN commands that can be used to test things
+echo "arm_client_id: $ARM_CLIENT_ID"
+echo "arm_tenant_id: $ARM_TENANT_ID"
+echo "arm_sub_id: $ARM_SUBSCRIPTION_ID"
+echo "arm_oidc_token: $ARM_OIDC_TOKEN"
+echo "pulumi_oidc_token: $PULUMI_OIDC_TOKEN"
+echo "arm_oidc_request_token: $ARM_OIDC_REQUEST_TOKEN"
+echo "arm_oidc_request_url: $ARM_OIDC_REQUEST_URL"
+az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN
+*/
