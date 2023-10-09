@@ -124,29 +124,21 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
                 subscriptionId: subscriptionId
             }
         },
-        // Some test code
+        // Drop in some prerun commands from below if needed for debugging
         preRunCommands: [
-            // Sets up some env variables for the deployment stage so the Azure Native provider can run using the OIDC settings.
-            // There is an update for Pulumi cloud being worked to address this so that these prerun commands are not needed. 
-            // See https://www.pulumi.com/docs/pulumi-cloud/deployments/api/#operationcontext for more about the /PULUMI_ENV file.
-            "echo ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc  >> /PULUMI_ENV",
-            "echo ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN >> /PULUMI_ENV",
+            // 'az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN',
         ]
     },
 });
 
 /*
-# Additional PRERUN commands that can be used to test things
-echo "arm_client_id: $ARM_CLIENT_ID"
-echo "arm_tenant_id: $ARM_TENANT_ID"
-echo "arm_sub_id: $ARM_SUBSCRIPTION_ID"
-echo "arm_oidc_token: $ARM_OIDC_TOKEN"
-echo "pulumi_oidc_token: $PULUMI_OIDC_TOKEN"
-echo "arm_oidc_request_token: $ARM_OIDC_REQUEST_TOKEN"
-echo "arm_oidc_request_url: $ARM_OIDC_REQUEST_URL"
+Some prerun commands that may be handy to debug OIDC config settings.
+
+# This command can be used to validate the basic OIDC setup is correct
 az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN
 
-## This one was used to validate the OIDC stuff actually works 
+# This prerun command can be used to further validate the OIDC stuff is set up correctly.
+# Change the stackIdentity and workDir to match your actual code. This can be seen in the deployment logs for the actual update/preview/destroy itself.
 ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN /pulumi-deploy-executor pulumi preview --stackIdentity="MitchGerdisch/ts-azure-storage/dev" --workDir="/deployment/ts-azure-pulumi_deployments-oidc/ts-azure-storage"
 
 */
