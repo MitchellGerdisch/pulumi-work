@@ -63,7 +63,9 @@ const STORAGE_BLOB_DATA_CONTRIBUTOR="ba92f5b4-2d11-453d-a403-e96b0029c9fe"
 
 // Obviously, creating role assignments for the storage contributor roles is unnecessary given the CONTRIBUTOR role.
 // But wanted to show/test looping through a set of different roles.
-const roleIds = [CONTRIBUTOR, STORAGE_ACCOUNT_CONTRIBUTOR, STORAGE_BLOB_DATA_CONTRIBUTOR]
+// const roleIds = [CONTRIBUTOR, STORAGE_ACCOUNT_CONTRIBUTOR, STORAGE_BLOB_DATA_CONTRIBUTOR]
+// Testing what should be "minimal" permissions needed.
+const roleIds = [STORAGE_ACCOUNT_CONTRIBUTOR, STORAGE_BLOB_DATA_CONTRIBUTOR]
 const fullSubId = pulumi.interpolate`subscriptions/${subscriptionId}`
 for (let roleId of roleIds) {
     const roleDefinitionId = pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${roleId}`
