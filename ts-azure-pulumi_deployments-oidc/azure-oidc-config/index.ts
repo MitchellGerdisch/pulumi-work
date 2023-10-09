@@ -96,8 +96,11 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
         },
         // Some test code
         preRunCommands: [
-            // gives a bit of a warm fuzzy that the SP and stuff was set up correctly for OIDC.
-           "az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN" 
+            // Sets up some env variables for the deployment stage so the Azure Native provider can run using the OIDC settings.
+            // There is an update for Pulumi cloud being worked to address this which should be pushed by Oct 10, 2023
+            // See https://www.pulumi.com/docs/pulumi-cloud/deployments/api/#operationcontext for more about the /PULUMI_ENV file.
+            "echo ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc  >> /PULUMI_ENV",
+            "echo ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN >> /PULUMI_ENV",
         ]
     },
 });
@@ -112,6 +115,10 @@ echo "pulumi_oidc_token: $PULUMI_OIDC_TOKEN"
 echo "arm_oidc_request_token: $ARM_OIDC_REQUEST_TOKEN"
 echo "arm_oidc_request_url: $ARM_OIDC_REQUEST_URL"
 az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN
+
+## This one was used to validate the OIDC stuff actually works for 
+ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN /pulumi-deploy-executor pulumi preview --stackIdentity="MitchGerdisch/ts-azure-storage/dev" --workDir="/deployment/ts-azure-pulumi_deployments-oidc/ts-azure-storage"
+
 */
 
 /* 

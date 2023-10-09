@@ -14,10 +14,10 @@ const storageAccount = new storage.StorageAccount("sa", {
     kind: storage.Kind.StorageV2,
 });
 
-// Export the primary key of the Storage Account
-const storageAccountKeys = storage.listStorageAccountKeysOutput({
-    resourceGroupName: resourceGroup.name,
-    accountName: storageAccount.name
-});
+// // Export the primary key of the Storage Account
+// const storageAccountKeys = storage.listStorageAccountKeysOutput({
+//     resourceGroupName: resourceGroup.name,
+//     accountName: storageAccount.name
+// });
 
-export const primaryStorageKey = storageAccountKeys.keys[0].value;
+// export const primaryStorageKey = storageAccountKeys.keys[0].value;
