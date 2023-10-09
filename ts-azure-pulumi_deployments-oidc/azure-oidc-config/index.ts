@@ -14,10 +14,21 @@ const config = new pulumi.Config()
 const deployedProject = config.require("deployedProject")
 const deployedStack = config.require("deployedStack")
 const deployedRepoUrl = config.require("deployedRepoUrl")
-const deployedRepoDir = config.require("deployedRepoDir")
+const deployedRepoDir = config.get("deployedRepoDir")
 const deployedRepoBranch = config.require("deployedRepoBranch")
+const deployedGitUserName = config.get("deployedGitUserName")
+const deployedGitPassword = config.getSecret("deployedGitPassword")
+let gitAuth = {}
+if (deployedGitUserName) {
+    gitAuth = {
+        basicAuth: {
+            username: deployedGitUserName,
+            password: deployedGitPassword
+        }
+    }
+}
 
-const name = "demo-deploy-oidc"
+const name = `deploy-az-oidc-${pulumi.getStack()}`
 const currentClient = auth.getClientConfigOutput()
 const clientOwners = [currentClient.objectId]
 export const subscriptionId = currentClient.subscriptionId
@@ -72,9 +83,10 @@ const STORAGE_ACCOUNT_KEY_OPERATOR="81a9662b-bebf-436f-a333-f67b29880f12"
 // Define the role
 const rgRoleName = `${name}-rg-role`
 const rgRoleDef = new auth.RoleDefinition(rgRoleName, {
+    roleName: rgRoleName,
     scope: fullSubId,
     assignableScopes: [fullSubId],
-    roleName: rgRoleName,
+    // roleName: rgRoleName,
     permissions: [{
         actions: [ // Here you define the permissions this role has
             "Microsoft.Resources/subscriptions/resourceGroups/write",
@@ -114,6 +126,7 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
             repoUrl: deployedRepoUrl,
             branch: deployedRepoBranch,
             repoDir: deployedRepoDir,
+            gitAuth: gitAuth,
         }
     },
     operationContext: {
@@ -126,6 +139,9 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
         },
         // Drop in some prerun commands from below if needed for debugging
         preRunCommands: [
+            // Temporary - shouldn't be needed after October 10, 2023
+            'echo ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc  >> /PULUMI_ENV',
+            'echo ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN >> /PULUMI_ENV',
             // 'az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN',
         ]
     },
