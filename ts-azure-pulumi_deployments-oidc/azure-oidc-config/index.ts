@@ -137,13 +137,6 @@ const settings = new pcloud.DeploymentSettings("deployment_settings", {
                 subscriptionId: subscriptionId
             }
         },
-        // Drop in some prerun commands from below if needed for debugging
-        preRunCommands: [
-            // Temporary - shouldn't be needed after October 10, 2023
-            'echo ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc  >> /PULUMI_ENV',
-            'echo ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN >> /PULUMI_ENV',
-            // 'az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN',
-        ]
     },
 });
 
@@ -157,5 +150,12 @@ az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-tok
 # Change the stackIdentity and workDir to match your actual code. This can be seen in the deployment logs for the actual update/preview/destroy itself.
 ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN /pulumi-deploy-executor pulumi preview --stackIdentity="MitchGerdisch/ts-azure-storage/dev" --workDir="/deployment/ts-azure-pulumi_deployments-oidc/ts-azure-storage"
 
+        // Drop in some prerun commands from below if needed for debugging
+        preRunCommands: [
+            // Temporary - shouldn't be needed after October 10, 2023
+            'echo ARM_OIDC_REQUEST_URL=https://api.pulumi.com/oidc  >> /PULUMI_ENV',
+            'echo ARM_OIDC_REQUEST_TOKEN=$ARM_OIDC_TOKEN >> /PULUMI_ENV',
+            // 'az login --service-principal -u $ARM_CLIENT_ID -t $ARM_TENANT_ID --federated-token $ARM_OIDC_TOKEN',
+        ]
 */
 
