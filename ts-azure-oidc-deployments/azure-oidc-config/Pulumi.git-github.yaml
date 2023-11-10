@@ -1,0 +1,6 @@
+config:
+  azure-oidc-config:deployedProject: ts-azure-storage
+  azure-oidc-config:deployedRepoBranch: master
+  azure-oidc-config:deployedRepoDir: ts-azure-pulumi_deployments-oidc/ts-azure-storage
+  azure-oidc-config:deployedRepoUrl: https://github.com/MitchellGerdisch/pulumi-work.git
+  azure-oidc-config:deployedStack: dev
