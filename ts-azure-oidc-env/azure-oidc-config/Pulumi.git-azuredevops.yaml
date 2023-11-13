@@ -1,8 +1,0 @@
-config:
-  azure-oidc-config:deployedGitPassword:
-    secure: AAABACz7j2rjkMWrETqZvhVrffZdJ9h4bCwuOofKLIY8YxYIJJUDImib7weFPFLrdOp8gmHh1YJxFx6EJXj9CZVfwQk8+1OrEmNZXBeB9WFUgxh9
-  azure-oidc-config:deployedGitUserName: mitch
-  azure-oidc-config:deployedProject: storage-account
-  azure-oidc-config:deployedRepoBranch: main
-  azure-oidc-config:deployedRepoUrl: https://pulumi-ce@dev.azure.com/pulumi-ce/pulumi-trunk-based-development/_git/storage-account
-  azure-oidc-config:deployedStack: production
