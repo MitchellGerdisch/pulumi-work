@@ -83,6 +83,7 @@ const rgRoleDef = new auth.RoleDefinition(rgRoleName, {
 // But this way shows creating assignments for a set of more limited roles.
 const rolesInfo = [
     {name: rgRoleName, roleDefId: rgRoleDef.id}, 
+    {name: "CONTRIBUTOR", roleDefId: pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${CONTRIBUTOR}`}, 
     {name: "STORAGE_ACCOUNT_CONTRIBUTOR", roleDefId: pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${STORAGE_ACCOUNT_CONTRIBUTOR}`}, 
     {name: "STORAGE_BLOB_DATA_CONTRIBUTOR", roleDefId: pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${STORAGE_BLOB_DATA_CONTRIBUTOR}`},
     {name: "STORAGE_ACCOUNT_KEY_OPERATOR", roleDefId: pulumi.interpolate`${fullSubId}/providers/Microsoft.Authorization/roleDefinitions/${STORAGE_ACCOUNT_KEY_OPERATOR}`},

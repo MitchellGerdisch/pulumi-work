@@ -1,3 +1,5 @@
-# This is the environment setup by the code in azure-oidc-env-config so that the stack can consume the settings
 environment:
   - azure-oidc
+config:
+  azure-native:location: CentralUS
+
