@@ -31,7 +31,7 @@ const run = async () => {
     // Create our stack 
     const args: InlineProgramArgs = {
         stackName: "demo/dev",
-        projectName: "stack-autoapi-inline",
+        projectName: "stack-autoapi-test-stack",
         program: pulumiProgram
     };
 
