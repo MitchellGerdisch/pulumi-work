@@ -1,0 +1,6 @@
+name: aws-cs-fargate
+runtime: dotnet
+main: Infra
+description: An application running in AWS ECS Fargate, using C# infrastructure as code
+config:
+  aws:region: us-east-2

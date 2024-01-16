@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aws.Fargate", "Infra\Aws.Fargate.csproj", "{D2684FE7-61B1-4251-B15F-97CAB42791C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aws-cs-fargate", "App\aws-cs-fargate.csproj", "{14537A3C-BE31-4C6A-83AB-6EEB56D384E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2684FE7-61B1-4251-B15F-97CAB42791C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2684FE7-61B1-4251-B15F-97CAB42791C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2684FE7-61B1-4251-B15F-97CAB42791C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2684FE7-61B1-4251-B15F-97CAB42791C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14537A3C-BE31-4C6A-83AB-6EEB56D384E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14537A3C-BE31-4C6A-83AB-6EEB56D384E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14537A3C-BE31-4C6A-83AB-6EEB56D384E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14537A3C-BE31-4C6A-83AB-6EEB56D384E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34E81CA0-B523-4B1C-B80A-B46EFCAEE71F}
+	EndGlobalSection
+EndGlobal
