@@ -6,3 +6,5 @@ const config = new Config()
 
 export const activeSystem = config.require("activeSystem")
 
+export const zoneName = config.get("zoneName") || "pulumi-ce.team"
+
