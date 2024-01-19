@@ -47,7 +47,7 @@ const originAccess = new aws.cloudfront.OriginAccessControl(`${baseName}-oac`, {
 });
 
 // Create a CloudFront distribution that points to the active S3 bucket
-// Updating the distribution on a switch is rather slow.
+// Updating the distribution on a switch is rather slow - about 4 minutes to do the switch.
 // So maybe I create separate distributions - one for each backend.
 // Will also need to create different certs and aliases due to conflicts?
 const distribution = new aws.cloudfront.Distribution(`${baseName}-distribution`, {
