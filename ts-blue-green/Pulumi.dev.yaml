@@ -1,4 +1,4 @@
 config:
   aws:region: us-east-1
-  ts-blue-green:activeSystem: blue
-  # ts-blue-green:activeSystem: green
+  # ts-blue-green:activeSystem: blue
+  ts-blue-green:activeSystem: green
