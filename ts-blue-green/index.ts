@@ -72,8 +72,8 @@ const distribution = new aws.cloudfront.Distribution(`${baseName}-distribution`,
       },
       viewerProtocolPolicy: "redirect-to-https",
       minTtl: 0,
-      defaultTtl: 60, // demos are better if things are ttling quickly
-      maxTtl: 120,
+      defaultTtl: 240, // demos are better if things are ttling quickly and it needs to cache longer than the update time which is about 4 minutes
+      maxTtl: 300,
   },
   priceClass: "PriceClass_100",
   customErrorResponses: [{
