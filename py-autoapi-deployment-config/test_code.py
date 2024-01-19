@@ -17,7 +17,7 @@ def create_params_parser():
                                   formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument("-d", "--destroy", action="store_true", help="Remove the deployment settings.")
   parser.add_argument("-dd", "--destroy_and_remove", action="store_true", help="Destroys AND removes the stacks created by the test code.")
-  parser.add_argument("-o", "--org", nargs="?", default="portx", help="Name of organization in which the stacks reside.")
+  parser.add_argument("-o", "--org", nargs="?", default="ORGNAMEHERE", help="Name of organization in which the stacks reside.")
   parser.add_argument("-t", "--tenant", required=True, help="Name of tenant for which the deployment is being created.")
   return parser
 
