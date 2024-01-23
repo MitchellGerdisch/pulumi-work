@@ -13,7 +13,7 @@ AWS doc on packaging python dependencies:
 ## Setting up the lambda app packages
 * `mkdir hello-packages`
 * `pip install -r hello-requirements.txt --target ./hello-packages`
+* Update the pulumi program to point at the applicable package folders that were populated in hello-packages.
 
-The Pulumi program will zip this up with the application for pushing to lambda.
 
 

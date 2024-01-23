@@ -12,7 +12,12 @@ custom_stage_name = 'example'
 ## Lambda Function
 ##################
 
-# Create a Lambda function, using code from the `./app` folder.
+# Create a Lambda function, using code and applicable dependencies.
+## See the README for how to install the packages for this code to work.
+## Icky bit: This block of code needs to track the  packages that the app's requirements.txt file is installing.
+## Looking into ways to programmatically build the AssetArchive with all the needed packages. 
+## OR just point at the "hello-packages" folder.
+## But for now this does work.
 
 lambda_func = aws.lambda_.Function("mylambda",
     role=iam.lambda_role.arn,
