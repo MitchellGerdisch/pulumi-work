@@ -19,7 +19,8 @@ lambda_func = aws.lambda_.Function("mylambda",
     runtime="python3.7",
     handler="hello.handler",
     code=pulumi.AssetArchive({
-        '.': pulumi.FileArchive('./hello_lambda')
+        "hello.py": pulumi.FileAsset('../hello.py'),
+        "randfacts": pulumi.FileArchive('../hello-packages/randfacts'),
     })
 )
 
