@@ -64,7 +64,7 @@ export let distributionDomainNames: { [id: string] : pulumi.Output<string>; } = 
 // Always create CloudFront distribution #1.
 // In variant 1 it points to the active backend.
 // In variant 2 it always points to the blue backend.
-const distribution1 = new aws.cloudfront.Distribution(`${baseName}-distribution1`, {
+const distribution1 = new aws.cloudfront.Distribution(`${baseName}-dist1`, {
   origins: [{
       domainName: backends[dist1backendSystem].bucketDomainName,
       originId: backends[dist1backendSystem].bucketArn,
@@ -135,7 +135,7 @@ const bucket1PolicyJSON = pulumi.all([backends[dist1backendSystem].bucketArn, di
     }]
   })
 )
-const bucketPolicy1 = new aws.s3.BucketPolicy(`${baseName}-bucketpolicy1`, {
+const bucketPolicy1 = new aws.s3.BucketPolicy(`${baseName}-bktpol1`, {
   bucket: backends[dist1backendSystem].bucketName, // reference to the active bucket created earlier
   policy: bucket1PolicyJSON
 })
@@ -143,7 +143,7 @@ const bucketPolicy1 = new aws.s3.BucketPolicy(`${baseName}-bucketpolicy1`, {
 // If variant other than 1 is set, then create a second distribution and point it to green.
 // Also use a hacky alias that doesn't conflict with the alias used for distribution 1.
 if (variant != 1) {
-  const distribution2 = new aws.cloudfront.Distribution(`${baseName}-distribution2`, {
+  const distribution2 = new aws.cloudfront.Distribution(`${baseName}-dist2`, {
     origins: [{
         domainName: backends[dist2backendSystem].bucketDomainName,
         originId: backends[dist2backendSystem].bucketArn,
@@ -213,7 +213,7 @@ if (variant != 1) {
   )
 
   // Create an S3 Bucket Policies to allow cloudfront access to the objects.
-  const bucketPolicy2 = new aws.s3.BucketPolicy(`${baseName}-bucketpolicy2`, {
+  const bucketPolicy2 = new aws.s3.BucketPolicy(`${baseName}-bktpol2`, {
     bucket: backends[dist2backendSystem].bucketName, // reference to the active bucket created earlier
     policy: bucket2PolicyJSON,
   })

@@ -1,5 +1,7 @@
 # Pulumi blue-green exercise
 
+NOTE: THIS VERSION IS A BIT FLAKEY - perhaps due to trying to support both variants in one code base.
+
 The premise is as follows:
 * There is a blue backend and a green backend.
 * There is a single cloud front distribution that points at one of the backends (the active backend).
