@@ -9,5 +9,6 @@ The premise is as follows:
 
 ## Possible Improvements
 The update takes a solid 4 minutes to complete.
-For speedier performance, I would like to have two cloud fronts and then just flip the route 53 record, but only one cloud front can own the Route 53 alias. So I would still have to update the cloud front configs for each distribution (remove it from old; add it to new).
-That said, updating the aliases may be speedier.
+For speedier performance, I would like to have two cloud fronts and then just flip the route 53 record, but only one cloud front can own the Route 53 alias. 
+There is a version that tries to implement this approach on a branch named `blue-green-mkII` but it has some AWS-inflicted issues.
+I think a better approach would be to put stuff behind a load balancer.
