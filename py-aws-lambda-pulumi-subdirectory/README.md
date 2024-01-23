@@ -10,6 +10,10 @@ AWS doc on packaging python dependencies:
 * https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
   * USING the `To create the deployment package (project directory)` approach described in that document.
 
+Pulumi Docs on Assets and Archives:
+* https://www.pulumi.com/docs/concepts/inputs-outputs/assets-archives/ 
+  * See pulumi/__main__.py where this stuff is used to build the archive to send the code and dependencies to Lambda.
+
 ## Setting up the lambda app packages
 * `mkdir hello-packages`
 * `pip install -r hello-requirements.txt --target ./hello-packages`
