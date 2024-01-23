@@ -2,7 +2,8 @@ import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 
 export interface CertArgs {
-  systemDomainName: string
+  baseDomainName: string,
+  zoneId: string,
 }
 export class Cert extends pulumi.ComponentResource {
   public readonly certificateArn: pulumi.Output<string>;
@@ -17,13 +18,13 @@ export class Cert extends pulumi.ComponentResource {
     });
 
     const certificateConfig: aws.acm.CertificateArgs = {
-      domainName: args.systemDomainName,
+      domainName: args.baseDomainName,
       validationMethod: "DNS",
     };
     const certificate = new aws.acm.Certificate(`${name}-cert`, certificateConfig, { parent: this, provider: eastRegion });
 
-    const domainParts = getDomainAndSubdomain(args.systemDomainName);
-    const hostedZoneId = aws.route53.getZoneOutput({ name: domainParts.parentDomain }).zoneId
+    const domainParts = getDomainAndSubdomain(args.baseDomainName);
+    const hostedZoneId = args.zoneId;
 
     /**
     *  Create a DNS record to prove that we _own_ the domain we're requesting a certificate for.
