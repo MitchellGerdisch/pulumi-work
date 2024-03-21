@@ -1,0 +1,5 @@
+environment:
+  - azure-oidc
+config:
+  azure-native:location: CentralUS
+

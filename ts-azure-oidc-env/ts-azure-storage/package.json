@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@pulumi/azure-native": "^2.18.0",
+    "@pulumi/pulumi": "^3.93.0"
+  }
+}

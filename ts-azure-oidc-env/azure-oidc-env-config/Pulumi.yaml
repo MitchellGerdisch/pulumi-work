@@ -1,0 +1,5 @@
+name: azure-oidc-env-config
+runtime: nodejs
+description: Configures Azure AD app for use with Pulumi ESC ENV.
+config:
+  azure-native:location: CentralUS
