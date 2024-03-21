@@ -4,5 +4,5 @@ pulumi-aws>=5.8.0
 pulumi-command>=0.3.0
 pulumi-pulumiservice>=0.1.8,<1.0.0
 ansible>=6.3.0
-## This path needs to match where you built the "WpInstance" MLC
-../../../../mlc-python-ec2_instance/sdk/python/bin
+# ../../../mlc-python-ec2_instance/sdk/python/bin
+pulumi_wpinstance @ git+https://github.com/MitchellGerdisch/mlc-python-ec2_instance.git#subdirectory=sdk/python/bin

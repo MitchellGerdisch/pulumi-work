@@ -2,46 +2,46 @@ name: pulumi-ansible-wordpress
 runtime: yaml
 description: Deploy an EC2 Wordpress server using Pulumi and Ansible.
 
-configuration:
+config:
   # A path to the EC2 keypair's public key:
   publicKeyPath:
-    type: String
+    type: string
   # A path to the EC2 keypair's private key:
   privateKeyPath:
-    type: String
+    type: string
   # The WordPress database size:
   dbInstanceSize:
-    type: String
+    type: string
     default: db.t3.small
   # The WordPress database name:
   dbName:
-    type: String
+    type: string
     default: wordpressdb
   # The WordPress database user's name:
   dbUsername:
-    type: String
+    type: string
     default: admin
   # The WordPress database user's password:
   dbPassword:
-    type: String
+    type: string
     secret: true
   # The WordPress EC2 instance's size:
   ec2InstanceSize:
-    type: String
+    type: string
     default: t3.small
 
 variables:
   # Dynamically fetch AZs so we can spread across them.
   availabilityZones:
-    Fn::Invoke:
-      Function: aws:getAvailabilityZones
+    fn::invoke:
+      function: aws:getAvailabilityZones
   # Read in the public key for easy use below.
   publicKey:
-    Fn::ReadFile: ${publicKeyPath}
+    fn::readFile: ${publicKeyPath}
   # Read in the private key for easy use below (and to ensure it's marked a secret!)
   privateKey:
-    Fn::Secret:
-      Fn::ReadFile: ${privateKeyPath}
+    fn::secret:
+      fn::readFile: ${privateKeyPath}
 
 resources:
   # Set up a Virtual Private Cloud to deploy our EC2 instance and RDS datbase into.
