@@ -1,0 +1,9 @@
+config:
+  azure-native:location: CentralUS
+  databricks-notebook:node-type: Standard_D3_v2
+  databricks-notebook:resource-prefix: mitch-db
+  # databricks-notebook:databricks-base-project: databricks-base-workspace
+environment:
+ - azure-oidc
+ # This is an ESC environment that creates a `databricks:host` config using the workspace_url from the `databricks-base-workspace` stack.
+ - databricks-base-workspace
