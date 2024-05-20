@@ -14,8 +14,8 @@ const deploymentSettings = new ps.DeploymentSettings("deploymentSettings", {
   organization: org,
   project: project,
   stack: stack,
-  agentPoolId: "",
-  operationContext: {},
+  // agentPoolId: "",
+  // operationContext: {},
   sourceContext: {
     git: {
       branch: "master",
@@ -23,4 +23,27 @@ const deploymentSettings = new ps.DeploymentSettings("deploymentSettings", {
       repoDir: "ts-deployment-schedules"
     }
   }
+})
+
+const driftSchedule = new ps.DriftSchedule("driftSchedule", {
+  organization: org,
+  project: project,
+  stack: stack,
+  scheduleCron: "0 * * * *",
+  autoRemediate: true
+})
+
+const ttlSchedule = new ps.TtlSchedule("ttlSchedule", {
+  organization: org,
+  project: project,
+  stack: stack,
+  timestamp: "2025-01-01T00:00:00Z"
+})
+
+const rawSchedule = new ps.DeploymentSchedule("rawSchedule", {
+  organization: org,
+  project: project,
+  stack: stack,
+  scheduleCron: "0 0 1 1 *",
+  pulumiOperation: "preview"
 })

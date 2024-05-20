@@ -1,4 +1,4 @@
-name: test-code
+name: deploy-sched-test
 runtime: nodejs
 description: A minimal TypeScript Pulumi program
 config:
