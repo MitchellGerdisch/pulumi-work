@@ -14,6 +14,9 @@ const deploymentSettings = new ps.DeploymentSettings("deploymentSettings", {
   organization: org,
   project: project,
   stack: stack,
+  operationContext: {
+    preRunCommands: ["pulumi about"]
+  },
   // agentPoolId: "",
   // operationContext: {},
   sourceContext: {
