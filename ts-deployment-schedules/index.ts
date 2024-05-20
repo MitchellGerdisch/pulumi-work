@@ -34,14 +34,14 @@ const driftSchedule = new ps.DriftSchedule("driftSchedule", {
   stack: stack,
   scheduleCron: "0 * * * *",
   autoRemediate: true
-})
+}, {dependsOn: [deploymentSettings]})
 
 const ttlSchedule = new ps.TtlSchedule("ttlSchedule", {
   organization: org,
   project: project,
   stack: stack,
   timestamp: "2025-01-01T00:00:00Z"
-})
+}, {dependsOn: [deploymentSettings]})
 
 const rawSchedule = new ps.DeploymentSchedule("rawSchedule", {
   organization: org,
@@ -49,4 +49,4 @@ const rawSchedule = new ps.DeploymentSchedule("rawSchedule", {
   stack: stack,
   scheduleCron: "0 0 1 1 *",
   pulumiOperation: "preview"
-})
+}, {dependsOn: [deploymentSettings]})
