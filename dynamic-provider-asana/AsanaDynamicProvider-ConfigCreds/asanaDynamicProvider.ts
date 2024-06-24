@@ -2,10 +2,10 @@
 // See https://developers.asana.com/docs/overview
 // https://developers.asana.com/reference/getuser
 
-// REQUIRES the following environment variables:
-// * ASANA_WORKSPACE_GID: this is the Asana workspace in which the resources are created. 
+// REQUIRES the following stack config values:
+// * asanaAccessTokena: this is the Asana workspace in which the resources are created. 
 //   * It can be found by logging into Asana and then going here: https://app.asana.com/api/1.0/workspaces?opt_pretty
-// * ASANA_ACCESS_TOKEN: this is a PAT for Asana.
+// * asanaWorkspaceGid: this is a PAT for Asana.
 //   * See https://developers.asana.com/docs/quick-start for how to get a personal access token.
 
 import * as pulumi from "@pulumi/pulumi";
