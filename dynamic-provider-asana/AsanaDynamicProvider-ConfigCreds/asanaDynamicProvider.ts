@@ -37,9 +37,6 @@ const AsanaTaskProvider: pulumi.dynamic.ResourceProvider = {
   async create(inputs: AsanaTaskProviderArgs): Promise<CreateResult> {
   
     // Use environment variable for authentication. 
-    // This keeps the actual ASANA_ACCESS_TOKEN value out of state and instead only the env variable reference is kept in state.
-    // Therefore, if the token is changed between the create and the destroy, the destroy will use the new creds. 
-    // const config = new pulumi.Config()
     const headers = {
       'Authorization': `Bearer ${accessToken.get()}`,
       'accept': 'application/json'
@@ -70,9 +67,6 @@ const AsanaTaskProvider: pulumi.dynamic.ResourceProvider = {
 
   //*** DELETE ***//
   async delete(id) {
-    // Use environment variable for authentication. 
-    // This keeps the actual ASANA_ACCESS_TOKEN value out of state and instead only the env variable reference is kept in state.
-    // Therefore, if the token is changed between the create and the destroy, the destroy will use the new creds. 
     const headers = {
       'Authorization': `Bearer ${accessToken.get()}`,
       'accept': 'application/json'
