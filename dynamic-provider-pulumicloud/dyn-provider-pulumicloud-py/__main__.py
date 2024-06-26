@@ -8,7 +8,7 @@ envName = config.get("envName") or "myTestEnv"
 
 esc_environment = PulumiEnvironment("myEscEnv", PulumiEnvironmentArgs(
   org_name=pulumi.get_organization(),
-  environment_name="myTestEnv"
+  environment_name=envName,
 ))
 
 pulumi.export("environmentName", esc_environment.id)

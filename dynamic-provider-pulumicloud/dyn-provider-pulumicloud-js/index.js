@@ -7,7 +7,7 @@ const envName = config.get("envName") || "myTestEnv"
 // Create an environment in the stack's orgnanization.
 const escEnvironment = new pulumienv.PulumiEnvironment("myEscEnv", {
   orgName: pulumi.getOrganization(),
-  environmentName: "myTestEnv"
+  environmentName: envName
 })
 
 exports.environmentName = envName

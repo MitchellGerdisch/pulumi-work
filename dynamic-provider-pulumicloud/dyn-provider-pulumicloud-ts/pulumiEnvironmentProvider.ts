@@ -1,4 +1,7 @@
 // A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables to pass in the credentials
+// Using environment variables as such allows one to keep the actual credential value out of state.
+// Although if the cred is in state, it is encypted, if the token is changed between the create and the destroy, 
+// the destroy will be able to use the new cred found in the environment variable instead of using a value from state. 
 
 // REQUIRES/SUPPORTS the following environment variables:
 // * PULUMI_ACCESS_TOKEN: (required) This is a Pulumi access token with the necessary permissions to create an ESC Environment in a given Pulumi Cloud organization.

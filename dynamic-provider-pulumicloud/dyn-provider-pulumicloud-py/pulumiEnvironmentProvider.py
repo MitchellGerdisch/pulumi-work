@@ -1,3 +1,12 @@
+# A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables to pass in the credentials
+# Using environment variables as such allows one to keep the actual credential value out of state.
+# Although if the cred is in state, it is encypted, if the token is changed between the create and the destroy, 
+# the destroy will be able to use the new cred found in the environment variable instead of using a value from state. 
+
+# REQUIRES/SUPPORTS the following environment variables:
+# * PULUMI_ACCESS_TOKEN: (required) This is a Pulumi access token with the necessary permissions to create an ESC Environment in a given Pulumi Cloud organization.
+# * PULUMI_CLOUD_API_URL: (optional) This is the URL for the Pulumi Cloud API endpoint. Defaults to `https://api.pulumi.com`.
+
 import pulumi
 from pulumi import Input, Output
 from pulumi.dynamic import ResourceProvider, CreateResult, Resource
@@ -20,12 +29,14 @@ base_pulumi_api_url = os.getenv("PULUMI_CLOUD_API_URL", "https://api.pulumi.com"
 # NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
 base_pulumi_env_api_url = f"{base_pulumi_api_url}/api/preview/environments"
 
+# Set up the headers using the environment variable.
+headers = {
+    'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
+    'Content-Type': 'application/json'
+}
+
 class PulumiEnvironmentProvider(ResourceProvider):
     def create(self, inputs: PulumiEnvironmentProviderArgs) -> CreateResult:
-        headers = {
-            'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
-            'Content-Type': 'application/json'
-        }
 
         create_env_url = f"{base_pulumi_env_api_url}/{inputs['org_name']}/{inputs['environment_name']}"
 
@@ -41,12 +52,10 @@ class PulumiEnvironmentProvider(ResourceProvider):
         return CreateResult(id_=env_id, outs=env_outs)
 
     def delete(self, id: str, props):
-        headers = {
-            'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
-            'Content-Type': 'application/json'
-        }
 
+        # The id provides the "org/environment-name" path for the environment
         delete_env_url = f"{base_pulumi_env_api_url}/{id}"
+
         response = requests.delete(delete_env_url, headers=headers)
         if response.status_code != 200:
             print(f"ERROR: {response.status_code} - {response.text}")
