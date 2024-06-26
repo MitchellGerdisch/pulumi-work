@@ -4,21 +4,8 @@
 // * PULUMI_ACCESS_TOKEN: (required) This is a Pulumi access token with the necessary permissions to create an ESC Environment in a given Pulumi Cloud organization.
 // * PULUMI_CLOUD_API_URL: (optional) This is the URL for the Pulumi Cloud API endpoint. Defaults to `https://api.pulumi.com`.
 
-import * as pulumi from "@pulumi/pulumi";
-import { Input, Output } from "@pulumi/pulumi";
-import { CreateResult } from "@pulumi/pulumi/dynamic";
-import axios from 'axios'
-import { AxiosResponse, AxiosError } from 'axios'
-
-export interface PulumiEnvironmentArgs {
-  orgName: string;
-  environmentName: string;
-}
-
-export interface PulumiEnvironmentProviderArgs {
-  orgName: string
-  environmentName: string;
-}
+const pulumi = require("@pulumi/pulumi");
+const axios = require('axios');
 
 // Use user-specified API URL if provided. Otherwise, use default Pulumi cloud URL.
 const basePulumiApiUrl= process.env.PULUMI_CLOUD_API_URL || "https://api.pulumi.com"
@@ -26,10 +13,10 @@ const basePulumiApiUrl= process.env.PULUMI_CLOUD_API_URL || "https://api.pulumi.
 // NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
 const basePulumiEnvApiUrl= `${basePulumiApiUrl}/api/preview/environments`
 
-const PulumiEnvironmentProvider: pulumi.dynamic.ResourceProvider = {
+const PulumiEnvironmentProvider = {
 
   //*** CREATE ***//
-  async create(inputs: PulumiEnvironmentProviderArgs): Promise<CreateResult> {
+  async create(inputs) {
   
     // Use environment variable for authentication. 
     // This keeps the actual PULUMI_ACCESS_TOKEN value out of state and instead only the env variable reference is kept in state.
@@ -41,14 +28,14 @@ const PulumiEnvironmentProvider: pulumi.dynamic.ResourceProvider = {
 
     const createEnvUrl = `${basePulumiEnvApiUrl}/${inputs.orgName}/${inputs.environmentName}`
 
-    let envId:string = "unassigned"
+    let envId = "unassigned"
     await axios.post(createEnvUrl, {},
       {
           headers: headers
-      }).then((response: AxiosResponse) => {
+      }).then((response) => {
         // Pulumi Cloud does not return a unique ID for an environment. So create one using the org and environment name.
         envId = `${inputs.orgName}/${inputs.environmentName}`
-      }).catch((reason: AxiosError) => {
+      }).catch((reason) => {
         console.log("ERROR: ", `${reason.status} - ${reason.response?.statusText}`)
         process.exit(10)
       }) 
@@ -71,21 +58,24 @@ const PulumiEnvironmentProvider: pulumi.dynamic.ResourceProvider = {
     await axios.delete(deleteEnvUrl, {
           headers: headers
     })
-    .then((response: AxiosResponse) => {
+    .then((response) => {
     })
-    .catch((reason: AxiosError) => {
+    .catch((reason) => {
       console.log("ERROR: ", `${reason.response?.status} - ${reason.response?.statusText}`)
       process.exit(20)
     }) 
   }
-
 }
 
-export class PulumiEnvironment extends pulumi.dynamic.Resource {
+class PulumiEnvironment extends pulumi.dynamic.Resource {
 
-  constructor(name: string, args: PulumiEnvironmentArgs, opts?: pulumi.CustomResourceOptions) {
+  constructor(name, args, opts) {
     super(PulumiEnvironmentProvider, name, args, opts);
   }
 }
+
+exports.PulumiEnvironment = PulumiEnvironment;
+
+
 
 

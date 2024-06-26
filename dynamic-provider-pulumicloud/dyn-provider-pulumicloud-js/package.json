@@ -1,0 +1,12 @@
+{
+    "name": "dyn-provider-pulumicloud-ts",
+    "main": "index.js",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.113.0",
+        "axios": "^1.7.2"
+    }
+}
