@@ -1,0 +1,7 @@
+name: dyn-provider-pulumicloud-ts
+runtime: nodejs
+description: Typescript program that demonstrates a dynamic provider that manages an ESC environment in Pulumi Cloud. 
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: typescript

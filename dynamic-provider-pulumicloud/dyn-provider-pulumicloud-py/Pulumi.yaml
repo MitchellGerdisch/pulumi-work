@@ -1,0 +1,10 @@
+name: dyn-provider-pulumicloud-py
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Python program that demonstrates a dynamic provider that manages an ESC environment in Pulumi Cloud. 
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: python
