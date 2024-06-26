@@ -35,6 +35,7 @@ An environment variable named `PULUMI_ACCESS_TOKEN` needs to be set to a Pulumi 
 
 ### Python Example
 * `cd dyn-provider-pulumicloud-ts`
+* `python3 -m venv venv; source ./venv/bin/activate`
 * `pip install -r requirements.txt`
 * `pulumi stack init dev`
 * (optional) `pulumi config set envName YYYYY`
