@@ -1,0 +1,6 @@
+name: pulumi-consuming-terraform-state
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Base Infra stack that consumes TF state
