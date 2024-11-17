@@ -1,11 +1,4 @@
-// A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables to pass in the credentials
-// Using environment variables as such allows one to keep the actual credential value out of state.
-// Although if the cred is in state, it is encypted, if the token is changed between the create and the destroy, 
-// the destroy will be able to use the new cred found in the environment variable instead of using a value from state. 
-
-// REQUIRES/SUPPORTS the following environment variables:
-// * PULUMI_ACCESS_TOKEN: (required) This is a Pulumi access token with the necessary permissions to create an ESC Environment in a given Pulumi Cloud organization.
-// * PULUMI_CLOUD_API_URL: (optional) This is the URL for the Pulumi Cloud API endpoint. Defaults to `https://api.pulumi.com`.
+// A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables or Pulumi config to pass in the credentials
 
 const pulumi = require("@pulumi/pulumi");
 const axios = require('axios');
@@ -16,24 +9,39 @@ const basePulumiApiUrl= process.env.PULUMI_CLOUD_API_URL || "https://api.pulumi.
 // NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
 const basePulumiEnvApiUrl= `${basePulumiApiUrl}/api/preview/environments`
 
-const PulumiEnvironmentProvider = {
+class PulumiEnvironmentProvider {
+
+    //*** CONFIG ***//
+    async configure(req) {
+
+      let accessToken = process.env.PULUMI_ACCESS_TOKEN || ""
+      if (accessToken) {
+        console.log("Using environment variable to get the access token")
+      } else {
+        // Use config to get the access token
+        console.log("Using Pulumi config to get the access token")
+        accessToken = req.config.require("pulumiAccessToken")
+      }
+  
+      this.headers = {
+        'Authorization': `token ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+  
+      // API endpoint for interacting with Pulumi Cloud Environments
+      const basePulumiApiUrl= process.env.PULUMI_CLOUD_API_URL || "https://api.pulumi.com"
+      this.basePulumiEnvApiUrl= `${basePulumiApiUrl}/api/preview/environments`
+    }
 
   //*** CREATE ***//
   async create(inputs) {
   
-    // It is important to set up the headers in the action as opposed to outside of the provider so that the environment variable reference is
-    // stored in state instead of the actual credential value.
-    const headers = {
-      'Authorization': `token ${process.env.PULUMI_ACCESS_TOKEN}`,
-      'Content-Type': 'application/json'
-    }
-
-    const createEnvUrl = `${basePulumiEnvApiUrl}/${inputs.orgName}/${inputs.environmentName}`
+    const createEnvUrl = `${this.basePulumiEnvApiUrl}/${inputs.orgName}/${inputs.environmentName}`
 
     let envId = "unassigned"
     await axios.post(createEnvUrl, {},
       {
-          headers: headers
+          headers: this.headers
       }).then((response) => {
         // Pulumi Cloud does not return a unique ID for an environment. So create one using the org and environment name.
         envId = `${inputs.orgName}/${inputs.environmentName}`
@@ -44,21 +52,14 @@ const PulumiEnvironmentProvider = {
 
       const envOuts = {id: envId, envName: inputs.environmentName, orgName: inputs.orgName}
       return { id: envId, outs: envOuts }
-  },
+  }
 
   //*** DELETE ***//
   async delete(id, props) {
 
-    // It is important to set up the headers in the action as opposed to outside of the provider so that the environment variable reference is
-    // stored in state instead of the actual credential value. 
-    const headers = {
-      'Authorization': `token ${process.env.PULUMI_ACCESS_TOKEN}`,
-      'Content-Type': 'application/json'
-    }
-
-    const deleteEnvUrl = `${basePulumiEnvApiUrl}/${id}`
+    const deleteEnvUrl = `${this.basePulumiEnvApiUrl}/${id}`
     await axios.delete(deleteEnvUrl, {
-          headers: headers
+          headers: this.headers
     })
     .then((response) => {
     })
@@ -72,7 +73,7 @@ const PulumiEnvironmentProvider = {
 class PulumiEnvironment extends pulumi.dynamic.Resource {
 
   constructor(name, args, opts) {
-    super(PulumiEnvironmentProvider, name, args, opts);
+    super(new PulumiEnvironmentProvider, name, args, opts);
   }
 }
 
