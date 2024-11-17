@@ -27,43 +27,13 @@ class PulumiEnvironmentProviderArgs:
         self.org_name = org_name
         self.environment_name = environment_name
 
-# # Use user-specified API URL if provided. Otherwise, use default Pulumi cloud URL.
-# base_pulumi_api_url = os.getenv("PULUMI_CLOUD_API_URL", "https://api.pulumi.com")
-
-# # NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
-# base_pulumi_env_api_url = f"{base_pulumi_api_url}/api/preview/environments"
-
-# # Set up the headers using the environment variable.
-# headers = {
-#     'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
-#     'Content-Type': 'application/json'
-# }
-
-# Set up the headers using class method
-# headers = {
-#     'Authorization': "undefined",
-#     'Content-Type': 'application/json'
-# }
-
-# def set_token(token):
-#     headers['Authorization'] = f"token {token}"
-#     print("set_token headers: ", headers) 
-
-# def set_token(token):
-#     headers['Authorization'] = f"token {token}"
-
 class PulumiEnvironmentProvider(ResourceProvider):
 
     # initialize local values
     headers: object
     base_pulumi_env_api_url: str
 
-    # def __init__(self):
-    #     self.headers = {
-    #         'Authorization': "undefined",
-    #         'Content-Type': 'application/json'
-    # }
-
+    # Gather up the confuration values as applicable.
     def configure(self, req: ConfigureRequest):
         # Use environment variable or config value for the access token 
         # ***NOTE*** If using the config option, and you rotate the token, you will need to run a `pulumi up` before destroying the stack.
