@@ -31,6 +31,12 @@ const basePulumiEnvApiUrl= `${basePulumiApiUrl}/api/preview/environments`
 
 const PulumiEnvironmentProvider: pulumi.dynamic.ResourceProvider = {
 
+  //*** CONFIG ***//
+  async configure(req: pulumi.dynamic.ConfigureRequest): Promise<void> {
+    this.
+
+  },
+
   //*** CREATE ***//
   async create(inputs: PulumiEnvironmentProviderArgs): Promise<CreateResult> {
   

@@ -1,0 +1,4 @@
+# See the pulumi-token.env file for how the environment would be set up to use/test this code
+
+environment:
+  - pulumi-token

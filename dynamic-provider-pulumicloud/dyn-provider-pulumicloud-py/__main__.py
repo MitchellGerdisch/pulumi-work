@@ -2,13 +2,11 @@
 
 import pulumi
 from pulumiEnvironmentProvider import PulumiEnvironment, PulumiEnvironmentArgs
-
-config = pulumi.Config()
-envName = config.get("envName") or "myTestEnv"
+import config 
 
 esc_environment = PulumiEnvironment("myEscEnv", PulumiEnvironmentArgs(
   org_name=pulumi.get_organization(),
-  environment_name=envName,
+  environment_name=config.envName,
 ))
 
 pulumi.export("environmentName", esc_environment.id)

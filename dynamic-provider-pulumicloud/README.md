@@ -2,6 +2,8 @@
 
 This folder contains dynamic providers written in javascript, typescript and python that show how to use environment variables for credentials so as to avoid storing the (encrypted) credentials in state. This means `pulumi destroy` can run after changing the credentials without having to run `pulumi up` first to refresh the credentials in state.
 
+They also show how to use values from stack config instead - requires pulumi/pulumi v3.139.0 or later.
+
 The example dynamic provider uses the Pulumi Cloud REST API to manage the creation/deletion of an ESC environment in a given Pulumi org. 
 
 ## Set Up

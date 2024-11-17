@@ -9,9 +9,13 @@
 
 import pulumi
 from pulumi import Input, Output
-from pulumi.dynamic import ResourceProvider, CreateResult, Resource
+from pulumi.dynamic import ResourceProvider, CreateResult, Resource, ConfigureRequest
 import requests
 import os
+# from config import token
+
+# config = pulumi.Config()
+# token = config.require_secret("pulumiAccessToken")
 
 class PulumiEnvironmentArgs:
     def __init__(self, org_name: str, environment_name: str):
@@ -23,25 +27,67 @@ class PulumiEnvironmentProviderArgs:
         self.org_name = org_name
         self.environment_name = environment_name
 
-# Use user-specified API URL if provided. Otherwise, use default Pulumi cloud URL.
-base_pulumi_api_url = os.getenv("PULUMI_CLOUD_API_URL", "https://api.pulumi.com")
+# # Use user-specified API URL if provided. Otherwise, use default Pulumi cloud URL.
+# base_pulumi_api_url = os.getenv("PULUMI_CLOUD_API_URL", "https://api.pulumi.com")
 
-# NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
-base_pulumi_env_api_url = f"{base_pulumi_api_url}/api/preview/environments"
+# # NOTE: When Pulumi Environments is GAed, the API path will no longer include "preview".
+# base_pulumi_env_api_url = f"{base_pulumi_api_url}/api/preview/environments"
 
-# Set up the headers using the environment variable.
-headers = {
-    'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
-    'Content-Type': 'application/json'
-}
+# # Set up the headers using the environment variable.
+# headers = {
+#     'Authorization': f"token {os.getenv('PULUMI_ACCESS_TOKEN')}",
+#     'Content-Type': 'application/json'
+# }
+
+# Set up the headers using class method
+# headers = {
+#     'Authorization': "undefined",
+#     'Content-Type': 'application/json'
+# }
+
+# def set_token(token):
+#     headers['Authorization'] = f"token {token}"
+#     print("set_token headers: ", headers) 
+
+# def set_token(token):
+#     headers['Authorization'] = f"token {token}"
 
 class PulumiEnvironmentProvider(ResourceProvider):
-    def create(self, inputs: PulumiEnvironmentProviderArgs) -> CreateResult:
 
-        create_env_url = f"{base_pulumi_env_api_url}/{inputs['org_name']}/{inputs['environment_name']}"
+    # initialize local values
+    headers: object
+    base_pulumi_env_api_url: str
+
+    # def __init__(self):
+    #     self.headers = {
+    #         'Authorization': "undefined",
+    #         'Content-Type': 'application/json'
+    # }
+
+    def configure(self, req: ConfigureRequest):
+        # Use environment variable or config value for the access token 
+        # ***NOTE*** If using the config option, and you rotate the token, you will need to run a `pulumi up` before destroying the stack.
+        # This is needed to update the state with the latest token.
+        # HOWEVER, if using environment variables, then the token is not stored in the state, and the new token will be used on the destroy.
+        if (os.getenv('PULUMI_ACCESS_TOKEN')):
+            print("Obtained token from environment variable")
+            self.access_token = os.getenv('PULUMI_ACCESS_TOKEN')
+        else:
+            print("Obtained token from config")
+            self.access_token = req.config.require("pulumiAccessToken") 
+
+        self.headers = {
+            'Authorization': f"token {self.access_token}",
+            'Content-Type': 'application/json'
+        }
+        base_pulumi_api_url = os.getenv("PULUMI_CLOUD_API_URL", "https://api.pulumi.com")
+        self.base_pulumi_env_api_url = f"{base_pulumi_api_url}/api/preview/environments"
+
+    def create(self, inputs: PulumiEnvironmentProviderArgs) -> CreateResult:
+        create_env_url = f"{self.base_pulumi_env_api_url}/{inputs['org_name']}/{inputs['environment_name']}"
 
         env_id = "unassigned"
-        response = requests.post(create_env_url, headers=headers)
+        response = requests.post(create_env_url, headers=self.headers)
         if response.status_code == 200 or response.status_code == 201:
             env_id = f"{inputs['org_name']}/{inputs['environment_name']}"
         else:
@@ -54,9 +100,9 @@ class PulumiEnvironmentProvider(ResourceProvider):
     def delete(self, id: str, props):
 
         # The id provides the "org/environment-name" path for the environment
-        delete_env_url = f"{base_pulumi_env_api_url}/{id}"
+        delete_env_url = f"{self.base_pulumi_env_api_url}/{id}"
 
-        response = requests.delete(delete_env_url, headers=headers)
+        response = requests.delete(delete_env_url, headers=self.headers)
         if response.status_code != 200:
             print(f"ERROR: {response.status_code} - {response.text}")
             os._exit(20)
