@@ -1,21 +1,10 @@
-# A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables to pass in the credentials
-# Using environment variables as such allows one to keep the actual credential value out of state.
-# Although if the cred is in state, it is encypted, if the token is changed between the create and the destroy, 
-# the destroy will be able to use the new cred found in the environment variable instead of using a value from state. 
-
-# REQUIRES/SUPPORTS the following environment variables:
-# * PULUMI_ACCESS_TOKEN: (required) This is a Pulumi access token with the necessary permissions to create an ESC Environment in a given Pulumi Cloud organization.
-# * PULUMI_CLOUD_API_URL: (optional) This is the URL for the Pulumi Cloud API endpoint. Defaults to `https://api.pulumi.com`.
+# A dynamic provider for Pulumi Cloud ESC Environments that uses Environment Variables or Pulumi config to pass in the credentials# Using environment variables as such allows one to keep the actual credential value out of state.
 
 import pulumi
 from pulumi import Input, Output
 from pulumi.dynamic import ResourceProvider, CreateResult, Resource, ConfigureRequest
 import requests
 import os
-# from config import token
-
-# config = pulumi.Config()
-# token = config.require_secret("pulumiAccessToken")
 
 class PulumiEnvironmentArgs:
     def __init__(self, org_name: str, environment_name: str):
@@ -35,10 +24,6 @@ class PulumiEnvironmentProvider(ResourceProvider):
 
     # Gather up the confuration values as applicable.
     def configure(self, req: ConfigureRequest):
-        # Use environment variable or config value for the access token 
-        # ***NOTE*** If using the config option, and you rotate the token, you will need to run a `pulumi up` before destroying the stack.
-        # This is needed to update the state with the latest token.
-        # HOWEVER, if using environment variables, then the token is not stored in the state, and the new token will be used on the destroy.
         if (os.getenv('PULUMI_ACCESS_TOKEN')):
             print("Obtained token from environment variable")
             self.access_token = os.getenv('PULUMI_ACCESS_TOKEN')
