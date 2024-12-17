@@ -3,6 +3,10 @@
  * Stacks that have never been updated.
  * Stacks that are empty (i.e. have no resources) and haven't been updated for 14 or age-parameter days.
  * It also prints warnings if you have stale stacks with resources still in them.
+ *
+ * How to Use
+ * Open up the Javascript Console in "Developer Tools" in your browser and copy/paste this file.
+ * Then run `DeleteEmptyStacks()` - see example below.
  * 
  * Parameters
  * orgName - Pulumi organization name
