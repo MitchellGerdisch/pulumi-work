@@ -6,6 +6,7 @@ environment:
   # Provides kubeconfig from shared k8s cluster.
   - shared-infra/k8s-cluster
 config:
+  # The org, project and stack name for the stack being managed by the stack custom resource.
   k8s-stack-crd:pulumiOrg: pequod
   k8s-stack-crd:projectName: benevolent-ruby-griffin
   k8s-stack-crd:stackName: dev
