@@ -1,0 +1,20 @@
+name: k8s-stack-crd
+description: Deploys a stack CRD to the Pulumi K8s operator.
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm
+template:
+  description: Create a pulumi k8s operator stack resource.
+  config:
+    aws:region:
+      description: The AWS region to deploy into
+      default: us-west-2
+    pulumiOrg:
+      description: The Pulumi (and by extension, GitHub) where the stack's project code is located.
+      default: pequod
+    projectName:
+      description: Name of the stack's project. 
+    stackName:
+      description: Name of the stack
+      default: dev

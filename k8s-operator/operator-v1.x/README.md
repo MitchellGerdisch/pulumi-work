@@ -1,6 +1,8 @@
 # K8s-Operator
 
-Gathered some elements to demo k8s operator:
+**NOT RECENTLY TESTED.**
+
+Gathered some elements to demo k8s operator v1.x:
 - deploy-operator-py: This stack can be run to deploy the k8s operator onto a k8s stack. It was tested with an EKS stack.
 - deploy-infra-by-operator: This stack deploys a custom resource for the operator. The custom resource points at a simple stack that creates a random resource.
 

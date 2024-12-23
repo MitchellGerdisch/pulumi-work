@@ -1,0 +1,11 @@
+environment:
+  # Read access to the repos.
+  - github/repo-read-access
+  # Config used for the stack settings.
+  - pulumi/org-access-token
+  # Provides kubeconfig from shared k8s cluster.
+  - shared-infra/k8s-cluster
+config:
+  k8s-stack-crd:pulumiOrg: pequod
+  k8s-stack-crd:projectName: benevolent-ruby-griffin
+  k8s-stack-crd:stackName: dev
