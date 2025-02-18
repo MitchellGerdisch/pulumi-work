@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as ccapi from "@pulumi/aws-native";
 import * as pulumicdk from '@pulumi/cdk';
 import { CloudFrontToS3 } from "@aws-solutions-constructs/aws-cloudfront-s3";
+import { aws_cloudfront } from 'aws-cdk-lib';
 
 
 // Define class that acts as a set of CDK and other Pulumi resources
@@ -14,10 +15,11 @@ class CloudFrontS3 extends pulumicdk.Stack {
     super(app, id, options);
 
     // Create Cloudfront distro and website and logging buckts, etc using the L3 CDK construct
-    const cloudfrontBucketInfra = new CloudFrontToS3(this, 'Website', {
+    const cloudfrontBucketInfra = new CloudFrontToS3(this, id, {
       cloudFrontDistributionProps: {
         priceClass: 'PriceClass_100', // Limit to US, Mexico, Canada, Europe, etc (see https://aws.amazon.com/cloudfront/pricing/)
-      }
+        // geoRestriction: aws_cloudfront.GeoRestriction.allowlist('US', 'CA')
+      },
     })
     // Get the domain name for the CloudFront distribution
     this.cloudFrontDomain = this.asOutput(cloudfrontBucketInfra.cloudFrontWebDistribution.distributionDomainName);

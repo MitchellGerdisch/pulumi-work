@@ -5,10 +5,11 @@ import * as fs from "fs";
 import * as mime from "mime-types";
 
 import { CloudFrontS3Deployment } from "./CloudFrontS3"; 
+import { start } from "repl";
 
 // Naming convention
 const config = new pulumi.Config();
-const prefix = config.get("prefix") || `${pulumi.getProject()}-${pulumi.getStack()}`;
+const prefix = config.get("prefix") || pulumi.getStack();
 
 // Instantiate the resources using the CDK construct
 const cloudFrontS3Deployment= new CloudFrontS3Deployment(prefix);
