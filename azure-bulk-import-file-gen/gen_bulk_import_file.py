@@ -75,26 +75,12 @@ def main():
               write_bulk_import_file(bulk_resources, f"{bulk_import_file_base}_{num_resources_processed//num_resources_per_file}.json")
               bulk_resources = [] 
       else:
-          print(f"Error: No Pulumi type found in {type_mappings_file} for Azure resource type: {resource_type}")
+          print(f"Error: Resource, {resource['name']}: No Pulumi type found in {type_mappings_file} for Azure resource type: {resource_type}")
 
   # Write any remaining resources to the bulk import file
   if num_resources_processed % num_resources_per_file != 0:
       write_bulk_import_file(bulk_resources, f"{bulk_import_file_base}_{(num_resources_processed//num_resources_per_file)+1}.json")
 
-# Read json source file
-def read_json_file(input_file):
-  try:
-      with open(input_file, 'r') as file:
-          azure_resources = json.load(file)
-          # Sort the resources by type.
-          # This way the imported resources will be grouped by type in the generated code which should make it easier to refactor into loops or functions, etc.
-          azure_resources = sorted(azure_resources, key=itemgetter('type'))
-  except FileNotFoundError:
-      print(f"Error: File, {azure_resources_file}, not found.")
-  except json.JSONDecodeError:
-      print(f"Error: Invalid JSON format in file, {azure_resources_file}.")
-  except Exception as e:
-      print(f"An unexpected error occurred while reading {azure_resources_file}: {e}")
 # Write the bulk import file
 def write_bulk_import_file(bulk_resources, bulk_import_file):
     bulk_resources = {

@@ -19,6 +19,7 @@
   "Microsoft.RecoveryServices/vaults" : "azure-native:recoveryservices:Vault",
   "Microsoft.Storage/storageAccounts" : "azure-native:storage:StorageAccount",
   "Microsoft.Web/connections" : "azure-native:web:Connection",
+  "Microsoft.Network/networkWatchers": "azure-native:network:NetworkWatcher",
   "microsoft.insights/actiongroups": "azure-native:monitor:ActionGroup",
   "microsoft.insights/activityLogAlerts": "azure-native:monitor:ActivityLogAlert",
   "microsoft.network/networkWatchers/flowLogs": "azure-native:network:FlowLog"
