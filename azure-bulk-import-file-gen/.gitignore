@@ -1,2 +1,4 @@
 *.json
 !type-mappings.json
+test-project/
+*.sln

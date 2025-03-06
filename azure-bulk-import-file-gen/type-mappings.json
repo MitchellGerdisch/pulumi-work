@@ -1,5 +1,5 @@
 {
-  "Microsoft.Network/publicIPAddresses": "azure-native:network:PublicIpAddress",
+  "Microsoft.Network/publicIPAddresses": "azure-native:network:PublicIPAddress",
   "Microsoft.Network/loadBalancers": "azure-native:network:LoadBalancer",
   "Microsoft.ManagedIdentity/userAssignedIdentities": "azure-native:managedidentity:UserAssignedIdentity",
   "Microsoft.Network/networkSecurityGroups": "azure-native:network:NetworkSecurityGroup",
