@@ -1,0 +1,4 @@
+config:
+  azure:location: CentralUS
+environment:
+  - default/azure-oidc
