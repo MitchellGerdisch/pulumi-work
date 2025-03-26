@@ -14,9 +14,9 @@ const deploymentSettings = new ps.DeploymentSettings("deploymentSettings", {
   organization: org,
   project: project,
   stack: stack,
-  operationContext: {
-    preRunCommands: ["pulumi about"]
-  },
+  // operationContext: {
+  //   preRunCommands: ["pulumi about"]
+  // },
   // agentPoolId: "",
   // operationContext: {},
   sourceContext: {
@@ -28,25 +28,26 @@ const deploymentSettings = new ps.DeploymentSettings("deploymentSettings", {
   }
 })
 
-const driftSchedule = new ps.DriftSchedule("driftSchedule", {
-  organization: org,
-  project: project,
-  stack: stack,
-  scheduleCron: "0 * * * *",
-  autoRemediate: true
-}, {dependsOn: [deploymentSettings]})
+// const driftSchedule = new ps.DriftSchedule("driftSchedule", {
+//   organization: org,
+//   project: project,
+//   stack: stack,
+//   scheduleCron: "0 * * * *",
+//   autoRemediate: true
+// }, {dependsOn: [deploymentSettings]})
 
 const ttlSchedule = new ps.TtlSchedule("ttlSchedule", {
   organization: org,
   project: project,
   stack: stack,
-  timestamp: "2025-01-01T00:00:00Z"
+  timestamp: "2028-03-26T22:05:00Z",
+  deleteAfterDestroy: true
 }, {dependsOn: [deploymentSettings]})
 
-const rawSchedule = new ps.DeploymentSchedule("rawSchedule", {
-  organization: org,
-  project: project,
-  stack: stack,
-  scheduleCron: "0 0 1 1 *",
-  pulumiOperation: "preview"
-}, {dependsOn: [deploymentSettings]})
+// const rawSchedule = new ps.DeploymentSchedule("rawSchedule", {
+//   organization: org,
+//   project: project,
+//   stack: stack,
+//   scheduleCron: "0 0 1 1 *",
+//   pulumiOperation: "preview"
+// }, {dependsOn: [deploymentSettings]})
