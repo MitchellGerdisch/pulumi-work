@@ -1,6 +1,8 @@
 name: deploy-sched-test
 runtime: nodejs
 description: A minimal TypeScript Pulumi program
+packages:
+  random-abstracted: https://github.com/mitchellgerdisch/component-random-abstracted@0.1.2
 config:
   pulumi:tags:
     value:
