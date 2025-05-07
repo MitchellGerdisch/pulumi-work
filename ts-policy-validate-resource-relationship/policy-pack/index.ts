@@ -56,6 +56,7 @@ new PolicyPack("s3-accessblock", {
                 // console.log(buckets)
                 // console.log(publicAccessBlocks)
                 buckets.forEach(function (bucket) {
+                    bucketAccessBlockFound = false
                     const bucketResourceUrn = bucket.urn
                     publicAccessBlocks.forEach(function (accessBlock) {
                         // DEBUGGING STUFF:
