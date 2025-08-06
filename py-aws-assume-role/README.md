@@ -4,6 +4,18 @@ This example shows how to use the AssumeRole functionality of the AWS provider
 to create resources in the security context of an IAM Role assumed by the IAM
 User running the Pulumi programs.
 
+# CHECK LIST
+You can read the details below, but for a quick checklist do the following:
+* Make sure the aws creds environment in `Pulumi.dev.yaml` works.
+* Check in `pulumi-ce-workshops` account for:
+  * S3 Bucket: `mitch-assumerole-test` or create one and set it in `Pulumi.dev.yaml`
+  * IAM Policy: `mitch-assumerole-test` 
+  * IAM Role: `mitch-assumerole-test-role` 
+  * MAKE SURE the IAM role has a Trust Relationship with the ARN that is used by the ESC environment. 
+    * YOU CAN VERIFY the ARN, by running `pulumi env run ENV_REFERENCED_IN_PULUMI.DEV.YAML -- aws sts get-caller-identity`
+* If the above is good, `pulumi up` should work.
+  * You can check the bucket in the `pulumi-ce-workshops` and see the object is added.
+
 # Mitch Notes
 Referencing https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html  
 The basic idea is that there is a "Production" account and a "Development" account and you want to allow certain user from the "Development" account to interact with resources in the "Production" account.
