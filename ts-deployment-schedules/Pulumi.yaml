@@ -1,4 +1,4 @@
-name: deploy-sched-test
+name: deploy-sched-test-ts
 runtime: nodejs
 description: A minimal TypeScript Pulumi program that configures it's own deployment settings and schedules
 config:

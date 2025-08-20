@@ -1,5 +1,5 @@
 import pulumi
-import pulumiservice as ps
+import pulumi_pulumiservice as ps
 from pulumi_command import local
 
 org = pulumi.get_organization()

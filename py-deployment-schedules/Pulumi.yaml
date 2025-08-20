@@ -1,4 +1,4 @@
-name: deploy-sched-test
+name: deploy-sched-test-py
 runtime: python
 description: Python program that sets up it's own deployment settings and schedules
 packages:
