@@ -1,0 +1,9 @@
+name: deploy-sched-test
+runtime: python
+description: Python program that sets up it's own deployment settings and schedules
+packages:
+  random-abstracted: https://github.com/mitchellgerdisch/component-random-abstracted@0.1.2
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: typescript

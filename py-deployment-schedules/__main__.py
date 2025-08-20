@@ -1,0 +1,37 @@
+import pulumi
+import pulumiservice as ps
+from pulumi_command import local
+
+org = pulumi.get_organization()
+project = pulumi.get_project()
+stack = pulumi.get_stack()
+
+git_origin_cmd = local.Command(
+    "git_origin",
+    create="git config --get remote.origin.url"
+)
+git_origin = git_origin_cmd.stdout
+
+deployment_settings = ps.DeploymentSettings(
+    "deploymentSettings",
+    organization=org,
+    project=project,
+    stack=stack,
+    source_context={
+        "git": {
+            "branch": "master",
+            "repoUrl": git_origin,
+            "repoDir": "ts-deployment-schedules"
+        }
+    }
+)
+
+ttl_schedule = ps.TtlSchedule(
+    "ttlSchedule",
+    organization=org,
+    project=project,
+    stack=stack,
+    timestamp="2028-03-26T22:05:00Z",
+    delete_after_destroy=True,
+    opts=pulumi.ResourceOptions(depends_on=[deployment_settings])
+)

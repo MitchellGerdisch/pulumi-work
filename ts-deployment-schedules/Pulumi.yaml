@@ -1,8 +1,6 @@
 name: deploy-sched-test
 runtime: nodejs
-description: A minimal TypeScript Pulumi program
-packages:
-  random-abstracted: https://github.com/mitchellgerdisch/component-random-abstracted@0.1.2
+description: A minimal TypeScript Pulumi program that configures it's own deployment settings and schedules
 config:
   pulumi:tags:
     value:
