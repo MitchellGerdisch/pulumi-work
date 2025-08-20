@@ -21,7 +21,7 @@ deployment_settings = ps.DeploymentSettings(
         "git": {
             "branch": "master",
             "repoUrl": git_origin,
-            "repoDir": "ts-deployment-schedules"
+            "repoDir": "py-deployment-schedules"
         }
     }
 )
