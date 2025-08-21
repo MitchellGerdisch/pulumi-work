@@ -30,8 +30,6 @@ deployment_settings = ps.DeploymentSettings(
 schedules = Schedules(
     "schedules",
     organization=org,
-    project=project,
-    stack=stack,
     ttl_minutes=1440,
     opts=pulumi.ResourceOptions(depends_on=[deployment_settings])
 )   
