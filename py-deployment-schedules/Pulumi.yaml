@@ -2,8 +2,8 @@ name: deploy-sched-test-py
 runtime: python
 description: Python program that sets up it's own deployment settings and schedules
 packages:
-  stackmgmt: https://github.com/mitchellgerdisch/component-stackmgmt
-  # stackmgmt: https://github.com/pulumi-pequod/component-stackmgmt
+  # stackmgmt: https://github.com/mitchellgerdisch/component-stackmgmt
+  stackmgmt: https://github.com/pulumi-pequod/component-stackmgmt
 config:
   pulumi:tags:
     value:

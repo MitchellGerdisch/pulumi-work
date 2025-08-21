@@ -1,7 +1,8 @@
 import pulumi
 import pulumi_pulumiservice as ps
 from pulumi_command import local
-from mitchellgerdisch_stackmgmt import StackSettings, StackSettingsArgs
+# from mitchellgerdisch_stackmgmt import StackSettings, StackSettingsArgs
+from pulumi_pequod_stackmgmt import StackSettings, StackSettingsArgs
 
 
 org = pulumi.get_organization()
