@@ -1,9 +1,11 @@
 name: deploy-sched-test-py
-runtime: python
+runtime:
+  name: python
+  options:
+    virtualenv: venv
 description: Python program that sets up it's own deployment settings and schedules
 packages:
-  # stackmgmt: https://github.com/mitchellgerdisch/component-stackmgmt
-  stackmgmt: https://github.com/pulumi-pequod/component-stackmgmt
+  pcloudsettings: https://github.com/mitchellgerdisch/component-pcloudsettings
 config:
   pulumi:tags:
     value:
