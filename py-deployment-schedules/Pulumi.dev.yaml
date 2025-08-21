@@ -1,0 +1,3 @@
+environment:
+  # Config used for the stack settings.
+  - mitchtesting/team-ce-org

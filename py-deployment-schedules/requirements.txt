@@ -1,3 +1,5 @@
+sdks/pulumi-pequod-stackmgmt
+sdks/mitchellgerdisch-stackmgmt
 pulumi>=3.0.0
 pulumi_pulumiservice>=0.1.0
 pulumi_command>=1.0.0

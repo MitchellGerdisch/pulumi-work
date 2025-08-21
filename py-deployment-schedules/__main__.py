@@ -1,6 +1,8 @@
 import pulumi
 import pulumi_pulumiservice as ps
 from pulumi_command import local
+from mitchellgerdisch_stackmgmt import StackSettings, StackSettingsArgs
+
 
 org = pulumi.get_organization()
 project = pulumi.get_project()
@@ -25,6 +27,9 @@ deployment_settings = ps.DeploymentSettings(
         }
     }
 )
+
+# Manage stack settings using the centrally managed custom component.
+stackmgmt = StackSettings("stacksettings") 
 
 ttl_schedule = ps.TtlSchedule(
     "ttlSchedule",
